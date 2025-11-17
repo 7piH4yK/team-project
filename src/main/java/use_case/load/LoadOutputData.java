@@ -1,16 +1,13 @@
-package interface_adapter.game;
+package use_case.load;
 
 import entity.ClickableObject;
 
 import java.util.List;
 
-/**
- * The state for the Game View Model.
- */
-public class GameState {
+public class LoadOutputData {
     private String backgroundImage;
     private List<ClickableObject> clickableObjects;
-//    currentDialogBox
+
     public String getBackgroundImage() {
         return backgroundImage;
     }

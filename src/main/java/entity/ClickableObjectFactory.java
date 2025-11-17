@@ -1,11 +1,14 @@
 package entity;
 
-/**
- * Factory for creating ClickableObject objects.
- */
 public class ClickableObjectFactory {
 
-    public ClickableObject create(String name, int coordinateX, int coordinateY, String image) {
-        return new ClickableObject(name, coordinateX, coordinateY, image);
+    // New: explicit collectable flag
+    public ClickableObject create(String name, int x, int y, String image, boolean collectable) {
+        return new ClickableObject(name, x, y, image, collectable);
+    }
+
+    // Keep old calls working (defaults to false)
+    public ClickableObject create(String name, int x, int y, String image) {
+        return new ClickableObject(name, x, y, image, false);
     }
 }

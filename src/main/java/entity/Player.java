@@ -1,5 +1,8 @@
 package entity;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +46,27 @@ public class Player {
      */
     public void removeFromInventory(ClickableObject object) {
         inventory.remove(object);
+    }
+
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        JSONArray inventoryArray = new JSONArray();
+
+        for (ClickableObject obj : inventory) {
+            inventoryArray.put(obj.toJson());
+        }
+
+        json.put("inventory", inventoryArray);
+        return json;
+    }
+
+    public static Player fromJson(JSONObject json) {
+        JSONArray invArray = json.getJSONArray("inventory");
+        List<ClickableObject> inventory = new ArrayList<>();
+        for (int i = 0; i < invArray.length(); i++) {
+            inventory.add(ClickableObject.fromJson(invArray.getJSONObject(i)));
+        }
+        return new Player(inventory);
     }
     public boolean hasItemNamed(String name) {
         for (ClickableObject obj : inventory) {

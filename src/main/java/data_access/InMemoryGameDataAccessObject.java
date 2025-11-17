@@ -1,15 +1,26 @@
 package data_access;
 
 import entity.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import use_case.game.GameDataAccessInterface;
+import use_case.save.SaveOutputData;
 import use_case.switch_to_game.SwitchToGameViewDataAccessInterface;
+import use_case.save.SaveDataAccessInterface;
+import use_case.load.LoadDataAccessInterface;
 
 import java.util.*;
 
 /**
  * In-memory implementation of game data access.
  */
-public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessInterface, GameDataAccessInterface {
+public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessInterface, GameDataAccessInterface,
+    SaveDataAccessInterface, LoadDataAccessInterface {
 
     private Scene currentScene;
     private Player player;
@@ -100,9 +111,85 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
         return player;
     }
 
+    public void saveGame(SaveOutputData outputData) {
+        JSONObject gameState = new JSONObject();
+        List<Scene> scenesData = new ArrayList<>(outputData.getScenes().values());
+        JSONArray scenes = new JSONArray();
+        for (Scene s : scenesData) {
+            scenes.put(s.toJson());
+        }
+        gameState.put("scenes", scenes);
+        gameState.put("player", outputData.getPlayer().toJson());
+        gameState.put("currentScene", outputData.getCurrentScene().toJson());
+
+        // Save to file
+        try (FileWriter file = new FileWriter("save.json")) {
+            file.write(gameState.toString(4)); // pretty print indent
+        } catch (IOException e) {
+            System.out.println("Error writing JSON: " + e.getMessage());
+        }
+    }
+
+    public void loadGame(String filePath) {
+        StringBuilder jsonText = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                jsonText.append(line);
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading save file: " + e.getMessage());
+            this.currentScene = null;
+            this.player = null;
+            this.scenes = new  HashMap<>();
+            return;
+        }
+        JSONObject gameState = new JSONObject(jsonText.toString());
+
+        JSONObject playerJson = gameState.getJSONObject("player");
+        this.player = Player.fromJson(playerJson);
+
+        JSONArray scenesArray = gameState.getJSONArray("scenes");
+        Map<String, Scene> loadedScenes = new HashMap<>();
+        for (int i = 0; i < scenesArray.length(); i++) {
+            Scene s = Scene.fromJson(scenesArray.getJSONObject(i));
+            loadedScenes.put(s.getName(), s);
+        }
+        this.scenes = loadedScenes;
+
+        JSONObject currentSceneJson = gameState.getJSONObject("currentScene");
+        this.currentScene = Scene.fromJson(currentSceneJson);
+    }
+
+    public void resetGame() {
+        // Re-run the constructor logic to rebuild fresh world
+        SceneFactory sceneFactory = new SceneFactory();
+        PlayerFactory playerFactory = new PlayerFactory();
+
+        // Reset everything exactly like the constructor:
+        ClickableObject object1 = new ClickableObjectFactory().create("Object1", 0, 0, "object1.png",false);
+        ClickableObject object2 = new ClickableObjectFactory().create("Object2", 600, 300, "object2.png", false);
+        ClickableObject object3 = new ClickableObjectFactory().create("Object3", 200, 200, "object2.png", true);
+
+        this.player = playerFactory.create();
+
+        ArrayList<ClickableObject> sceneOneList = new ArrayList<>(List.of(object1, object2, object3));
+        Scene scene1 = sceneFactory.create("Scene1", sceneOneList, "scene1.png");
+        Scene scene2 = sceneFactory.create("Scene2", new ArrayList<>(List.of(object2, object1)), "scene2.png");
+
+        // Rebuild dialogues, NPCs, etc (copy same code from your constructor)
+
+        this.scenes = new HashMap<>();
+        scenes.put("Scene1", scene1);
+        scenes.put("Scene2", scene2);
+
+        this.currentScene = scene1;
+    }
+
     public void setPlayer(Player player) {
         this.player = player;
     }
+      
     private final java.util.Set<String> unlockedDoors = new java.util.HashSet<>();
 
     @Override
@@ -113,15 +200,6 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
     @Override
     public void unlockDoor(String doorName) {
         unlockedDoors.add(doorName);
-    }
-
-
-    public void save() {
-
-    }
-
-    public void load() {
-
     }
 
 }

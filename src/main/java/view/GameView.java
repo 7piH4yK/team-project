@@ -7,6 +7,7 @@ import entity.DialogueText;
 import interface_adapter.game.GameController;
 import interface_adapter.game.GameState;
 import interface_adapter.game.GameViewModel;
+import interface_adapter.save.SaveController;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -29,6 +30,7 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
     private final String viewName = "game";
     private final GameViewModel gameViewModel;
     private GameController gameController;
+    private SaveController saveController;
 
 
     public GameView(GameViewModel gameViewModel) {
@@ -98,6 +100,11 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
                     });
                 }
             }
+            // save and exit button
+            JButton saveExitButton = new JButton("Save & Exit");
+            saveExitButton.setBounds(650, 20, 120, 40);
+            saveExitButton.addActionListener(e -> saveController.save());
+            add(saveExitButton);
 
             // add background image
             ImageIcon background = new ImageIcon();
@@ -121,4 +128,6 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
     public void setGameController(GameController controller) {
         this.gameController = controller;
     }
+
+    public void setSaveController(SaveController controller) {this.saveController = controller;}
 }

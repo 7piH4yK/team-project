@@ -20,8 +20,9 @@ public class MainMenuView extends JPanel implements ActionListener, PropertyChan
     private MainMenuController mainMenuController;
 
     private final JButton startGameButton;
-    private final JButton laodGameButton;
+    private final JButton loadGameButton;
     private final JButton exitGameButton;
+    private final JLabel errorLabel;
 
     public MainMenuView(MainMenuViewModel mainMenuViewModel) {
         this.mainMenuViewModel = mainMenuViewModel;
@@ -30,6 +31,11 @@ public class MainMenuView extends JPanel implements ActionListener, PropertyChan
         final JLabel title = new JLabel(MainMenuViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
         title.setFont(new Font("Arial", Font.BOLD, 48));
+
+        errorLabel = new JLabel((""));
+        errorLabel.setForeground(Color.RED);
+        errorLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        errorLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         final JPanel buttons = new JPanel();
         buttons.setLayout(new BoxLayout(buttons, BoxLayout.Y_AXIS));
@@ -43,11 +49,11 @@ public class MainMenuView extends JPanel implements ActionListener, PropertyChan
         buttons.add(startGameButton);
         buttons.add(Box.createRigidArea(new Dimension(0, 20)));
 
-        laodGameButton = new JButton(MainMenuViewModel.LAOD_GAME_BUTTON_LABEL);
-        laodGameButton.setPreferredSize(buttonsSize);
-        laodGameButton.setMaximumSize(buttonsSize);
-        laodGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        buttons.add(laodGameButton);
+        loadGameButton = new JButton(MainMenuViewModel.LAOD_GAME_BUTTON_LABEL);
+        loadGameButton.setPreferredSize(buttonsSize);
+        loadGameButton.setMaximumSize(buttonsSize);
+        loadGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        buttons.add(loadGameButton);
         buttons.add(Box.createRigidArea(new Dimension(0, 20)));
 
         exitGameButton = new JButton(MainMenuViewModel.EXIT_GAME_BUTTON_LABEL);
@@ -67,11 +73,12 @@ public class MainMenuView extends JPanel implements ActionListener, PropertyChan
                 }
         );
 
-        laodGameButton.addActionListener(
+        loadGameButton.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
-                        // TODO: implement load game button functionality
-                        System.out.print("Load game (TODO)");
+                        if  (evt.getSource().equals(loadGameButton)) {
+                            mainMenuController.loadGame();
+                        }
                     }
                 }
         );
@@ -86,7 +93,9 @@ public class MainMenuView extends JPanel implements ActionListener, PropertyChan
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.add(title);
-        this.add(Box.createVerticalStrut(100));
+        this.add(Box.createVerticalStrut(40));
+        this.add(errorLabel);
+        this.add(Box.createVerticalStrut(40));
         this.add(buttons);
     }
 
@@ -97,7 +106,10 @@ public class MainMenuView extends JPanel implements ActionListener, PropertyChan
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        // No state changes to handle for now
+        if (evt.getSource() == mainMenuViewModel) {
+            String error = mainMenuViewModel.getState().getErrorMessage();
+            errorLabel.setText(error != null ? error:"");
+        }
     }
 
     public String getViewName() {

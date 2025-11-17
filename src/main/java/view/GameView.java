@@ -60,7 +60,7 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
                     label.setForeground(Color.RED);
                     label.setFont(new Font(label.getFont().getName(), Font.BOLD, label.getFont().getSize()));
                     Dimension preferredSize = label.getPreferredSize();
-                    label.setBounds(clickableObject.getCoordinateX(), clickableObject.getCoordinateY(), preferredSize.width, preferredSize.height);
+                    label.setBounds(clickableObject.getCoordinateX(), clickableObject.getCoordinateY(), preferredSize.width + 50, preferredSize.height);
                     add(label);
                     label.addMouseListener(new MouseAdapter()
                     {
@@ -78,14 +78,9 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
                     label.setForeground(Color.RED);
                     label.setBackground(Color.BLACK);
                     label.setFont(new Font(label.getFont().getName(), Font.BOLD, label.getFont().getSize()));
-                    label.setBounds(clickableObject.getCoordinateX(), clickableObject.getCoordinateY(), 800-InMemoryGameDataAccessObject.text_xpos-InMemoryGameDataAccessObject.option_xpos, InMemoryGameDataAccessObject.option4_ypos + 28 - InMemoryGameDataAccessObject.option1_ypos);
+                    label.setBounds(clickableObject.getCoordinateX(), clickableObject.getCoordinateY(), 400, 300);
                     add(label);
-//
-//                    label.addMouseListener(new MouseAdapter()
-//                    {
-//                        @Override
-//                        public void mouseClicked(MouseEvent e) {gameController.click(clickableObject);}
-//                    });
+
                 }
                 else {
                     ImageIcon imageIcon = new ImageIcon();

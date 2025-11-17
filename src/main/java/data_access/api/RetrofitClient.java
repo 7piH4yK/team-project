@@ -1,4 +1,4 @@
-package app.api;
+package data_access.api;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

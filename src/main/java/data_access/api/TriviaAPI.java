@@ -1,6 +1,6 @@
-package app.api;
+package data_access.api;
 
-import app.api.model.TriviaResponse;
+import entity.model.TriviaResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;

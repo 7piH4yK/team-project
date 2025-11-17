@@ -1,4 +1,4 @@
-package app.api.model;
+package entity.model;
 
 import java.util.List;
 

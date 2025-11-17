@@ -1,6 +1,6 @@
-package app.api.apiTests;
+package data_access.api.apiTests;
 
-import app.api.RetrofitClient;
+import data_access.api.RetrofitClient;
 import okhttp3.HttpUrl;
 import retrofit2.Retrofit;
 import org.junit.jupiter.api.Test;

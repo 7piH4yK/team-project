@@ -26,7 +26,6 @@ public class MainMenuController {
      * Executes the switch to game view use case.
      */
     public void switchToGameView() {
-        gameDAO.resetGame();
         switchToGameViewInteractor.execute();
     }
 

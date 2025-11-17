@@ -57,7 +57,7 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
         }
         gameState.put("scenes", scenes);
         gameState.put("player", outputData.getPlayer().toJson());
-        gameState.put("currentScene", outputData.getCurrentScene().toJson());
+        gameState.put("currentScene", outputData.getCurrentScene().getName());
 
         // Save to file
         try (FileWriter file = new FileWriter("save.json")) {
@@ -94,8 +94,7 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
         }
         this.scenes = loadedScenes;
 
-        JSONObject currentSceneJson = gameState.getJSONObject("currentScene");
-        this.currentScene = Scene.fromJson(currentSceneJson);
+        this.currentScene = this.scenes.get(gameState.getString("currentScene"));
     }
 
     public void resetGame() {

@@ -42,7 +42,7 @@ public class CollectItemTest {
                 "bg.png"
         );
 
-        // remove Object3
+        // remove obj3
         List<ClickableObject> updated = new java.util.ArrayList<>(scene.getObjects());
         updated.removeIf(o -> o.getName().equals("Object3"));
 

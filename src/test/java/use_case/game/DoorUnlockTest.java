@@ -58,7 +58,7 @@ public class DoorUnlockTest {
 
         assertTrue(isDoorUnlocked("Object2"));
 
-        // Even with no key
+        // with no key
         assertFalse(player.hasItemNamed("Object3"));
         assertTrue(isDoorUnlocked("Object2"));
     }

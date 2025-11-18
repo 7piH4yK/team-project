@@ -43,28 +43,10 @@
             "name": "Scene2"
         }
     ],
-    "player": {"inventory": [{
-        "image": "object2.png",
-        "coordinateY": 200,
-        "coordinateX": 200,
-        "name": "Object3"
-    }]},
+    "player": {"inventory": []},
     "currentScene": {
-        "image": "scene1.png",
-        "objects": [
-            {
-                "image": "object1.png",
-                "coordinateY": 0,
-                "coordinateX": 0,
-                "name": "Object1"
-            },
-            {
-                "image": "object2.png",
-                "coordinateY": 300,
-                "coordinateX": 600,
-                "name": "Object2"
-            }
-        ],
-        "name": "Scene1"
+        "image": "qq",
+        "objects": [],
+        "name": "qq"
     }
 }

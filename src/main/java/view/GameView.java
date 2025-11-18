@@ -101,6 +101,16 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
             saveExitButton.addActionListener(e -> saveController.save());
             add(saveExitButton);
 
+            // Add a small bag icon (top-right corner)
+            ImageIcon bagIcon = new ImageIcon(ImageIO.read(new File("src/main/resources/bag.png")));
+            JButton bagButton = new JButton(bagIcon);
+            bagButton.setBounds(20, 480, 64, 64); // Adjust position and size
+            bagButton.setContentAreaFilled(false);
+            bagButton.setBorderPainted(false);
+            bagButton.setFocusPainted(false);
+            bagButton.addActionListener(e -> openInventoryPanel());
+            add(bagButton);
+
             // add background image
             ImageIcon background = new ImageIcon();
             background.setImage(ImageIO.read(new File("src/main/resources", state.getBackgroundImage())));
@@ -125,4 +135,39 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
     }
 
     public void setSaveController(SaveController controller) {this.saveController = controller;}
+
+    private void openInventoryPanel() {
+        JFrame inventoryFrame = new JFrame("Inventory");
+        inventoryFrame.setSize(400, 300);
+        inventoryFrame.setLocationRelativeTo(null);
+        inventoryFrame.setLayout(new FlowLayout());
+
+        // Fetch player inventory from your DAO
+        // (If you need it through a controller or view model, adapt accordingly)
+        java.util.List<entity.ClickableObject> items =
+                interface_adapter.AppContext.getGameDAO().getPlayer().getInventory();
+
+        if (items.isEmpty()) {
+            inventoryFrame.add(new JLabel("Your inventory is empty."));
+        } else {
+            for (entity.ClickableObject item : items) {
+                try {
+                    ImageIcon itemIcon = new ImageIcon(ImageIO.read(new File("src/main/resources", item.getImage())));
+                    JLabel itemLabel = new JLabel(itemIcon);
+                    itemLabel.setToolTipText(item.getName());
+                    inventoryFrame.add(itemLabel);
+                } catch (Exception ex) {
+                    inventoryFrame.add(new JLabel(item.getName()));
+                }
+            }
+        }
+
+        JButton closeButton = new JButton("Close");
+        closeButton.addActionListener(e -> inventoryFrame.dispose());
+        inventoryFrame.add(closeButton);
+
+        inventoryFrame.setVisible(true);
+    }
+
 }
+

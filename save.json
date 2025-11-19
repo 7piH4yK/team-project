@@ -14,12 +14,6 @@
                     "coordinateY": 300,
                     "coordinateX": 600,
                     "name": "Object2"
-                },
-                {
-                    "image": "object2.png",
-                    "coordinateY": 200,
-                    "coordinateX": 200,
-                    "name": "Object3"
                 }
             ],
             "name": "Scene1"
@@ -28,16 +22,22 @@
             "image": "scene2.png",
             "objects": [
                 {
+                    "image": "object1.png",
+                    "coordinateY": 0,
+                    "coordinateX": 0,
+                    "name": "Object1"
+                },
+                {
                     "image": "object2.png",
                     "coordinateY": 300,
                     "coordinateX": 600,
                     "name": "Object2"
                 },
                 {
-                    "image": "object1.png",
-                    "coordinateY": 0,
-                    "coordinateX": 0,
-                    "name": "Object1"
+                    "image": "object3.png",
+                    "coordinateY": 200,
+                    "coordinateX": 200,
+                    "name": "Object3"
                 },
                 {
                     "image": "npc1.png",
@@ -47,8 +47,49 @@
                 }
             ],
             "name": "Scene2"
+        },
+        {
+            "image": "scene3.png",
+            "objects": [
+                {
+                    "image": "object1.png",
+                    "coordinateY": 0,
+                    "coordinateX": 0,
+                    "name": "Object1"
+                },
+                {
+                    "image": "door1.png",
+                    "coordinateY": 200,
+                    "coordinateX": 200,
+                    "name": "Door1"
+                }
+            ],
+            "name": "Scene3"
+        },
+        {
+            "image": "scene4.png",
+            "objects": [
+                {
+                    "image": "object1.png",
+                    "coordinateY": 0,
+                    "coordinateX": 0,
+                    "name": "Object1"
+                },
+                {
+                    "image": "npc2.png",
+                    "coordinateY": 300,
+                    "coordinateX": 700,
+                    "name": "NPC2"
+                }
+            ],
+            "name": "Scene4"
         }
     ],
-    "player": {"inventory": []},
-    "currentScene": "Scene1"
+    "player": {"inventory": [{
+        "image": "key1.png",
+        "coordinateY": 200,
+        "coordinateX": 200,
+        "name": "Key1"
+    }]},
+    "currentScene": "Scene4"
 }

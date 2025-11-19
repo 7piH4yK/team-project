@@ -1,6 +1,7 @@
 package interface_adapter.game;
 
 import entity.ClickableObject;
+import entity.DialogueOption;
 import use_case.game.GameInputBoundary;
 import use_case.game.GameInputData;
 
@@ -9,16 +10,23 @@ import use_case.game.GameInputData;
  */
 public class GameController {
 
-    private final GameInputBoundary clickButtonInteractor;
+    private final GameInputBoundary gameInputBoundary;
 
-    public GameController(GameInputBoundary clickButtonInteractor) {
-        this.clickButtonInteractor = clickButtonInteractor;
+    public GameController(GameInputBoundary gameInputBoundary) {
+        this.gameInputBoundary = gameInputBoundary;
     }
 
     /**
      * Click a clickable object
      */
     public void click(ClickableObject clickableObject) {
-        clickButtonInteractor.execute(new GameInputData(clickableObject));
+        gameInputBoundary.execute(new GameInputData(clickableObject));
+    }
+
+    /**
+     * Click a dialogue option
+     */
+    public void clickDialogueOption(DialogueOption dialogueOption) {
+        gameInputBoundary.executeDialogueOption(dialogueOption);
     }
 }

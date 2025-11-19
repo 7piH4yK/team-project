@@ -1,11 +1,9 @@
 package use_case.game;
 
 import entity.*;
-import use_case.switch_to_game.SwitchToGameOutputData;
-import use_case.switch_to_game.SwitchToGameViewDataAccessInterface;
 
 /**
- * The Click Button Interactor.
+ * The Game Interactor.
  */
 public class GameInteractor implements GameInputBoundary {
     private final GameOutputBoundary presenter;
@@ -22,7 +20,7 @@ public class GameInteractor implements GameInputBoundary {
 
         Scene cur = gameDataAccessInterface.getCurrentScene();
 
-        // ✅ Handle collectable objects
+        // Handle collectable objects
         if (clicked.isCollectable()) {
             // 1. Add to inventory
             gameDataAccessInterface.getPlayer().addToInventory(clicked);
@@ -45,16 +43,10 @@ public class GameInteractor implements GameInputBoundary {
             );
         }
 
-
-
-
-        // ✅ Refresh UI
-        // game logic
+        // Game logic
         if (clicked instanceof NonPlayableCharacter) {
-            gameDataAccessInterface.setCurrentScene(((NonPlayableCharacter) clicked).getDB());
-        }
-        else if (clicked instanceof DialogueOption) {
-            gameDataAccessInterface.setCurrentScene(((DialogueOption) clicked).getScene());
+            // Open dialogue overlay instead of changing scene
+            gameDataAccessInterface.setCurrentDialogue(((NonPlayableCharacter) clicked).getDB());
         }
         else {
             switch (clicked.getName()) {
@@ -80,8 +72,6 @@ public class GameInteractor implements GameInputBoundary {
                         // Not unlocked yet: require Object3 (the key)
                         if (player.hasItemNamed("Key1")) {
                             // consume the key
-                            // (use your helper removeItemNamed from earlier)
-                            // or do the manual loop if you didn't add the helper
                             java.util.List<entity.ClickableObject> inv = player.getInventory();
                             for (ClickableObject clickableObject : inv) {
                                 if (clickableObject.getName().equals("Object3")) {
@@ -116,13 +106,31 @@ public class GameInteractor implements GameInputBoundary {
             }
         }
 
-        // update game ui
+        // Update game UI
+        updateView();
+    }
+
+    @Override
+    public void executeDialogueOption(DialogueOption dialogueOption) {
+        if (dialogueOption.leadsToScene()) {
+            // Close dialogue and navigate to scene
+            gameDataAccessInterface.setCurrentDialogue(null);
+            gameDataAccessInterface.setCurrentScene(dialogueOption.getTargetScene());
+        } else if (dialogueOption.leadsToDialogue()) {
+            // Show next dialogue
+            gameDataAccessInterface.setCurrentDialogue(dialogueOption.getTargetDialogue());
+        }
+
+        // Update game UI
+        updateView();
+    }
+
+    private void updateView() {
         Scene currentScene = gameDataAccessInterface.getCurrentScene();
         GameOutputData gameOutputData = new GameOutputData();
         gameOutputData.setBackgroundImage(currentScene.getImage());
         gameOutputData.setClickableObjects(currentScene.getObjects());
+        gameOutputData.setCurrentDialogue(gameDataAccessInterface.getCurrentDialogue());
         presenter.prepareView(gameOutputData);
-
     }
-
 }

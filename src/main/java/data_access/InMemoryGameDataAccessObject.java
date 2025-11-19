@@ -26,6 +26,7 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
     private Player player;
     private Map<String, Scene> scenes = new HashMap<>();
     private final java.util.Set<String> unlockedDoors = new java.util.HashSet<>();
+    private DialogueBox currentDialogue;
 
 
     public InMemoryGameDataAccessObject() {
@@ -155,6 +156,7 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
         currentScene = scenes.get("Scene1");
 
         unlockedDoors.clear();
+        currentDialogue = null;
     }
 
     public void setPlayer(Player player) {
@@ -172,4 +174,13 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
         unlockedDoors.add(doorName);
     }
 
+    @Override
+    public DialogueBox getCurrentDialogue() {
+        return currentDialogue;
+    }
+
+    @Override
+    public void setCurrentDialogue(DialogueBox dialogue) {
+        this.currentDialogue = dialogue;
+    }
 }

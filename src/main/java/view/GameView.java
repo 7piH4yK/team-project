@@ -1,6 +1,5 @@
 package view;
 
-import data_access.InMemoryGameDataAccessObject;
 import entity.ClickableObject;
 import entity.DialogueOption;
 import entity.DialogueText;
@@ -20,7 +19,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 
 /**
  * The View for the Game.
@@ -144,8 +142,8 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
 
         // Fetch player inventory from your DAO
         // (If you need it through a controller or view model, adapt accordingly)
-        java.util.List<entity.ClickableObject> items =
-                interface_adapter.AppContext.getGameDAO().getPlayer().getInventory();
+        java.util.List<ClickableObject> items = gameViewModel.getState().getInventoryItems();
+
 
         if (items.isEmpty()) {
             inventoryFrame.add(new JLabel("Your inventory is empty."));

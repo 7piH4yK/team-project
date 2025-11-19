@@ -19,7 +19,12 @@ public class GamePresenter implements GameOutputBoundary {
         final GameState state = new GameState();
         state.setBackgroundImage(outputData.getBackgroundImage());
         state.setClickableObjects(outputData.getClickableObjects());
+
+        // NEW
+        state.setInventoryItems(outputData.getInventory());
+
         gameViewModel.setState(state);
         gameViewModel.firePropertyChange();
     }
+
 }

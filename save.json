@@ -50,5 +50,9 @@
         }
     ],
     "player": {"inventory": []},
-    "currentScene": "Scene1"
+    "currentScene": {
+        "image": "qq",
+        "objects": [],
+        "name": "qq"
+    }
 }

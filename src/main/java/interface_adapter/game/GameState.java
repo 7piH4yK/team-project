@@ -1,13 +1,17 @@
 package interface_adapter.game;
 
 import entity.ClickableObject;
+import entity.DialogueBox;
+
 import java.util.List;
 
+/**
+ * The state for the Game View Model.
+ */
 public class GameState {
     private String backgroundImage;
     private List<ClickableObject> clickableObjects;
-
-    // NEW — inventory items for the UI (image + name)
+    private DialogueBox currentDialogue;
     private List<ClickableObject> inventoryItems;
 
     public String getBackgroundImage() {
@@ -26,7 +30,14 @@ public class GameState {
         this.clickableObjects = clickableObjects;
     }
 
-    // NEW GETTER/SETTER
+    public DialogueBox getCurrentDialogue() {
+        return currentDialogue;
+    }
+
+    public void setCurrentDialogue(DialogueBox currentDialogue) {
+        this.currentDialogue = currentDialogue;
+    }
+
     public List<ClickableObject> getInventoryItems() {
         return inventoryItems;
     }

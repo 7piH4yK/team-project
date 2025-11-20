@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -74,14 +75,8 @@ public class Player {
         }
         return false;
     }
-    public boolean removeItemNamed(String name) {
-        for (int i = 0; i < inventory.size(); i++) {
-            if (inventory.get(i).getName().equals(name)) {
-                inventory.remove(i);
-                return true;
-            }
-        }
-        return false;
+    public void removeItemNamed(String name) {
+        inventory.removeIf(obj -> obj.getName().equals(name));
     }
 
     /** Optional: returns the first item with this name, or null if none. */

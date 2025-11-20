@@ -1,14 +1,9 @@
 package use_case.game;
 
-import entity.ClickableObject;
-import entity.DialogueOption;
-import entity.NonPlayableCharacter;
-import entity.Scene;
-import use_case.switch_to_game.SwitchToGameOutputData;
-import use_case.switch_to_game.SwitchToGameViewDataAccessInterface;
+import entity.*;
 
 /**
- * The Click Button Interactor.
+ * The Game Interactor.
  */
 public class GameInteractor implements GameInputBoundary {
     private final GameOutputBoundary presenter;
@@ -25,7 +20,7 @@ public class GameInteractor implements GameInputBoundary {
 
         Scene cur = gameDataAccessInterface.getCurrentScene();
 
-        // ✅ Handle collectable objects
+        // Handle collectable objects
         if (clicked.isCollectable()) {
             // 1. Add to inventory
             gameDataAccessInterface.getPlayer().addToInventory(clicked);
@@ -48,69 +43,9 @@ public class GameInteractor implements GameInputBoundary {
             );
         }
 
-        // ✅ Optional: handle non-collectable objects (scene switching, etc.)
-        else if (clicked.getName().equals("Object1")) {
-            gameDataAccessInterface.setCurrentScene(gameDataAccessInterface.getScenes().get("Scene1"));
-        } else if (clicked.getName().equals("Object2")) {
-            entity.Player player = gameDataAccessInterface.getPlayer();
-            if (player == null) {
-                player = new entity.Player();
-                gameDataAccessInterface.setPlayer(player);
-            }
-
-            // If already unlocked, just go to Scene2
-            if (gameDataAccessInterface.isDoorUnlocked("Object2")) {
-                entity.Scene scene2 = gameDataAccessInterface.getScenes().get("Scene2");
-                if (scene2 != null) {
-                    gameDataAccessInterface.setCurrentScene(scene2);
-                }
-            } else {
-                // Not unlocked yet: require Object3 (the key)
-                if (player.hasItemNamed("Object3")) {
-                    // consume the key
-                    // (use your helper removeItemNamed from earlier)
-                    // or do the manual loop if you didn't add the helper
-                    java.util.List<entity.ClickableObject> inv = player.getInventory();
-                    for (int i = 0; i < inv.size(); i++) {
-                        if (inv.get(i).getName().equals("Object3")) {
-                            player.removeFromInventory(inv.get(i));
-                            break;
-                        }
-                    }
-
-                    // mark door as unlocked forever
-                    gameDataAccessInterface.unlockDoor("Object2");
-
-                    // go to Scene2
-                    entity.Scene scene2 = gameDataAccessInterface.getScenes().get("Scene2");
-                    if (scene2 != null) {
-                        gameDataAccessInterface.setCurrentScene(scene2);
-                    }
-
-                    // optional UX feedback
-                    javax.swing.SwingUtilities.invokeLater(() ->
-                            javax.swing.JOptionPane.showMessageDialog(
-                                    null, "Door unlocked with Object3. It will stay open.",
-                                    "Door Unlocked", javax.swing.JOptionPane.INFORMATION_MESSAGE));
-                } else {
-                    // still locked
-                    javax.swing.SwingUtilities.invokeLater(() ->
-                            javax.swing.JOptionPane.showMessageDialog(
-                                    null, "It's locked. You need Object3.",
-                                    "Locked", javax.swing.JOptionPane.WARNING_MESSAGE));
-                }
-            }
-        }
-
-
-
-        // ✅ Refresh UI
-        // game logic
+        // Game logic
         if (clicked instanceof NonPlayableCharacter) {
-            gameDataAccessInterface.setCurrentScene(((NonPlayableCharacter) clicked).getDB());
-        }
-        else if (clicked instanceof DialogueOption) {
-            gameDataAccessInterface.setCurrentScene(((DialogueOption) clicked).getScene());
+            gameDataAccessInterface.setCurrentDialogue(((NonPlayableCharacter) clicked).getDB());
         }
         else {
             switch (clicked.getName()) {
@@ -120,19 +55,76 @@ public class GameInteractor implements GameInputBoundary {
                 case "Object2":
                     gameDataAccessInterface.setCurrentScene(gameDataAccessInterface.getScenes().get("Scene2"));
                     break;
+                case "Object3":
+                    gameDataAccessInterface.setCurrentScene(gameDataAccessInterface.getScenes().get("Scene3"));
+                    break;
+                case "Door1":
+                    Player player = gameDataAccessInterface.getPlayer();
+
+                    // If already unlocked, just go to Scene2
+                    if (gameDataAccessInterface.isDoorUnlocked("Door1")) {
+                        Scene scene2 = gameDataAccessInterface.getScenes().get("Scene4");
+                        if (scene2 != null) {
+                            gameDataAccessInterface.setCurrentScene(scene2);
+                        }
+                    } else {
+                        // Not unlocked yet
+                        if (player.hasItemNamed("Key1")) {
+                            // consume the key
+
+                            player.removeItemNamed("Key1");
+
+                            // mark door as unlocked forever
+                            gameDataAccessInterface.unlockDoor("Door1");
+
+                            // go to Scene4
+                            entity.Scene scene4 = gameDataAccessInterface.getScenes().get("Scene4");
+                            if (scene4 != null) {
+                                gameDataAccessInterface.setCurrentScene(scene4);
+                            }
+
+                            javax.swing.SwingUtilities.invokeLater(() ->
+                                    javax.swing.JOptionPane.showMessageDialog(
+                                            null, "Door unlocked with Key1. It will stay open.",
+                                            "Door Unlocked", javax.swing.JOptionPane.INFORMATION_MESSAGE));
+                        } else {
+                            // still locked
+                            javax.swing.SwingUtilities.invokeLater(() ->
+                                    javax.swing.JOptionPane.showMessageDialog(
+                                            null, "It's locked. You need Key1.",
+                                            "Locked", javax.swing.JOptionPane.WARNING_MESSAGE));
+                        }
+                    }
+                    break;
             }
         }
 
-        // update game ui
+        // Update game UI
+        updateView();
+    }
+
+    @Override
+    public void executeDialogueOption(DialogueOption dialogueOption) {
+        if (dialogueOption.leadsToScene()) {
+            // Close dialogue and navigate to scene
+            gameDataAccessInterface.setCurrentDialogue(null);
+            gameDataAccessInterface.setCurrentScene(dialogueOption.getTargetScene());
+        } else if (dialogueOption.leadsToDialogue()) {
+            // Show next dialogue
+            gameDataAccessInterface.setCurrentDialogue(dialogueOption.getTargetDialogue());
+        }
+
+        // Update game UI
+        updateView();
+    }
+
+    private void updateView() {
         Scene currentScene = gameDataAccessInterface.getCurrentScene();
         GameOutputData gameOutputData = new GameOutputData();
         gameOutputData.setBackgroundImage(currentScene.getImage());
         gameOutputData.setClickableObjects(currentScene.getObjects());
-        presenter.prepareView(gameOutputData);
+        gameOutputData.setCurrentDialogue(gameDataAccessInterface.getCurrentDialogue());
         gameOutputData.setInventory(gameDataAccessInterface.getPlayer().getInventory());
-
         presenter.prepareView(gameOutputData);
-
     }
-
 }

@@ -25,6 +25,8 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
     private Scene currentScene;
     private Player player;
     private Map<String, Scene> scenes = new HashMap<>();
+    private final java.util.Set<String> unlockedDoors = new java.util.HashSet<>();
+    private DialogueBox currentDialogue;
 
 
     public InMemoryGameDataAccessObject() {
@@ -102,12 +104,17 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
 
         ClickableObject object1 = new ClickableObjectFactory().create("Object1", 0, 0, "object1.png",false);
         ClickableObject object2 = new ClickableObjectFactory().create("Object2", 600, 300, "object2.png", false);
-        ClickableObject object3 = new ClickableObjectFactory().create("Object3", 200, 200, "object2.png", true);
+        ClickableObject object3 = new ClickableObjectFactory().create("Object3", 200, 200, "object3.png", false);
+        ClickableObject objectKey1 = new ClickableObjectFactory().create("Key1", 200, 200, "key1.png", true);
+        ClickableObject objectDoor1 = new ClickableObjectFactory().create("Door1", 200, 200, "door1.png", false);
+
 
         this.player = new PlayerFactory().create();
 
-        Scene scene1 = new SceneFactory().create("Scene1", new ArrayList<>(List.of(object1, object2, object3)), "scene1.png");
-        Scene scene2 = new SceneFactory().create("Scene2", new ArrayList<>(List.of(object2, object1)), "scene2.png");
+        Scene scene1 = new SceneFactory().create("Scene1", new ArrayList<>(List.of(object1, object2, objectKey1)), "scene1.png");
+        Scene scene2 = new SceneFactory().create("Scene2", new ArrayList<>(List.of(object1, object2, object3)), "scene2.png");
+        Scene scene3 = new SceneFactory().create("Scene3", new ArrayList<>(List.of(object1, objectDoor1)), "scene3.png");
+        Scene scene4 = new SceneFactory().create("Scene4", new ArrayList<>(List.of(object1)), "scene4.png");
 
         DialogueBox dialogBoxOptionOutcome1 = new DialogueBuilder("db1.png")
                 .setText("OUTCOME1")
@@ -131,20 +138,31 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
                 .addOption("Option 2", dialogBoxOptionOutcome2)
                 .build();
 
+
+        DialogueBox dialogueBox2 = new DialogueBuilder("db1.png")
+                .setText("Hello, world! I am NPC2")
+                .addOption("Goodbye", scene4)
+                .build();
+
         NonPlayableCharacter npc1 = new NonPlayableCharacterFactory().create("NPC1", 300, 300, "npc1.png", dialogueBox);
         scene2.addObject(npc1);
+        NonPlayableCharacter npc2 = new NonPlayableCharacterFactory().create("NPC2", 700, 300, "npc2.png", dialogueBox2);
+        scene4.addObject(npc2);
 
         scenes.put("Scene1", scene1);
         scenes.put("Scene2", scene2);
+        scenes.put("Scene3", scene3);
+        scenes.put("Scene4", scene4);
         currentScene = scenes.get("Scene1");
 
+        unlockedDoors.clear();
+        currentDialogue = null;
     }
 
     public void setPlayer(Player player) {
         this.player = player;
     }
-      
-    private final java.util.Set<String> unlockedDoors = new java.util.HashSet<>();
+
 
     @Override
     public boolean isDoorUnlocked(String doorName) {
@@ -156,4 +174,13 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
         unlockedDoors.add(doorName);
     }
 
+    @Override
+    public DialogueBox getCurrentDialogue() {
+        return currentDialogue;
+    }
+
+    @Override
+    public void setCurrentDialogue(DialogueBox dialogue) {
+        this.currentDialogue = dialogue;
+    }
 }

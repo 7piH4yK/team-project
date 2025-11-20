@@ -1,8 +1,10 @@
 package view;
 
+import data_access.InMemoryGameDataAccessObject;
 import entity.ClickableObject;
 import entity.DialogueOption;
 import entity.DialogueText;
+import entity.DialogueBox;
 import interface_adapter.game.GameController;
 import interface_adapter.game.GameState;
 import interface_adapter.game.GameViewModel;
@@ -19,6 +21,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * The View for the Game.
@@ -50,49 +53,30 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
         this.removeAll();
 
         try {
+
+
+            // Render dialogue overlay if active
+            DialogueBox dialogue = state.getCurrentDialogue();
+            if (dialogue != null) {
+                renderDialogueOverlay(dialogue);
+            }
+
+
             // add clickable objects
             for (ClickableObject clickableObject : state.getClickableObjects()) {
-                if (clickableObject instanceof DialogueOption)
-                {
-                    JLabel label = new JLabel(((DialogueOption) clickableObject).getText());
-                    label.setForeground(Color.RED);
-                    label.setFont(new Font(label.getFont().getName(), Font.BOLD, label.getFont().getSize()));
-                    Dimension preferredSize = label.getPreferredSize();
-                    label.setBounds(clickableObject.getCoordinateX(), clickableObject.getCoordinateY(), preferredSize.width + 50, preferredSize.height);
-                    add(label);
-                    label.addMouseListener(new MouseAdapter()
-                    {
-                        @Override
-                        public void mouseClicked(MouseEvent e) {gameController.click(clickableObject);}
-                    });
-                }
-                else if (clickableObject instanceof DialogueText)
-                {
-                    JTextArea label = new JTextArea(((DialogueText) clickableObject).getText());
-                    label.setLineWrap(true);
-                    label.setWrapStyleWord(true);
-                    label.setEditable(false);
-                    label.setHighlighter(null);
-                    label.setForeground(Color.RED);
-                    label.setBackground(Color.BLACK);
-                    label.setFont(new Font(label.getFont().getName(), Font.BOLD, label.getFont().getSize()));
-                    label.setBounds(clickableObject.getCoordinateX(), clickableObject.getCoordinateY(), 400, 300);
-                    add(label);
-
-                }
-                else {
-                    ImageIcon imageIcon = new ImageIcon();
-                    imageIcon.setImage(ImageIO.read(new File("src/main/resources", clickableObject.getImage())));
-                    JLabel label = new JLabel(imageIcon);
-                    label.setBounds(clickableObject.getCoordinateX(), clickableObject.getCoordinateY(), imageIcon.getIconWidth(), imageIcon.getIconHeight());
-                    add(label);
-                    label.addMouseListener(new MouseAdapter()
-                    {
-                        @Override
-                        public void mouseClicked(MouseEvent e) {gameController.click(clickableObject);}
-                    });
-                }
+                ImageIcon imageIcon = new ImageIcon();
+                imageIcon.setImage(ImageIO.read(new File("src/main/resources", clickableObject.getImage())));
+                JLabel label = new JLabel(imageIcon);
+                label.setBounds(clickableObject.getCoordinateX(), clickableObject.getCoordinateY(), imageIcon.getIconWidth(), imageIcon.getIconHeight());
+                add(label);
+                label.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        gameController.click(clickableObject);
+                    }
+                });
             }
+
             // save and exit button
             JButton saveExitButton = new JButton("Save & Exit");
             saveExitButton.setBounds(650, 20, 120, 40);
@@ -124,6 +108,45 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
         }
     }
 
+    private void renderDialogueOverlay(DialogueBox dialogue) throws IOException {
+        // Add dialogue text
+        DialogueText dialogueText = dialogue.getText();
+        JTextArea textArea = new JTextArea(dialogueText.getText());
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        textArea.setEditable(false);
+        textArea.setHighlighter(null);
+        textArea.setForeground(Color.RED);
+        textArea.setBackground(Color.BLACK);
+        textArea.setFont(new Font(textArea.getFont().getName(), Font.BOLD, textArea.getFont().getSize()));
+        textArea.setBounds(dialogueText.getCoordinateX(), dialogueText.getCoordinateY(), 400, 300);
+        add(textArea); // Add at front
+
+        // Add dialogue options
+        for (DialogueOption option : dialogue.getOptions()) {
+            JLabel optionLabel = new JLabel(option.getText());
+            optionLabel.setForeground(Color.RED);
+            optionLabel.setFont(new Font(optionLabel.getFont().getName(), Font.BOLD, optionLabel.getFont().getSize()));
+            Dimension preferredSize = optionLabel.getPreferredSize();
+            optionLabel.setBounds(option.getCoordinateX(), option.getCoordinateY(), preferredSize.width + 50, preferredSize.height);
+            add(optionLabel); // Add at front
+            optionLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    gameController.clickDialogueOption(option);
+                }
+            });
+        }
+
+        // Add dialogue box background image
+        ImageIcon dialogueBackground = new ImageIcon();
+        dialogueBackground.setImage(ImageIO.read(new File("src/main/resources", dialogue.getImage())));
+        JLabel dialogueBackgroundLabel = new JLabel(dialogueBackground);
+        dialogueBackgroundLabel.setBounds(0, 0, dialogueBackground.getIconWidth(), dialogueBackground.getIconHeight());
+        add(dialogueBackgroundLabel); // Add at front
+
+    }
+
     public String getViewName() {
         return viewName;
     }
@@ -140,8 +163,6 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
         inventoryFrame.setLocationRelativeTo(null);
         inventoryFrame.setLayout(new FlowLayout());
 
-        // Fetch player inventory from your DAO
-        // (If you need it through a controller or view model, adapt accordingly)
         java.util.List<ClickableObject> items = gameViewModel.getState().getInventoryItems();
 
 

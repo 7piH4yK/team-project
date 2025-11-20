@@ -29,6 +29,7 @@ public class MainMenuPresenter implements SwitchToGameViewOutputBoundary {
         final GameState state = gameViewModel.getState();
         state.setBackgroundImage(outputData.getBackgroundImage());
         state.setClickableObjects(outputData.getClickableObjects());
+        state.setCurrentDialogue(outputData.getCurrentDialogue());
         gameViewModel.setState(state);
         gameViewModel.firePropertyChange();
     }

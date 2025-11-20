@@ -23,6 +23,7 @@ public class SwitchToGameViewInteractor implements SwitchToGameViewInputBoundary
         SwitchToGameOutputData gameOutputData = new SwitchToGameOutputData();
         gameOutputData.setBackgroundImage(currentScene.getImage());
         gameOutputData.setClickableObjects(currentScene.getObjects());
+        gameOutputData.setCurrentDialogue(null); // No dialogue when first entering game
         presenter.switchToGameView(gameOutputData);
     }
 }

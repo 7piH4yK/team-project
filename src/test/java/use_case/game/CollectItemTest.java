@@ -1,5 +1,6 @@
 package use_case.game;
 
+import entity.ClickableObject;
 import entity.Collectibles;
 import entity.Player;
 import entity.Scene;
@@ -31,7 +32,7 @@ public class CollectItemTest {
 
     @Test
     public void testCollectableIsRemovedFromScene() {
-        Collectibles key = new Collectibles("Object3", 100,100,"key.png", true);
+        Collectibles key = new Collectibles("key", 100,100,"key.png", true);
 
         Scene scene = new Scene(
                 "Scene1",
@@ -43,14 +44,14 @@ public class CollectItemTest {
         );
 
         // remove Object3
-        List<Collectibles> updated = new java.util.ArrayList<>(scene.getObjects());
-        updated.removeIf(o -> o.getName().equals("Object3"));
+        List<ClickableObject> updated = new java.util.ArrayList<>(scene.getObjects());
+        updated.removeIf(o -> o.getName().equals("key"));
 
         Scene updatedScene = new Scene("Scene1", updated, "bg.png");
 
         assertEquals(1, updatedScene.getObjects().size());
         assertFalse(updatedScene.getObjects()
                 .stream()
-                .anyMatch(o -> o.getName().equals("Object3")));
+                .anyMatch(o -> o.getName().equals("key")));
     }
 }

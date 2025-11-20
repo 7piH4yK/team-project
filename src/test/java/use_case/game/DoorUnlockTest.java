@@ -1,6 +1,6 @@
 package use_case.game;
 
-import entity.ClickableObject;
+import entity.Collectibles;
 import entity.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,7 @@ public class DoorUnlockTest {
 
     @Test
     public void testDoorOpensWithKey() {
-        ClickableObject key = new ClickableObject("Object3", 0,0,"key.png", true);
+        Collectibles key = new Collectibles("Object3", 0,0,"key.png", true);
 
         // Collect key
         player.addToInventory(key);
@@ -65,7 +65,7 @@ public class DoorUnlockTest {
 
     @Test
     public void testKeyConsumption() {
-        ClickableObject key = new ClickableObject("Object3", 0,0,"key.png", true);
+        Collectibles key = new Collectibles("Object3", 0,0,"key.png", true);
 
         player.addToInventory(key);
         assertTrue(player.hasItemNamed("Object3"));

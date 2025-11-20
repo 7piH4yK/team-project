@@ -21,9 +21,10 @@ public class GameInteractor implements GameInputBoundary {
         Scene cur = gameDataAccessInterface.getCurrentScene();
 
         // Handle collectable objects
-        if (clicked.isCollectable()) {
+        if (clicked instanceof Collectibles) {
             // 1. Add to inventory
-            gameDataAccessInterface.getPlayer().addToInventory(clicked);
+
+            gameDataAccessInterface.getPlayer().addToInventory((Collectibles) clicked);
 
             // 2. Remove from scene (rebuild because Scene is immutable)
             java.util.List<ClickableObject> updated = new java.util.ArrayList<>(cur.getObjects());

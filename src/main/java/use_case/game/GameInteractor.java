@@ -45,7 +45,6 @@ public class GameInteractor implements GameInputBoundary {
 
         // Game logic
         if (clicked instanceof NonPlayableCharacter) {
-            // Open dialogue overlay instead of changing scene
             gameDataAccessInterface.setCurrentDialogue(((NonPlayableCharacter) clicked).getDB());
         }
         else {
@@ -69,27 +68,21 @@ public class GameInteractor implements GameInputBoundary {
                             gameDataAccessInterface.setCurrentScene(scene2);
                         }
                     } else {
-                        // Not unlocked yet: require Object3 (the key)
+                        // Not unlocked yet
                         if (player.hasItemNamed("Key1")) {
                             // consume the key
-                            java.util.List<entity.ClickableObject> inv = player.getInventory();
-                            for (ClickableObject clickableObject : inv) {
-                                if (clickableObject.getName().equals("Object3")) {
-                                    player.removeFromInventory(clickableObject);
-                                    break;
-                                }
-                            }
+
+                            player.removeItemNamed("Key1");
 
                             // mark door as unlocked forever
                             gameDataAccessInterface.unlockDoor("Door1");
 
-                            // go to Scene2
-                            entity.Scene scene2 = gameDataAccessInterface.getScenes().get("Scene4");
-                            if (scene2 != null) {
-                                gameDataAccessInterface.setCurrentScene(scene2);
+                            // go to Scene4
+                            entity.Scene scene4 = gameDataAccessInterface.getScenes().get("Scene4");
+                            if (scene4 != null) {
+                                gameDataAccessInterface.setCurrentScene(scene4);
                             }
 
-                            // optional UX feedback
                             javax.swing.SwingUtilities.invokeLater(() ->
                                     javax.swing.JOptionPane.showMessageDialog(
                                             null, "Door unlocked with Key1. It will stay open.",
@@ -131,6 +124,7 @@ public class GameInteractor implements GameInputBoundary {
         gameOutputData.setBackgroundImage(currentScene.getImage());
         gameOutputData.setClickableObjects(currentScene.getObjects());
         gameOutputData.setCurrentDialogue(gameDataAccessInterface.getCurrentDialogue());
+        gameOutputData.setInventory(gameDataAccessInterface.getPlayer().getInventory());
         presenter.prepareView(gameOutputData);
     }
 }

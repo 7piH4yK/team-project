@@ -4,6 +4,7 @@ import data_access.InMemoryGameDataAccessObject;
 import entity.ClickableObject;
 import entity.DialogueOption;
 import entity.DialogueText;
+import entity.DialogueBox;
 import interface_adapter.game.GameController;
 import interface_adapter.game.GameState;
 import interface_adapter.game.GameViewModel;
@@ -162,8 +163,6 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
         inventoryFrame.setLocationRelativeTo(null);
         inventoryFrame.setLayout(new FlowLayout());
 
-        // Fetch player inventory from your DAO
-        // (If you need it through a controller or view model, adapt accordingly)
         java.util.List<ClickableObject> items = gameViewModel.getState().getInventoryItems();
 
 

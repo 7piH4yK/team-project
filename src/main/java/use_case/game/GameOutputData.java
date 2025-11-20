@@ -14,9 +14,8 @@ public class GameOutputData {
     private List<ClickableObject> clickableObjects;
     private DialogueBox currentDialogue;
 
-    public String getBackgroundImage() {
-        return backgroundImage;
-    }
+    // NEW
+    private List<ClickableObject> inventory;
 
     public void setBackgroundImage(String backgroundImage) {
         this.backgroundImage = backgroundImage;
@@ -37,4 +36,7 @@ public class GameOutputData {
     public void setCurrentDialogue(DialogueBox currentDialogue) {
         this.currentDialogue = currentDialogue;
     }
+    // NEW GETTER/SETTER
+    public List<ClickableObject> getInventory() { return inventory; }
+    public void setInventory(List<ClickableObject> inventory) { this.inventory = inventory; }
 }

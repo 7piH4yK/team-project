@@ -1,7 +1,6 @@
 package interface_adapter.game;
 
 import entity.ClickableObject;
-import entity.DialogueBox;
 
 import java.util.List;
 
@@ -12,6 +11,7 @@ public class GameState {
     private String backgroundImage;
     private List<ClickableObject> clickableObjects;
     private DialogueBox currentDialogue;
+    private List<ClickableObject> inventoryItems;
 
     public String getBackgroundImage() {
         return backgroundImage;
@@ -29,11 +29,11 @@ public class GameState {
         this.clickableObjects = clickableObjects;
     }
 
-    public DialogueBox getCurrentDialogue() {
-        return currentDialogue;
+    public List<ClickableObject> getInventoryItems() {
+        return inventoryItems;
     }
 
-    public void setCurrentDialogue(DialogueBox currentDialogue) {
-        this.currentDialogue = currentDialogue;
+    public void setInventoryItems(List<ClickableObject> inventoryItems) {
+        this.inventoryItems = inventoryItems;
     }
 }

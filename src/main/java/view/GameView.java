@@ -1,7 +1,7 @@
 package view;
 
+import data_access.InMemoryGameDataAccessObject;
 import entity.ClickableObject;
-import entity.DialogueBox;
 import entity.DialogueOption;
 import entity.DialogueText;
 import interface_adapter.game.GameController;
@@ -20,6 +20,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * The View for the Game.
@@ -80,6 +81,16 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
             saveExitButton.setBounds(650, 20, 120, 40);
             saveExitButton.addActionListener(e -> saveController.save());
             add(saveExitButton);
+
+            // Add a small bag icon (top-right corner)
+            ImageIcon bagIcon = new ImageIcon(ImageIO.read(new File("src/main/resources/bag.png")));
+            JButton bagButton = new JButton(bagIcon);
+            bagButton.setBounds(20, 480, 64, 64); // Adjust position and size
+            bagButton.setContentAreaFilled(false);
+            bagButton.setBorderPainted(false);
+            bagButton.setFocusPainted(false);
+            bagButton.addActionListener(e -> openInventoryPanel());
+            add(bagButton);
 
             // add background image
             ImageIcon background = new ImageIcon();
@@ -143,7 +154,40 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
         this.gameController = controller;
     }
 
-    public void setSaveController(SaveController controller) {
-        this.saveController = controller;
+    public void setSaveController(SaveController controller) {this.saveController = controller;}
+
+    private void openInventoryPanel() {
+        JFrame inventoryFrame = new JFrame("Inventory");
+        inventoryFrame.setSize(400, 300);
+        inventoryFrame.setLocationRelativeTo(null);
+        inventoryFrame.setLayout(new FlowLayout());
+
+        // Fetch player inventory from your DAO
+        // (If you need it through a controller or view model, adapt accordingly)
+        java.util.List<ClickableObject> items = gameViewModel.getState().getInventoryItems();
+
+
+        if (items.isEmpty()) {
+            inventoryFrame.add(new JLabel("Your inventory is empty."));
+        } else {
+            for (entity.ClickableObject item : items) {
+                try {
+                    ImageIcon itemIcon = new ImageIcon(ImageIO.read(new File("src/main/resources", item.getImage())));
+                    JLabel itemLabel = new JLabel(itemIcon);
+                    itemLabel.setToolTipText(item.getName());
+                    inventoryFrame.add(itemLabel);
+                } catch (Exception ex) {
+                    inventoryFrame.add(new JLabel(item.getName()));
+                }
+            }
+        }
+
+        JButton closeButton = new JButton("Close");
+        closeButton.addActionListener(e -> inventoryFrame.dispose());
+        inventoryFrame.add(closeButton);
+
+        inventoryFrame.setVisible(true);
     }
+
 }
+

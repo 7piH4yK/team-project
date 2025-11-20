@@ -2,6 +2,7 @@ package app;
 
 import data_access.InMemoryGameDataAccessObject;
 import entity.*;
+import interface_adapter.AppContext;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.game.GameController;
 import interface_adapter.game.GamePresenter;
@@ -136,7 +137,13 @@ public class AppBuilder {
 
         viewManagerModel.setState(mainMenuView.getViewName());
         viewManagerModel.firePropertyChange();
+        AppContext.setGameDAO(gameDataAccessObject);
 
         return application;
     }
+    // In AppBuilder.java
+    public InMemoryGameDataAccessObject getGameDataAccessObject() {
+        return gameDataAccessObject;
+    }
+
 }

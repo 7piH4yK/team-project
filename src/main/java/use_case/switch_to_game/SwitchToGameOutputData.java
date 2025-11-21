@@ -11,7 +11,7 @@ import java.util.List;
 public class SwitchToGameOutputData {
 
     private String backgroundImage;
-    private List<ClickableObject> clickableObjects;
+    private List<ClickableObject> clickables;
     private DialogueBox currentDialogue;
 
     public String getBackgroundImage() {
@@ -23,11 +23,11 @@ public class SwitchToGameOutputData {
     }
 
     public List<ClickableObject> getClickableObjects() {
-        return clickableObjects;
+        return clickables;
     }
 
-    public void setClickableObjects(List<ClickableObject> clickableObjects) {
-        this.clickableObjects = clickableObjects;
+    public void setClickableObjects(List<ClickableObject> clickable) {
+        this.clickables = clickable;
     }
 
     public DialogueBox getCurrentDialogue() {

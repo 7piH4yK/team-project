@@ -1,10 +1,6 @@
 package view;
 
-import data_access.InMemoryGameDataAccessObject;
-import entity.ClickableObject;
-import entity.DialogueOption;
-import entity.DialogueText;
-import entity.DialogueBox;
+import entity.*;
 import interface_adapter.game.GameController;
 import interface_adapter.game.GameState;
 import interface_adapter.game.GameViewModel;
@@ -21,7 +17,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 
 /**
  * The View for the Game.
@@ -63,16 +58,16 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
 
 
             // add clickable objects
-            for (ClickableObject clickableObject : state.getClickableObjects()) {
+            for (ClickableObject clickables : state.getClickableObjects()) {
                 ImageIcon imageIcon = new ImageIcon();
-                imageIcon.setImage(ImageIO.read(new File("src/main/resources", clickableObject.getImage())));
+                imageIcon.setImage(ImageIO.read(new File("src/main/resources", clickables.getImage())));
                 JLabel label = new JLabel(imageIcon);
-                label.setBounds(clickableObject.getCoordinateX(), clickableObject.getCoordinateY(), imageIcon.getIconWidth(), imageIcon.getIconHeight());
+                label.setBounds(clickables.getCoordinateX(), clickables.getCoordinateY(), imageIcon.getIconWidth(), imageIcon.getIconHeight());
                 add(label);
                 label.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        gameController.click(clickableObject);
+                        gameController.click(clickables);
                     }
                 });
             }
@@ -163,13 +158,13 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
         inventoryFrame.setLocationRelativeTo(null);
         inventoryFrame.setLayout(new FlowLayout());
 
-        java.util.List<ClickableObject> items = gameViewModel.getState().getInventoryItems();
+        java.util.List<Collectibles> items = gameViewModel.getState().getInventoryItems();
 
 
         if (items.isEmpty()) {
             inventoryFrame.add(new JLabel("Your inventory is empty."));
         } else {
-            for (entity.ClickableObject item : items) {
+            for (Collectibles item : items) {
                 try {
                     ImageIcon itemIcon = new ImageIcon(ImageIO.read(new File("src/main/resources", item.getImage())));
                     JLabel itemLabel = new JLabel(itemIcon);

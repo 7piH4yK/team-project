@@ -19,7 +19,7 @@ public class NonPlayableCharacter extends ClickableObject {
      * @throws IllegalArgumentException if the name or image path is empty
      **/
     public NonPlayableCharacter(String name, int coordinateX, int coordinateY, String image, DialogueBox box) {
-        super(name, coordinateX, coordinateY, image, false);
+        super(name, coordinateX, coordinateY, image);
         if ("".equals(name)) {
             throw new IllegalArgumentException("Object name cannot be empty");
         }

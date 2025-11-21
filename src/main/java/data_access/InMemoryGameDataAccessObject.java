@@ -102,11 +102,11 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
 
     public void resetGame() {
 
-        ClickableObject object1 = new ClickableObjectFactory().create("Object1", 0, 0, "object1.png",false);
-        ClickableObject object2 = new ClickableObjectFactory().create("Object2", 600, 300, "object2.png", false);
-        ClickableObject object3 = new ClickableObjectFactory().create("Object3", 200, 200, "object3.png", false);
-        ClickableObject objectKey1 = new ClickableObjectFactory().create("Key1", 200, 200, "key1.png", true);
-        ClickableObject objectDoor1 = new ClickableObjectFactory().create("Door1", 200, 200, "door1.png", false);
+        ClickableObject object1 = new ClickableObjectFactory().create("Object1", 0, 0, "object1.png");
+        ClickableObject object2 = new ClickableObjectFactory().create("Object2", 600, 300, "object2.png");
+        ClickableObject object3 = new ClickableObjectFactory().create("Object3", 200, 200, "object3.png");
+        Collectibles objectKey1 = new ClickableObjectFactory().createCollectibles("Key1", 200, 200, "key1.png", true);
+        ClickableObject objectDoor1 = new ClickableObjectFactory().create("Door1", 200, 200, "door1.png");
 
 
         this.player = new PlayerFactory().create();

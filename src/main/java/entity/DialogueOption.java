@@ -1,5 +1,7 @@
 package entity;
 
+import org.json.JSONObject;
+
 /**
  * Represents a clickable option in a dialogue box.
  */
@@ -89,4 +91,5 @@ public class DialogueOption {
     public boolean leadsToDialogue() {
         return targetDialogue != null;
     }
+
 }

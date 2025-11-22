@@ -12,4 +12,5 @@ public interface SwitchToGameViewDataAccessInterface {
      * @return the current scene
      */
     Scene getCurrentScene();
+    void resetGame();
 }

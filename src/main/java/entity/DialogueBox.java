@@ -1,5 +1,9 @@
 package entity;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,4 +33,5 @@ public class DialogueBox {
     public List<DialogueOption> getOptions() {
         return new ArrayList<>(options);
     }
+
 }

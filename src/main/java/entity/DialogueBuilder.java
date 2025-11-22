@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DialogueBuilder {
-    private int option_xpos = 50;
+    final private int option_xpos = 50;
     private int option_ypos = 350;
-    private int text_xpos = 400;
-    private int text_ypos = 350;
+    final private int text_xpos = 400;
+    final private int text_ypos = 350;
 
     private final String image;
 

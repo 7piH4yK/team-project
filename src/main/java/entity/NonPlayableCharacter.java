@@ -1,5 +1,7 @@
 package entity;
 
+import org.json.JSONObject;
+
 /**
  * Represents a clickable non-playable character (NPC) in the game that can be interacted with.
  */
@@ -48,4 +50,5 @@ public class NonPlayableCharacter extends ClickableObject {
     public String getImage() {return image;}
 
     public DialogueBox getDB() {return box;}
+
 }

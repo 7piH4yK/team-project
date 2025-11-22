@@ -70,6 +70,7 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
     }
 
     public void loadGame(String filePath) {
+        // read file and stuff
         StringBuilder jsonText = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -83,8 +84,11 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
             this.scenes = new  HashMap<>();
             return;
         }
+
+        // create JSONObject to read from
         JSONObject gameState = new JSONObject(jsonText.toString());
 
+        // load player and scene object
         JSONObject playerJson = gameState.getJSONObject("player");
         this.player = Player.fromJson(playerJson);
 
@@ -96,6 +100,15 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
         }
         this.scenes = loadedScenes;
 
+        // get scenes then add constant dialogue and NPCs
+        Map<String, Scene> sceneMap = getScenes();
+        Scene scene1 = sceneMap.get("Scene1");
+        Scene scene2 = sceneMap.get("Scene2");
+        Scene scene3 = sceneMap.get("Scene3");
+        Scene scene4 = sceneMap.get("Scene4");
+
+        loadGameConstants(scene1, scene2, scene3, scene4);
+
         String currentSceneName = gameState.getString("currentScene");
         this.currentScene = loadedScenes.get(currentSceneName);
     }
@@ -105,7 +118,7 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
         ClickableObject object1 = new ClickableObjectFactory().create("Object1", 0, 0, "object1.png");
         ClickableObject object2 = new ClickableObjectFactory().create("Object2", 600, 300, "object2.png");
         ClickableObject object3 = new ClickableObjectFactory().create("Object3", 200, 200, "object3.png");
-        Collectibles objectKey1 = new ClickableObjectFactory().createCollectibles("Key1", 200, 200, "key1.png", true);
+        Collectibles objectKey1 = new ClickableObjectFactory().createCollectibles("Key1", 200, 200, "key1.png");
         ClickableObject objectDoor1 = new ClickableObjectFactory().create("Door1", 200, 200, "door1.png");
 
 
@@ -116,6 +129,20 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
         Scene scene3 = new SceneFactory().create("Scene3", new ArrayList<>(List.of(object1, objectDoor1)), "scene3.png");
         Scene scene4 = new SceneFactory().create("Scene4", new ArrayList<>(List.of(object1)), "scene4.png");
 
+        // This method loads and creates all the NPCs and their dialogues
+        loadGameConstants(scene1, scene2, scene3, scene4);
+
+        scenes.put("Scene1", scene1);
+        scenes.put("Scene2", scene2);
+        scenes.put("Scene3", scene3);
+        scenes.put("Scene4", scene4);
+        currentScene = scenes.get("Scene1");
+
+        unlockedDoors.clear();
+        currentDialogue = null;
+    }
+
+    public void loadGameConstants(Scene scene1, Scene scene2, Scene scene3, Scene scene4) {
         DialogueBox dialogBoxOptionOutcome1 = new DialogueBuilder("db1.png")
                 .setText("OUTCOME1")
                 .addOption("OK", scene2)
@@ -148,15 +175,6 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
         scene2.addObject(npc1);
         NonPlayableCharacter npc2 = new NonPlayableCharacterFactory().create("NPC2", 700, 300, "npc2.png", dialogueBox2);
         scene4.addObject(npc2);
-
-        scenes.put("Scene1", scene1);
-        scenes.put("Scene2", scene2);
-        scenes.put("Scene3", scene3);
-        scenes.put("Scene4", scene4);
-        currentScene = scenes.get("Scene1");
-
-        unlockedDoors.clear();
-        currentDialogue = null;
     }
 
     public void setPlayer(Player player) {

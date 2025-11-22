@@ -2,7 +2,7 @@
     "scenes": [
         {
             "image": "scene1.png",
-            "objects": [
+            "clickableObjects": [
                 {
                     "image": "object1.png",
                     "coordinateY": 0,
@@ -16,11 +16,17 @@
                     "name": "Object2"
                 }
             ],
-            "name": "Scene1"
+            "name": "Scene1",
+            "collectibles": [{
+                "image": "key1.png",
+                "coordinateY": 200,
+                "coordinateX": 200,
+                "name": "Key1"
+            }]
         },
         {
             "image": "scene2.png",
-            "objects": [
+            "clickableObjects": [
                 {
                     "image": "object1.png",
                     "coordinateY": 0,
@@ -38,19 +44,14 @@
                     "coordinateY": 200,
                     "coordinateX": 200,
                     "name": "Object3"
-                },
-                {
-                    "image": "npc1.png",
-                    "coordinateY": 300,
-                    "coordinateX": 300,
-                    "name": "NPC1"
                 }
             ],
-            "name": "Scene2"
+            "name": "Scene2",
+            "collectibles": []
         },
         {
             "image": "scene3.png",
-            "objects": [
+            "clickableObjects": [
                 {
                     "image": "object1.png",
                     "coordinateY": 0,
@@ -64,32 +65,21 @@
                     "name": "Door1"
                 }
             ],
-            "name": "Scene3"
+            "name": "Scene3",
+            "collectibles": []
         },
         {
             "image": "scene4.png",
-            "objects": [
-                {
-                    "image": "object1.png",
-                    "coordinateY": 0,
-                    "coordinateX": 0,
-                    "name": "Object1"
-                },
-                {
-                    "image": "npc2.png",
-                    "coordinateY": 300,
-                    "coordinateX": 700,
-                    "name": "NPC2"
-                }
-            ],
-            "name": "Scene4"
+            "clickableObjects": [{
+                "image": "object1.png",
+                "coordinateY": 0,
+                "coordinateX": 0,
+                "name": "Object1"
+            }],
+            "name": "Scene4",
+            "collectibles": []
         }
     ],
-    "player": {"inventory": [{
-        "image": "key1.png",
-        "coordinateY": 200,
-        "coordinateX": 200,
-        "name": "Key1"
-    }]},
-    "currentScene": "Scene4"
+    "player": {"inventory": []},
+    "currentScene": "Scene1"
 }

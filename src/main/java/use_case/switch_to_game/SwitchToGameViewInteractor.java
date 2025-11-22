@@ -19,6 +19,7 @@ public class SwitchToGameViewInteractor implements SwitchToGameViewInputBoundary
 
     @Override
     public void execute() {
+        gameDataAccessObject.resetGame();
         Scene currentScene = gameDataAccessObject.getCurrentScene();
         SwitchToGameOutputData gameOutputData = new SwitchToGameOutputData();
         gameOutputData.setBackgroundImage(currentScene.getImage());

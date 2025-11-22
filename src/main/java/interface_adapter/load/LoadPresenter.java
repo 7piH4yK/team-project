@@ -8,7 +8,9 @@ import use_case.load.LoadOutputData;
 import use_case.load.LoadOutputBoundary;
 import interface_adapter.main_menu.MainMenuState;
 
-
+/**
+ Presenter that handles the load use case.
+ **/
 public class LoadPresenter implements LoadOutputBoundary {
     GameViewModel gameViewModel;
     ViewManagerModel viewManagerModel;
@@ -20,6 +22,9 @@ public class LoadPresenter implements LoadOutputBoundary {
         this.gameViewModel = gameViewModel;
     }
 
+    /**
+     Similar to the game use case 'switchToGameView' but loads game first
+     **/
     @Override
     public void switchToLoadView(LoadOutputData loadOutputData) {
         // switch to view
@@ -33,6 +38,9 @@ public class LoadPresenter implements LoadOutputBoundary {
         gameViewModel.firePropertyChange();
     }
 
+    /**
+     Displays errors involving load use case.
+     **/
     public void displayError(String errorMessage) {
         MainMenuState state = mainMenuViewModel.getState();
         state.setErrorMessage(errorMessage);

@@ -1,20 +1,13 @@
-package data_access;
-
-import entity.*;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import use_case.game.GameDataAccessInterface;
-import use_case.save.SaveOutputData;
-import use_case.switch_to_game.SwitchToGameViewDataAccessInterface;
-import use_case.save.SaveDataAccessInterface;
-import use_case.load.LoadDataAccessInterface;
+package dataaccess;
 
 import java.util.*;
+
+import entity.*;
+import use_case.game.GameDataAccessInterface;
+import use_case.load.LoadDataAccessInterface;
+import use_case.save.SaveDataAccessInterface;
+import use_case.save.SaveOutputData;
+import use_case.switch_to_game.SwitchToGameViewDataAccessInterface;
 
 /**
  * In-memory implementation of game data access.
@@ -50,54 +43,30 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
         return player;
     }
 
+    /**
+     Creates a FileAccessObject to handle the save.
+     **/
     public void saveGame(SaveOutputData outputData) {
-        JSONObject gameState = new JSONObject();
-        List<Scene> scenesData = new ArrayList<>(outputData.getScenes().values());
-        JSONArray scenes = new JSONArray();
-        for (Scene s : scenesData) {
-            scenes.put(s.toJson());
-        }
-        gameState.put("scenes", scenes);
-        gameState.put("player", outputData.getPlayer().toJson());
-        gameState.put("currentScene", outputData.getCurrentScene().getName());
-
-        // Save to file
-        try (FileWriter file = new FileWriter("save.json")) {
-            file.write(gameState.toString(4)); // pretty print indent
-        } catch (IOException e) {
-            System.out.println("Error writing JSON: " + e.getMessage());
-        }
+        FileAccessObject fileAccessObject = new FileAccessObject();
+        fileAccessObject.saveGame(outputData);
     }
 
+    /**
+     Creates a FileAccessObject to handle the load.
+     **/
     public void loadGame(String filePath) {
-        StringBuilder jsonText = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                jsonText.append(line);
-            }
-        } catch (IOException e) {
-            System.out.println("Error reading save file: " + e.getMessage());
-            this.currentScene = null;
-            this.player = null;
-            this.scenes = new  HashMap<>();
-            return;
-        }
-        JSONObject gameState = new JSONObject(jsonText.toString());
+        FileAccessObject fileAccessObject = new FileAccessObject(filePath);
+        this.scenes = fileAccessObject.loadScenes();
+        this.player = fileAccessObject.loadPlayer();
+        this.currentScene = this.scenes.get(fileAccessObject.loadCurrentScene());
 
-        JSONObject playerJson = gameState.getJSONObject("player");
-        this.player = Player.fromJson(playerJson);
+        Map<String, Scene> sceneMap = getScenes();
+        Scene scene1 = sceneMap.get("Scene1");
+        Scene scene2 = sceneMap.get("Scene2");
+        Scene scene3 = sceneMap.get("Scene3");
+        Scene scene4 = sceneMap.get("Scene4");
 
-        JSONArray scenesArray = gameState.getJSONArray("scenes");
-        Map<String, Scene> loadedScenes = new HashMap<>();
-        for (int i = 0; i < scenesArray.length(); i++) {
-            Scene s = Scene.fromJson(scenesArray.getJSONObject(i));
-            loadedScenes.put(s.getName(), s);
-        }
-        this.scenes = loadedScenes;
-
-        String currentSceneName = gameState.getString("currentScene");
-        this.currentScene = loadedScenes.get(currentSceneName);
+        loadGameConstants(scene1, scene2, scene3, scene4);
     }
 
     public void resetGame() {
@@ -105,17 +74,34 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
         ClickableObject object1 = new ClickableObjectFactory().create("Object1", 0, 0, "object1.png");
         ClickableObject object2 = new ClickableObjectFactory().create("Object2", 600, 300, "object2.png");
         ClickableObject object3 = new ClickableObjectFactory().create("Object3", 200, 200, "object3.png");
-        Collectibles objectKey1 = new ClickableObjectFactory().createCollectibles("Key1", 200, 200, "key1.png", true);
+        Collectibles objectKey1 = new ClickableObjectFactory().createCollectibles("Key1", 200, 200, "key1.png");
         ClickableObject objectDoor1 = new ClickableObjectFactory().create("Door1", 200, 200, "door1.png");
 
 
         this.player = new PlayerFactory().create();
 
-        Scene scene1 = new SceneFactory().create("Scene1", new ArrayList<>(List.of(object1, object2, objectKey1)), "scene1.png");
-        Scene scene2 = new SceneFactory().create("Scene2", new ArrayList<>(List.of(object1, object2, object3)), "scene2.png");
+        Scene scene1 = new SceneFactory().create("Scene1", new ArrayList<>(List.of(object2, objectKey1)), "scene1.png");
+        Scene scene2 = new SceneFactory().create("Scene2", new ArrayList<>(List.of(object1, object3)), "scene2.png");
         Scene scene3 = new SceneFactory().create("Scene3", new ArrayList<>(List.of(object1, objectDoor1)), "scene3.png");
         Scene scene4 = new SceneFactory().create("Scene4", new ArrayList<>(List.of(object1)), "scene4.png");
 
+        // This method loads and creates all the NPCs and their dialogues
+        loadGameConstants(scene1, scene2, scene3, scene4);
+
+        scenes.put("Scene1", scene1);
+        scenes.put("Scene2", scene2);
+        scenes.put("Scene3", scene3);
+        scenes.put("Scene4", scene4);
+        currentScene = scenes.get("Scene1");
+
+        unlockedDoors.clear();
+        currentDialogue = null;
+    }
+
+    /**
+     Creates NPC and dialogue.
+     **/
+    public void loadGameConstants(Scene scene1, Scene scene2, Scene scene3, Scene scene4) {
         DialogueBox dialogBoxOptionOutcome1 = new DialogueBuilder("db1.png")
                 .setText("OUTCOME1")
                 .addOption("OK", scene2)
@@ -148,15 +134,6 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
         scene2.addObject(npc1);
         NonPlayableCharacter npc2 = new NonPlayableCharacterFactory().create("NPC2", 700, 300, "npc2.png", dialogueBox2);
         scene4.addObject(npc2);
-
-        scenes.put("Scene1", scene1);
-        scenes.put("Scene2", scene2);
-        scenes.put("Scene3", scene3);
-        scenes.put("Scene4", scene4);
-        currentScene = scenes.get("Scene1");
-
-        unlockedDoors.clear();
-        currentDialogue = null;
     }
 
     public void setPlayer(Player player) {

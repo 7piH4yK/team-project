@@ -1,11 +1,14 @@
 package app;
 
-import data_access.InMemoryGameDataAccessObject;
-import entity.*;
+import java.awt.*;
+
+import javax.swing.*;
+
+import dataaccess.InMemoryGameDataAccessObject;
+import entity.PlayerFactory;
+import entity.SceneFactory;
 import interface_adapter.AppContext;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.game.GameController;
-import interface_adapter.game.GamePresenter;
 import interface_adapter.game.GameViewModel;
 import interface_adapter.load.LoadPresenter;
 import interface_adapter.main_menu.MainMenuController;
@@ -13,12 +16,9 @@ import interface_adapter.main_menu.MainMenuPresenter;
 import interface_adapter.main_menu.MainMenuViewModel;
 import interface_adapter.save.SaveController;
 import interface_adapter.save.SavePresenter;
-import use_case.game.GameInputBoundary;
-import use_case.game.GameInteractor;
-import use_case.game.GameOutputBoundary;
+import use_case.load.LoadInputBoundary;
 import use_case.load.LoadInteractor;
 import use_case.load.LoadOutputBoundary;
-import use_case.load.LoadInputBoundary;
 import use_case.save.SaveInputBoundary;
 import use_case.save.SaveInteractor;
 import use_case.save.SaveOutputBoundary;
@@ -28,9 +28,6 @@ import use_case.switch_to_game.SwitchToGameViewOutputBoundary;
 import view.GameView;
 import view.MainMenuView;
 import view.ViewManager;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class AppBuilder {
     private final JPanel cardPanel = new JPanel();
@@ -119,7 +116,7 @@ public class AppBuilder {
     }
 
     public AppBuilder addSaveUseCase() {
-        SaveOutputBoundary savePresenter = new SavePresenter(viewManagerModel, gameViewModel, mainMenuViewModel);
+        SaveOutputBoundary savePresenter = new SavePresenter(viewManagerModel, mainMenuViewModel);
         SaveInputBoundary saveInteractor = new SaveInteractor(gameDataAccessObject, savePresenter);
         SaveController saveController = new SaveController(saveInteractor);
         gameView.setSaveController(saveController);

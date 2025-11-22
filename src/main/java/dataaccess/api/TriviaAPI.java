@@ -1,4 +1,4 @@
-package data_access.api;
+package dataaccess.api;
 
 import entity.model.TriviaResponse;
 import retrofit2.Call;

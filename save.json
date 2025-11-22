@@ -2,27 +2,14 @@
     "scenes": [
         {
             "image": "scene1.png",
-            "clickableObjects": [
-                {
-                    "image": "object1.png",
-                    "coordinateY": 0,
-                    "coordinateX": 0,
-                    "name": "Object1"
-                },
-                {
-                    "image": "object2.png",
-                    "coordinateY": 300,
-                    "coordinateX": 600,
-                    "name": "Object2"
-                }
-            ],
+            "clickableObjects": [{
+                "image": "object2.png",
+                "coordinateY": 300,
+                "coordinateX": 600,
+                "name": "Object2"
+            }],
             "name": "Scene1",
-            "collectibles": [{
-                "image": "key1.png",
-                "coordinateY": 200,
-                "coordinateX": 200,
-                "name": "Key1"
-            }]
+            "collectibles": []
         },
         {
             "image": "scene2.png",
@@ -32,12 +19,6 @@
                     "coordinateY": 0,
                     "coordinateX": 0,
                     "name": "Object1"
-                },
-                {
-                    "image": "object2.png",
-                    "coordinateY": 300,
-                    "coordinateX": 600,
-                    "name": "Object2"
                 },
                 {
                     "image": "object3.png",
@@ -80,6 +61,11 @@
             "collectibles": []
         }
     ],
-    "player": {"inventory": []},
+    "player": {"inventory": [{
+        "image": "key1.png",
+        "coordinateY": 200,
+        "coordinateX": 200,
+        "name": "Key1"
+    }]},
     "currentScene": "Scene1"
 }

@@ -2,7 +2,7 @@ package interface_adapter.main_menu;
 
 import use_case.load.LoadInputBoundary;
 import use_case.switch_to_game.SwitchToGameViewInputBoundary;
-import data_access.InMemoryGameDataAccessObject;
+import dataaccess.InMemoryGameDataAccessObject;
 
 /**
  * Controller for the Main Menu.
@@ -11,7 +11,6 @@ public class MainMenuController {
 
     private final SwitchToGameViewInputBoundary switchToGameViewInteractor;
     private final LoadInputBoundary loadInputBoundary;
-    private final InMemoryGameDataAccessObject gameDAO;
 
 
     public MainMenuController(SwitchToGameViewInputBoundary switchToGameViewInteractor,
@@ -19,7 +18,6 @@ public class MainMenuController {
                               InMemoryGameDataAccessObject gameDAO) {
         this.switchToGameViewInteractor = switchToGameViewInteractor;
         this.loadInputBoundary = loadInputBoundary;
-        this.gameDAO = gameDAO;
     }
 
     /**

@@ -27,7 +27,6 @@ public class LoadInteractor implements LoadInputBoundary {
             return;
         }
 
-
         loadDataAccessObject.loadGame("save.json");
 
         Scene currentScene = loadDataAccessObject.getCurrentScene();

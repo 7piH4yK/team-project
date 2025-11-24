@@ -58,16 +58,16 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
 
 
             // add clickable objects
-            for (ClickableObject clickables : state.getClickableObjects()) {
+            for (ClickableObject clickable : state.getClickableObjects()) {
                 ImageIcon imageIcon = new ImageIcon();
-                imageIcon.setImage(ImageIO.read(new File("src/main/resources", clickables.getImage())));
+                imageIcon.setImage(ImageIO.read(new File("src/main/resources", clickable.getImage())));
                 JLabel label = new JLabel(imageIcon);
-                label.setBounds(clickables.getCoordinateX(), clickables.getCoordinateY(), imageIcon.getIconWidth(), imageIcon.getIconHeight());
+                label.setBounds(clickable.getCoordinateX(), clickable.getCoordinateY(), imageIcon.getIconWidth(), imageIcon.getIconHeight());
                 add(label);
                 label.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        gameController.click(clickables);
+                        gameController.click(clickable);
                     }
                 });
             }

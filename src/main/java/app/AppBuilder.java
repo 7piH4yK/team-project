@@ -12,6 +12,11 @@ import interface_adapter.main_menu.MainMenuPresenter;
 import interface_adapter.main_menu.MainMenuViewModel;
 import interface_adapter.save.SaveController;
 import interface_adapter.save.SavePresenter;
+import interface_adapter.gateways.trivia.TriviaApiDataAccessObject;
+import interface_adapter.question.QuestionController;
+import interface_adapter.question.QuestionPresenter;
+import use_case.game.ClickActionType;
+import use_case.question.*;
 import use_case.game.GameInputBoundary;
 import use_case.game.GameInteractor;
 import use_case.game.GameOutputBoundary;
@@ -46,6 +51,8 @@ public class AppBuilder {
     private MainMenuViewModel mainMenuViewModel;
     private GameViewModel gameViewModel;
     private GameView gameView;
+
+    private QuestionInputBoundary questionInteractor;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -101,6 +108,10 @@ public class AppBuilder {
                 .removeOnCollect(true)                     // remove from scene
                 .build());
 
+        rules.put("Trivia_Button", new use_case.game.ClickRule.Builder()
+                .type(ClickActionType.TRIVIA)
+                .build());
+
         // 2) Create GameManager
         use_case.game.GameManager manager = new use_case.game.GameManager(rules);
 
@@ -108,7 +119,7 @@ public class AppBuilder {
         final use_case.game.GameOutputBoundary gameOutputBoundary =
                 new interface_adapter.game.GamePresenter(gameViewModel);
         final use_case.game.GameInputBoundary clickButtonInteractor =
-                new use_case.game.GameInteractor(gameDataAccessObject, gameOutputBoundary);
+                new use_case.game.GameInteractor(gameDataAccessObject, gameOutputBoundary, manager, questionInteractor);
 
         // 4) Controller wiring
         interface_adapter.game.GameController gameController =
@@ -125,6 +136,18 @@ public class AppBuilder {
         return this;
     }
 
+    public AppBuilder addQuestionUseCase() {
+        // this line initializes the DAO
+        QuestionDataAccessInterface questionDAO = new TriviaApiDataAccessObject();
+
+        // then this line is the Presenter but uses GameViewModel instead of separate QuestionViewModel
+        QuestionOutputBoundary questionPresenter = new QuestionPresenter(mainMenuViewModel, viewManagerModel, gameViewModel, gameDataAccessObject);
+
+        // then the interactor
+        this.questionInteractor = new QuestionInteractor(questionDAO, questionPresenter);
+
+        return this;
+    }
 
     public JFrame build() {
         final JFrame application = new JFrame("Point and Click Game");

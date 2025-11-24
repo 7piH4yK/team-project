@@ -41,4 +41,8 @@ public class GameManager {
 
         return new Scene(currentScene.getName(), updated, currentScene.getImage());
     }
+
+    public ClickRule getRuleFor(String objectName) {
+        return rulesByObjectName.get(objectName);
+    }
 }

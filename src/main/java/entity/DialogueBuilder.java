@@ -11,7 +11,7 @@ public class DialogueBuilder {
     private int text_xpos = 400;
     private int text_ypos = 350;
 
-    private final String image;
+    protected final String image;
 
     public String text = "";
     public List<ClickableObject> options = new ArrayList<>();

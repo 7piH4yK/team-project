@@ -4,6 +4,8 @@ import entity.ClickableObject;
 import entity.DialogueOption;
 import entity.NonPlayableCharacter;
 import entity.Scene;
+import entity.QuestionOption;
+import use_case.question.QuestionInputBoundary;
 import use_case.switch_to_game.SwitchToGameOutputData;
 import use_case.switch_to_game.SwitchToGameViewDataAccessInterface;
 
@@ -13,15 +15,49 @@ import use_case.switch_to_game.SwitchToGameViewDataAccessInterface;
 public class GameInteractor implements GameInputBoundary {
     private final GameOutputBoundary presenter;
     private final GameDataAccessInterface gameDataAccessInterface;
+    private final GameManager manager;
+    private final QuestionInputBoundary questionInteractor;
 
-    public GameInteractor(GameDataAccessInterface gameDataAccessInterface, GameOutputBoundary gameOutputBoundary) {
+    public GameInteractor(GameDataAccessInterface gameDataAccessInterface, GameOutputBoundary gameOutputBoundary, GameManager manager, QuestionInputBoundary questionInteractor) {
         this.presenter = gameOutputBoundary;
         this.gameDataAccessInterface = gameDataAccessInterface;
+        this.manager = manager;
+        this.questionInteractor = questionInteractor;
     }
 
     @Override
     public void execute(GameInputData gameInputData) {
         ClickableObject clicked = gameInputData.getClickableObject();
+
+        ClickRule rule = manager.getRuleFor(clicked.getName());
+
+        if (rule != null && rule.getType() == ClickActionType.TRIVIA) {
+            if (questionInteractor != null) {
+                questionInteractor.execute();
+            } else {
+                System.err.println("QuestionInteractor is null – trivia rule triggered but question use case not wired.");
+            }
+            return;
+        }
+
+        // handles clicking question options
+        if (clicked instanceof QuestionOption) {
+            QuestionOption qo = (QuestionOption) clicked;
+
+            // For now: just show correct / incorrect, don't change scenes
+            javax.swing.SwingUtilities.invokeLater(() ->
+                    javax.swing.JOptionPane.showMessageDialog(
+                            null,
+                            qo.isCorrect() ? "Correct!" : "Wrong!",
+                            "Trivia Result",
+                            javax.swing.JOptionPane.INFORMATION_MESSAGE
+                    )
+            );
+
+            // You might later trigger another question here, or return to an NPC scene, etc.
+            // But crucially: DON'T touch currentScene or call presenter here.
+            return;
+        }
 
         Scene cur = gameDataAccessInterface.getCurrentScene();
 
@@ -131,5 +167,4 @@ public class GameInteractor implements GameInputBoundary {
         presenter.prepareView(gameOutputData);
 
     }
-
 }

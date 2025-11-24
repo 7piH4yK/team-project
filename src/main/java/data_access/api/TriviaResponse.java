@@ -1,14 +1,15 @@
-package entity.model;
+package data_access.api;
 
 import java.util.List;
 
 public class TriviaResponse {
-    private int response_code;
+    private int responseCode;
     private List<Question> results;
 
     public int getResponseCode() {
-        return response_code;
+        return responseCode;
     }
+
     public List<Question> getResults() {
         return results;
     }

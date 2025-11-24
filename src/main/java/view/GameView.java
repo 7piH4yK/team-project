@@ -20,6 +20,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
+import interface_adapter.question.QuestionController;
 import java.util.Objects;
 
 /**
@@ -91,7 +92,9 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
                     label.addMouseListener(new MouseAdapter()
                     {
                         @Override
-                        public void mouseClicked(MouseEvent e) {gameController.click(clickableObject);}
+                        public void mouseClicked(MouseEvent e) {
+                            gameController.click(clickableObject);
+                        }
                     });
                 }
             }

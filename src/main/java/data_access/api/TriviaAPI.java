@@ -1,9 +1,9 @@
 package data_access.api;
 
-import entity.model.TriviaResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
+import data_access.api.TriviaResponse;
 
 public interface TriviaAPI {
     @GET("api.php")
@@ -12,6 +12,4 @@ public interface TriviaAPI {
             @Query("category") int category,
             @Query("type") String type
     );
-
 }
-

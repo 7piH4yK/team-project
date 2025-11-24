@@ -103,11 +103,12 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
         ClickableObject object1 = new ClickableObjectFactory().create("Object1", 0, 0, "object1.png",false);
         ClickableObject object2 = new ClickableObjectFactory().create("Object2", 600, 300, "object2.png", false);
         ClickableObject object3 = new ClickableObjectFactory().create("Object3", 200, 200, "object2.png", true);
+        ClickableObject triviaButton = new ClickableObjectFactory().create("Trivia_Button", 100, 300, "trivia_icon.png", false);
 
         this.player = new PlayerFactory().create();
 
         Scene scene1 = new SceneFactory().create("Scene1", new ArrayList<>(List.of(object1, object2, object3)), "scene1.png");
-        Scene scene2 = new SceneFactory().create("Scene2", new ArrayList<>(List.of(object2, object1)), "scene2.png");
+        Scene scene2 = new SceneFactory().create("Scene2", new ArrayList<>(List.of(object2, object1, triviaButton)), "scene2.png");
 
         DialogueBox dialogBoxOptionOutcome1 = new DialogueBuilder("db1.png")
                 .setText("OUTCOME1")
@@ -133,6 +134,7 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
 
         NonPlayableCharacter npc1 = new NonPlayableCharacterFactory().create("NPC1", 300, 300, "npc1.png", dialogueBox);
         scene2.addObject(npc1);
+        scene2.addObject(triviaButton);
 
         scenes.put("Scene1", scene1);
         scenes.put("Scene2", scene2);

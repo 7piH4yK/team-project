@@ -13,7 +13,6 @@ public class GameOutputData {
 
     private String backgroundImage;
     private List<ClickableObject> clickables;
-    private DialogueBox currentDialogue;
 
     private List<Collectibles> inventory;
 
@@ -31,14 +30,6 @@ public class GameOutputData {
 
     public void setClickableObjects(List<ClickableObject> collectibles) {
         this.clickables = collectibles;
-    }
-
-    public DialogueBox getCurrentDialogue() {
-        return currentDialogue;
-    }
-
-    public void setCurrentDialogue(DialogueBox currentDialogue) {
-        this.currentDialogue = currentDialogue;
     }
 
     public List<Collectibles> getInventory() {

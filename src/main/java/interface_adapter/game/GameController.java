@@ -1,8 +1,8 @@
 package interface_adapter.game;
 
 import entity.ClickableObject;
-import entity.Collectibles;
 import entity.DialogueOption;
+import use_case.dialogue.DialogueInputBoundary;
 import use_case.game.GameInputBoundary;
 import use_case.game.GameInputData;
 
@@ -24,10 +24,4 @@ public class GameController {
         gameInputBoundary.execute(new GameInputData(clickables));
     }
 
-    /**
-     * Click a dialogue option
-     */
-    public void clickDialogueOption(DialogueOption dialogueOption) {
-        gameInputBoundary.executeDialogueOption(dialogueOption);
-    }
 }

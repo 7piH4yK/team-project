@@ -12,10 +12,4 @@ public interface GameInputBoundary {
      * @param gameInputData the input data
      */
     void execute(GameInputData gameInputData);
-
-    /**
-     * Executes the click use case for dialogue options.
-     * @param dialogueOption the clicked dialogue option
-     */
-    void executeDialogueOption(DialogueOption dialogueOption);
 }

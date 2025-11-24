@@ -1,6 +1,7 @@
 package use_case.game;
 
 import entity.*;
+import use_case.dialogue.DialogueOutputData;
 
 /**
  * The Game Interactor.
@@ -132,9 +133,10 @@ public class GameInteractor implements GameInputBoundary {
     private void updateView() {
         Scene currentScene = gameDataAccessInterface.getCurrentScene();
         GameOutputData gameOutputData = new GameOutputData();
+        DialogueOutputData dialogueOutputData = new DialogueOutputData();
         gameOutputData.setBackgroundImage(currentScene.getImage());
         gameOutputData.setClickableObjects(currentScene.getObjects());
-        gameOutputData.setCurrentDialogue(gameDataAccessInterface.getCurrentDialogue());
+        dialogueOutputData.setCurrentDialogue(gameDataAccessInterface.getCurrentDialogue());
         gameOutputData.setInventory(gameDataAccessInterface.getPlayer().getInventory());
         presenter.prepareView(gameOutputData);
     }

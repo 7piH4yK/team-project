@@ -9,7 +9,12 @@
                 "name": "Object2"
             }],
             "name": "Scene1",
-            "collectibles": []
+            "collectibles": [{
+                "image": "key1.png",
+                "coordinateY": 200,
+                "coordinateX": 200,
+                "name": "Key1"
+            }]
         },
         {
             "image": "scene2.png",
@@ -61,11 +66,6 @@
             "collectibles": []
         }
     ],
-    "player": {"inventory": [{
-        "image": "key1.png",
-        "coordinateY": 200,
-        "coordinateX": 200,
-        "name": "Key1"
-    }]},
-    "currentScene": "Scene1"
+    "player": {"inventory": []},
+    "currentScene": "Scene2"
 }

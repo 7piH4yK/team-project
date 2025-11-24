@@ -3,6 +3,7 @@ package dataaccess;
 import java.util.*;
 
 import entity.*;
+import use_case.dialogue.DialogueDataAccessInterface;
 import use_case.game.GameDataAccessInterface;
 import use_case.load.LoadDataAccessInterface;
 import use_case.save.SaveDataAccessInterface;
@@ -13,7 +14,7 @@ import use_case.switch_to_game.SwitchToGameViewDataAccessInterface;
  * In-memory implementation of game data access.
  */
 public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessInterface, GameDataAccessInterface,
-    SaveDataAccessInterface, LoadDataAccessInterface {
+    SaveDataAccessInterface, LoadDataAccessInterface, DialogueDataAccessInterface {
 
     private Scene currentScene;
     private Player player;

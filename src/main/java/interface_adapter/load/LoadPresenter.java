@@ -31,7 +31,7 @@ public class LoadPresenter implements LoadOutputBoundary {
         viewManagerModel.setState(gameViewModel.getViewName());
         viewManagerModel.firePropertyChange();
 
-        final GameState state = gameViewModel.getState();
+        final GameState state = ((GameState) gameViewModel.getState());
         state.setBackgroundImage(loadOutputData.getBackgroundImage());
         state.setClickableObjects(loadOutputData.getClickableObjects());
         gameViewModel.setState(state);

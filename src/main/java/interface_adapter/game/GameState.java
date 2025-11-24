@@ -11,9 +11,10 @@ import java.util.List;
  */
 public class GameState {
     private String backgroundImage;
-    private List<ClickableObject> clickables;
+    private List<ClickableObject> clickable;
     private DialogueBox currentDialogue;
-    private List<Collectibles> inventoryItems;
+    private List<Collectibles> inventoryItems = new java.util.ArrayList<>();
+
 
     public String getBackgroundImage() {
         return backgroundImage;
@@ -24,11 +25,11 @@ public class GameState {
     }
 
     public List<ClickableObject> getClickableObjects() {
-        return clickables;
+        return clickable;
     }
 
     public void setClickableObjects(List<ClickableObject> collectibles) {
-        this.clickables = collectibles;
+        this.clickable = collectibles;
     }
 
     public DialogueBox getCurrentDialogue() {

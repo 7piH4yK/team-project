@@ -7,13 +7,13 @@ import entity.ClickableObject;
  */
 public class GameInputData {
 
-    private final ClickableObject clickables;
+    private final ClickableObject clickable;
 
     public GameInputData(ClickableObject collectibles) {
-        this.clickables = collectibles;
+        this.clickable = collectibles;
     }
 
     public ClickableObject getClickableObject() {
-        return clickables;
+        return clickable;
     }
 }

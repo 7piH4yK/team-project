@@ -12,7 +12,7 @@ import java.util.List;
 public class GameOutputData {
 
     private String backgroundImage;
-    private List<ClickableObject> clickables;
+    private List<ClickableObject> clickable;
     private DialogueBox currentDialogue;
 
     private List<Collectibles> inventory;
@@ -26,11 +26,11 @@ public class GameOutputData {
     }
 
     public List<ClickableObject> getClickableObjects() {
-        return clickables;
+        return clickable;
     }
 
     public void setClickableObjects(List<ClickableObject> collectibles) {
-        this.clickables = collectibles;
+        this.clickable = collectibles;
     }
 
     public DialogueBox getCurrentDialogue() {

@@ -9,6 +9,8 @@ import entity.PlayerFactory;
 import entity.SceneFactory;
 import interface_adapter.AppContext;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.collect_item.CollectItemController;
+import interface_adapter.collect_item.CollectItemPresenter;
 import interface_adapter.game.GameViewModel;
 import interface_adapter.load.LoadPresenter;
 import interface_adapter.main_menu.MainMenuController;
@@ -16,6 +18,10 @@ import interface_adapter.main_menu.MainMenuPresenter;
 import interface_adapter.main_menu.MainMenuViewModel;
 import interface_adapter.save.SaveController;
 import interface_adapter.save.SavePresenter;
+import use_case.collect_item.ClickActionType;
+import use_case.collect_item.ClickRule;
+import use_case.collect_item.CollectItemInputBoundary;
+import use_case.collect_item.CollectItemInteractor;
 import use_case.load.LoadInputBoundary;
 import use_case.load.LoadInteractor;
 import use_case.load.LoadOutputBoundary;
@@ -79,22 +85,22 @@ public class AppBuilder {
 
     public AppBuilder addClickButtonUseCase() {
         // 1) Build click rules for objects by name
-        java.util.Map<String, use_case.game.ClickRule> rules = new java.util.HashMap<>();
+        java.util.Map<String, ClickRule> rules = new java.util.HashMap<>();
 
         // Example mappings (adjust names to your real objects/scenes)
-        rules.put("Object1", new use_case.game.ClickRule.Builder()
-                .type(use_case.game.ClickActionType.CHANGE_SCENE)
+        rules.put("Object1", new ClickRule.Builder()
+                .type(ClickActionType.CHANGE_SCENE)
                 .targetScene("Scene1")
                 .build());
 
-        rules.put("Object2", new use_case.game.ClickRule.Builder()
-                .type(use_case.game.ClickActionType.CHANGE_SCENE)
+        rules.put("Object2", new ClickRule.Builder()
+                .type(ClickActionType.CHANGE_SCENE)
                 .targetScene("Scene2")
                 .build());
 
         // Collect and then change to Scene2, with a message
-        rules.put("Object3", new use_case.game.ClickRule.Builder()
-                .type(use_case.game.ClickActionType.COLLECT)             // only collect
+        rules.put("Object3", new ClickRule.Builder()
+                .type(ClickActionType.COLLECT)             // only collect
                 .message("You collected Object 3!")        // optional message
                 .removeOnCollect(true)                     // remove from scene
                 .build());
@@ -122,6 +128,23 @@ public class AppBuilder {
         gameView.setSaveController(saveController);
         return this;
     }
+
+    public AppBuilder addCollectItemUseCase() {
+        CollectItemPresenter presenter =
+                new CollectItemPresenter(gameViewModel);
+
+        CollectItemInputBoundary interactor =
+                new CollectItemInteractor(gameDataAccessObject, presenter);
+
+        CollectItemController controller =
+                new CollectItemController(interactor);
+
+        gameView.setCollectItemController(controller);
+
+        return this;
+    }
+
+
 
 
     public JFrame build() {

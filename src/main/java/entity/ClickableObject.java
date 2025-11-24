@@ -2,7 +2,6 @@ package entity;
 
 import org.json.JSONObject;
 
-
 public class ClickableObject {
 
     private final String name;
@@ -10,18 +9,29 @@ public class ClickableObject {
     private final int coordinateY;
     private final String image;
 
-    public ClickableObject(String name, int x, int y, String image) {
+    public ClickableObject(String name, int coordinateX, int coordinateY, String image) {
         this.name = name;
-        this.coordinateX = x;
-        this.coordinateY = y;
+        this.coordinateX = coordinateX;
+        this.coordinateY = coordinateY;
         this.image = image;
     }
 
-    public String getName() { return name; }
-    public int getCoordinateX() { return coordinateX; }
-    public int getCoordinateY() { return coordinateY; }
+    public String getName() {
+        return name;
+    }
 
-    public String getImage() { return image; }
+    public int getCoordinateX() {
+        return coordinateX;
+    }
+
+    public int getCoordinateY() {
+        return coordinateY;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("name", this.name);
@@ -30,6 +40,7 @@ public class ClickableObject {
         json.put("image", this.image);
         return json;
     }
+
     public static ClickableObject fromJson(JSONObject json) {
         return new ClickableObject(
                 json.getString("name"),
@@ -38,7 +49,4 @@ public class ClickableObject {
                 json.getString("image")
         );
     }
-
-
-
 }

@@ -21,7 +21,7 @@ public class Collectibles extends ClickableObject {
      * @throws IllegalArgumentException if the name or image path is empty
      */
     public Collectibles(String name, int coordinateX, int coordinateY, String image) {
-        super(name,coordinateX,coordinateY, image);
+        super(name, coordinateX, coordinateY, image);
         if ("".equals(name)) {
             throw new IllegalArgumentException("Object name cannot be empty");
         }

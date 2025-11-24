@@ -1,6 +1,7 @@
 package view;
 
 import entity.*;
+import interface_adapter.collect_item.CollectItemController;
 import interface_adapter.game.GameController;
 import interface_adapter.game.GameState;
 import interface_adapter.game.GameViewModel;
@@ -27,6 +28,8 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
     private final GameViewModel gameViewModel;
     private GameController gameController;
     private SaveController saveController;
+    private CollectItemController collectItemController;
+
 
 
     public GameView(GameViewModel gameViewModel) {
@@ -67,9 +70,19 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
                 label.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        gameController.click(clickables);
+                        // If it's a collectible, use the new Collect Item use case
+                        if (clickables instanceof Collectibles) {
+                            collectItemController.collectItem(
+                                    clickables.getName(),
+                                    gameViewModel.getState().getBackgroundImage() // or your sceneName getter
+                            );
+                        } else {
+                            // Otherwise, pass to the old game logic
+                            gameController.click(clickables);
+                        }
                     }
                 });
+
             }
 
             // save and exit button
@@ -145,6 +158,11 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
     public String getViewName() {
         return viewName;
     }
+
+    public void setCollectItemController(interface_adapter.collect_item.CollectItemController controller) {
+        this.collectItemController = controller;
+    }
+
 
     public void setGameController(GameController controller) {
         this.gameController = controller;

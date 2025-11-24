@@ -86,4 +86,5 @@ public class Scene {
         return new Scene(name, objects, image);
     }
     public void addObject(ClickableObject object) {objects.add(object);}
+
 }

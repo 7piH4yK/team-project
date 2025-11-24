@@ -10,6 +10,7 @@ public class Main {
                 .addGameView()
                 .addSwitchToGameUseCase()
                 .addClickButtonUseCase()
+                .addCollectItemUseCase()
                 .addSaveUseCase()
                 .build();
 

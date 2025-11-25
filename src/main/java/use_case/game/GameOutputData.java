@@ -13,7 +13,7 @@ public class GameOutputData {
 
     private String backgroundImage;
     private List<ClickableObject> clickables;
-
+    private String sceneName;
     private List<Collectibles> inventory;
 
     public void setBackgroundImage(String backgroundImage) {
@@ -38,5 +38,12 @@ public class GameOutputData {
 
     public void setInventory(List<Collectibles> inventory) {
         this.inventory = inventory;
+    }
+
+    public String getSceneName() {
+        return sceneName;
+    }
+    public void setSceneName(String sceneName) {
+        this.sceneName = sceneName;
     }
 }

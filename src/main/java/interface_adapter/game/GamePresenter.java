@@ -16,10 +16,15 @@ public class GamePresenter implements GameOutputBoundary {
 
     @Override
     public void prepareView(GameOutputData outputData) {
-        final GameState state = new GameState();
+
+        GameState state = new GameState();
+
+        // Presenter should ONLY copy values from outputData
         state.setBackgroundImage(outputData.getBackgroundImage());
         state.setClickableObjects(outputData.getClickableObjects());
         state.setInventoryItems(outputData.getInventory());
+        state.setSceneName(outputData.getSceneName());
+
         gameViewModel.setState(state);
         gameViewModel.firePropertyChange();
     }

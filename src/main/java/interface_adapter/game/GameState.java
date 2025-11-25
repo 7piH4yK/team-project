@@ -13,6 +13,10 @@ public class GameState {
     private String backgroundImage;
     private List<ClickableObject> clickables;
     private List<Collectibles> inventoryItems;
+    private String sceneName;
+
+    public String getSceneName() { return sceneName; }
+    public void setSceneName(String sceneName) { this.sceneName = sceneName; }
 
     public String getBackgroundImage() {
         return backgroundImage;
@@ -37,4 +41,6 @@ public class GameState {
     public void setInventoryItems(List<Collectibles> inventoryItems) {
         this.inventoryItems = inventoryItems;
     }
+
+
 }

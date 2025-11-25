@@ -2,6 +2,8 @@ package view;
 
 import entity.*;
 import interface_adapter.collect_item.CollectItemController;
+import interface_adapter.dialogue.DialogueController;
+import interface_adapter.dialogue.DialogueState;
 import interface_adapter.game.GameController;
 import interface_adapter.game.GameState;
 import interface_adapter.game.GameViewModel;
@@ -27,9 +29,12 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
     private final String viewName = "game";
     private final GameViewModel gameViewModel;
     private GameController gameController;
+    private DialogueController dialogueController;
     private SaveController saveController;
     private CollectItemController collectItemController;
 
+
+    private GameState gameState;
 
 
     public GameView(GameViewModel gameViewModel) {
@@ -45,7 +50,7 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        final GameState state = (GameState) evt.getNewValue();
+        final Object object = evt.getNewValue();
 
         // remove all children
         this.removeAll();
@@ -83,37 +88,70 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
                     }
                 });
 
+            if (object instanceof DialogueState) {
+                final DialogueState state =  (DialogueState) object;
+                // Render dialogue overlay if active
+                DialogueBox dialogue = state.getCurrentDialogue();
+                if (dialogue != null) {
+                    renderDialogueOverlay(dialogue);
+                }
+                else { drawScene(gameState); }
             }
+            else {
+                final GameState state =  (GameState) object;
 
-            // save and exit button
-            JButton saveExitButton = new JButton("Save & Exit");
-            saveExitButton.setBounds(650, 20, 120, 40);
-            saveExitButton.addActionListener(e -> saveController.save());
-            add(saveExitButton);
-
-            // Add a small bag icon (top-right corner)
-            ImageIcon bagIcon = new ImageIcon(ImageIO.read(new File("src/main/resources/bag.png")));
-            JButton bagButton = new JButton(bagIcon);
-            bagButton.setBounds(20, 480, 64, 64); // Adjust position and size
-            bagButton.setContentAreaFilled(false);
-            bagButton.setBorderPainted(false);
-            bagButton.setFocusPainted(false);
-            bagButton.addActionListener(e -> openInventoryPanel());
-            add(bagButton);
-
-            // add background image
-            ImageIcon background = new ImageIcon();
-            background.setImage(ImageIO.read(new File("src/main/resources", state.getBackgroundImage())));
-            JLabel backgroundLabel = new JLabel(background);
-            backgroundLabel.setBounds(0, 0, background.getIconWidth(), background.getIconHeight());
-            add(backgroundLabel);
+                drawScene(state);
 
 
+            }
             // force update ui
             repaint();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void drawScene(GameState state) throws IOException {
+        gameState = state;
+        // add clickable objects
+        for (ClickableObject clickable : state.getClickableObjects()) {
+            ImageIcon imageIcon = new ImageIcon();
+            imageIcon.setImage(ImageIO.read(new File("src/main/resources", clickable.getImage())));
+            JLabel label = new JLabel(imageIcon);
+            label.setBounds(clickable.getCoordinateX(), clickable.getCoordinateY(), imageIcon.getIconWidth(), imageIcon.getIconHeight());
+            add(label);
+            label.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if (clickable instanceof NonPlayableCharacter) {
+                        dialogueController.click(clickable); }
+                    else { gameController.click(clickable); }
+                }
+            });
+        }
+
+        // save and exit button
+        JButton saveExitButton = new JButton("Save & Exit");
+        saveExitButton.setBounds(650, 20, 120, 40);
+        saveExitButton.addActionListener(e -> saveController.save());
+        add(saveExitButton);
+
+        // Add a small bag icon (top-right corner)
+        ImageIcon bagIcon = new ImageIcon(ImageIO.read(new File("src/main/resources/bag.png")));
+        JButton bagButton = new JButton(bagIcon);
+        bagButton.setBounds(20, 480, 64, 64); // Adjust position and size
+        bagButton.setContentAreaFilled(false);
+        bagButton.setBorderPainted(false);
+        bagButton.setFocusPainted(false);
+        bagButton.addActionListener(e -> openInventoryPanel());
+        add(bagButton);
+
+        // add background image
+        ImageIcon background = new ImageIcon();
+        background.setImage(ImageIO.read(new File("src/main/resources", state.getBackgroundImage())));
+        JLabel backgroundLabel = new JLabel(background);
+        backgroundLabel.setBounds(0, 0, background.getIconWidth(), background.getIconHeight());
+        add(backgroundLabel);
     }
 
     private void renderDialogueOverlay(DialogueBox dialogue) throws IOException {
@@ -141,7 +179,7 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
             optionLabel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    gameController.clickDialogueOption(option);
+                    dialogueController.clickDialogueOption(option);
                 }
             });
         }
@@ -168,6 +206,10 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
         this.gameController = controller;
     }
 
+    public void setDialogueController(DialogueController controller) {
+        this.dialogueController = controller;
+    }
+
     public void setSaveController(SaveController controller) {this.saveController = controller;}
 
     private void openInventoryPanel() {
@@ -176,21 +218,24 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
         inventoryFrame.setLocationRelativeTo(null);
         inventoryFrame.setLayout(new FlowLayout());
 
-        java.util.List<Collectibles> items = gameViewModel.getState().getInventoryItems();
+        if (gameViewModel.getState() instanceof GameState) {
+            java.util.List<Collectibles> items = ((GameState) gameViewModel.getState()).getInventoryItems();
 
 
-        if (items.isEmpty()) {
-            inventoryFrame.add(new JLabel("Your inventory is empty."));
-        } else {
-            for (Collectibles item : items) {
-                try {
-                    ImageIcon itemIcon = new ImageIcon(ImageIO.read(new File("src/main/resources", item.getImage())));
-                    JLabel itemLabel = new JLabel(itemIcon);
-                    itemLabel.setToolTipText(item.getName());
-                    inventoryFrame.add(itemLabel);
-                } catch (Exception ex) {
-                    inventoryFrame.add(new JLabel(item.getName()));
+            if (items.isEmpty()) {
+                inventoryFrame.add(new JLabel("Your inventory is empty."));
+            } else {
+                for (Collectibles item : items) {
+                    try {
+                        ImageIcon itemIcon = new ImageIcon(ImageIO.read(new File("src/main/resources", item.getImage())));
+                        JLabel itemLabel = new JLabel(itemIcon);
+                        itemLabel.setToolTipText(item.getName());
+                        inventoryFrame.add(itemLabel);
+                    } catch (Exception ex) {
+                        inventoryFrame.add(new JLabel(item.getName()));
+                    }
                 }
+
             }
         }
 

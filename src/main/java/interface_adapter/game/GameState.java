@@ -36,14 +36,6 @@ public class GameState {
         this.clickable = collectibles;
     }
 
-    public DialogueBox getCurrentDialogue() {
-        return currentDialogue;
-    }
-
-    public void setCurrentDialogue(DialogueBox currentDialogue) {
-        this.currentDialogue = currentDialogue;
-    }
-
     public List<Collectibles> getInventoryItems() {
         return inventoryItems;
     }

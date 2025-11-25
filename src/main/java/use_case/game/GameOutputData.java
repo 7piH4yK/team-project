@@ -43,14 +43,6 @@ public class GameOutputData {
         this.clickable = collectibles;
     }
 
-    public DialogueBox getCurrentDialogue() {
-        return currentDialogue;
-    }
-
-    public void setCurrentDialogue(DialogueBox currentDialogue) {
-        this.currentDialogue = currentDialogue;
-    }
-
     public List<Collectibles> getInventory() {
         return inventory;
     }

@@ -113,11 +113,18 @@ public class AppBuilder {
                 new interface_adapter.game.GamePresenter(gameViewModel);
         final use_case.game.GameInputBoundary clickButtonInteractor =
                 new use_case.game.GameInteractor(gameDataAccessObject, gameOutputBoundary);
+        final use_case.dialogue.DialogueOutputBoundary dialogueOutputBoundary =
+                new interface_adapter.dialogue.DialoguePresenter(gameViewModel);
+        final use_case.dialogue.DialogueInputBoundary dialogueInputBoundary =
+                new use_case.dialogue.DialogueInteractor(gameDataAccessObject, dialogueOutputBoundary);
 
         // 4) Controller wiring
         interface_adapter.game.GameController gameController =
                 new interface_adapter.game.GameController(clickButtonInteractor);
+        interface_adapter.dialogue.DialogueController dialogueController =
+                new interface_adapter.dialogue.DialogueController(dialogueInputBoundary);
         gameView.setGameController(gameController);
+        gameView.setDialogueController(dialogueController);
         return this;
     }
 

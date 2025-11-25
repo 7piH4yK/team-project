@@ -162,8 +162,7 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
         this.currentDialogue = dialogue;
     }
 
-    @Override
-    public Scene getScene(String name) {
+    public Scene getCurrentScene(String name) {
         return currentScene;
     }
     public void savePlayer(Player p) { this.player = p; }

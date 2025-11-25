@@ -74,7 +74,7 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
                         if (clickables instanceof Collectibles) {
                             collectItemController.collectItem(
                                     clickables.getName(),
-                                    gameViewModel.getState().getBackgroundImage() // or your sceneName getter
+                                    gameViewModel.getState().getSceneName() // or your sceneName getter
                             );
                         } else {
                             // Otherwise, pass to the old game logic

@@ -15,6 +15,10 @@ public class GameState {
     private DialogueBox currentDialogue;
     private List<Collectibles> inventoryItems = new java.util.ArrayList<>();
 
+    private String sceneName;
+
+    public String getSceneName() { return sceneName; }
+    public void setSceneName(String name) { this.sceneName = name; }
 
     public String getBackgroundImage() {
         return backgroundImage;
@@ -47,4 +51,6 @@ public class GameState {
     public void setInventoryItems(List<Collectibles> inventoryItems) {
         this.inventoryItems = inventoryItems;
     }
+
+
 }

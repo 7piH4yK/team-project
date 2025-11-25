@@ -15,7 +15,17 @@ public class GameOutputData {
     private List<ClickableObject> clickable;
     private DialogueBox currentDialogue;
 
+    private String sceneName;
+
     private List<Collectibles> inventory;
+
+    public String getSceneName() {
+        return sceneName;
+    }
+
+    public void setSceneName(String sceneName) {
+        this.sceneName = sceneName;
+    }
 
     public void setBackgroundImage(String backgroundImage) {
         this.backgroundImage = backgroundImage;

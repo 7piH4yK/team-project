@@ -6,7 +6,7 @@ import entity.Player;
 
 public interface CollectItemDataAccessInterface {
 
-    Scene getScene(String name);
+    Scene getCurrentScene(String name);
     Player getPlayer();
     public void savePlayer(Player p);
 

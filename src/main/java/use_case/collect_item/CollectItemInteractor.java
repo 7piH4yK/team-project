@@ -22,7 +22,7 @@ public class CollectItemInteractor implements CollectItemInputBoundary {
     @Override
     public void collect(CollectItemInputData input) {
 
-        Scene scene = dao.getScene(input.getSceneName());
+        Scene scene = dao.getCurrentScene(input.getSceneName());
         Player player = dao.getPlayer();
 
         // find object

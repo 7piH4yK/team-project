@@ -16,11 +16,13 @@ public class GamePresenter implements GameOutputBoundary {
 
     @Override
     public void prepareView(GameOutputData outputData) {
+
         final GameState state = new GameState();
         state.setBackgroundImage(outputData.getBackgroundImage());
         state.setClickableObjects(outputData.getClickableObjects());
         state.setInventoryItems(outputData.getInventory());
         state.setCurrentDialogue(outputData.getCurrentDialogue());
+        state.setSceneName(outputData.getSceneName());
         gameViewModel.setState(state);
         gameViewModel.firePropertyChange();
     }

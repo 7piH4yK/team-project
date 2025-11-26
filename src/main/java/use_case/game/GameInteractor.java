@@ -115,6 +115,7 @@ public class GameInteractor implements GameInputBoundary {
         gameOutputData.setClickableObjects(currentScene.getObjects());
         dialogueOutputData.setCurrentDialogue(gameDataAccessInterface.getCurrentDialogue());
         gameOutputData.setInventory(gameDataAccessInterface.getPlayer().getInventory());
+
         presenter.prepareView(gameOutputData);
     }
 }

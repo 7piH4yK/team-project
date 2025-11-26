@@ -4,6 +4,7 @@ import entity.ClickableObject;
 import entity.Collectibles;
 import entity.DialogueBox;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,12 +36,14 @@ public class GameState {
     }
 
     public List<Collectibles> getInventoryItems() {
-        return inventoryItems;
+        return inventoryItems == null ? new ArrayList<>() : inventoryItems;
     }
 
+
     public void setInventoryItems(List<Collectibles> inventoryItems) {
-        this.inventoryItems = inventoryItems;
+        this.inventoryItems = (inventoryItems == null ? new ArrayList<>() : inventoryItems);
     }
+
 
 
 }

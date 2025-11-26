@@ -49,7 +49,7 @@ public class CollectItemInteractor implements CollectItemInputBoundary {
         dao.setCurrentScene(updatedScene);
 
         presenter.prepareSuccessView(
-                new CollectItemOutputData(updatedScene, target.getName())
+                new CollectItemOutputData(updatedScene, target.getName(), dao.getPlayer().getInventory())
         );
     }
 }

@@ -3,6 +3,8 @@ package interface_adapter.game;
 import use_case.game.GameOutputBoundary;
 import use_case.game.GameOutputData;
 
+import java.util.ArrayList;
+
 /**
  * The Presenter for the Game View.
  */
@@ -22,7 +24,10 @@ public class GamePresenter implements GameOutputBoundary {
         // Presenter should ONLY copy values from outputData
         state.setBackgroundImage(outputData.getBackgroundImage());
         state.setClickableObjects(outputData.getClickableObjects());
-        state.setInventoryItems(outputData.getInventory());
+        state.setInventoryItems(
+                outputData.getInventory() == null ? new ArrayList<>() : outputData.getInventory()
+        );
+
         state.setSceneName(outputData.getSceneName());
 
         gameViewModel.setState(state);

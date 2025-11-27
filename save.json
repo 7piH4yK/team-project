@@ -69,6 +69,11 @@
             "collectibles": []
         }
     ],
-    "player": {"inventory": []},
-    "currentScene": "Scene Classroom"
+    "player": {"inventory": [{
+        "image": "key1.png",
+        "coordinateY": 200,
+        "coordinateX": 200,
+        "name": "Key Classroom"
+    }]},
+    "currentScene": "Scene Table"
 }

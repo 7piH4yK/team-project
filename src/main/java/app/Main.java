@@ -11,6 +11,7 @@ public class Main {
                 .addSwitchToGameUseCase()
                 .addClickButtonUseCase()
                 .addSaveUseCase()
+                .addPauseMenu()
                 .build();
 
         application.pack();

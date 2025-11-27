@@ -5,6 +5,7 @@ import interface_adapter.game.GameController;
 import interface_adapter.game.GameState;
 import interface_adapter.game.GameViewModel;
 import interface_adapter.save.SaveController;
+import interface_adapter.pause_menu.PauseController;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -27,7 +28,11 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
     private final GameViewModel gameViewModel;
     private GameController gameController;
     private SaveController saveController;
+    private PauseController pauseController;
 
+    public void setPauseController(PauseController pauseController) {
+        this.pauseController = pauseController;
+    }
 
     public GameView(GameViewModel gameViewModel) {
         this.gameViewModel = gameViewModel;
@@ -72,11 +77,11 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
                 });
             }
 
-            // save and exit button
-            JButton saveExitButton = new JButton("Save & Exit");
-            saveExitButton.setBounds(650, 20, 120, 40);
-            saveExitButton.addActionListener(e -> saveController.save());
-            add(saveExitButton);
+            // pause button
+            JButton pauseButton = new JButton("Pause");
+            pauseButton.setBounds(650, 20, 120, 40);
+            pauseButton.addActionListener(e -> pauseController.pause());
+            add(pauseButton);
 
             // Add a small bag icon (top-right corner)
             ImageIcon bagIcon = new ImageIcon(ImageIO.read(new File("src/main/resources/bag.png")));

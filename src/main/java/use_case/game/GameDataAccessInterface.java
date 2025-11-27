@@ -7,24 +7,26 @@ import entity.Scene;
 import java.util.Map;
 
 /**
- * Data access interface for the Switch to Game View use case.
+ * Data access interface for the Game use case.
  */
 public interface GameDataAccessInterface {
 
     /**
-     * Returns the current scene.
-     * @return the current scene
+     * Returns whether a door is unlocked.
      */
-    // add these:
     boolean isDoorUnlocked(String doorName);
-    void unlockDoor(String doorName);
-
-    Scene getCurrentScene();
 
     /**
-     * Returns all scenes.
+     * Unlocks a door.
      */
-    Map<String, Scene> getScenes();
+    void unlockDoor(String doorName);
+
+    /**
+     * Returns the current scene.
+     *
+     * @return the current scene
+     */
+    Scene getCurrentScene();
 
     /**
      * Set current scene
@@ -32,10 +34,27 @@ public interface GameDataAccessInterface {
     void setCurrentScene(Scene scene);
 
     /**
+     * Returns all scenes.
+     */
+    Map<String, Scene> getScenes();
+
+    /**
      * Get the player
      */
     Player getPlayer();
+
+    /**
+     * Set the player
+     */
     void setPlayer(Player player);
 
+    /**
+     * Get the current dialogue box (null if no dialogue is active).
+     */
+    DialogueBox getCurrentDialogue();
 
+    /**
+     * Set the current dialogue box (null to close dialogue).
+     */
+    void setCurrentDialogue(DialogueBox dialogue);
 }

@@ -11,7 +11,7 @@ public class PlayerFactory {
         return new Player();
     }
 
-    public Player create(List<ClickableObject> inventory) {
+    public Player create(List<Collectibles> inventory) {
         return new Player(inventory);
     }
 }

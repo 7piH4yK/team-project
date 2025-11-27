@@ -17,9 +17,10 @@ public class Scene {
 
     /**
      * Creates a new scene.
-     * @param name the name of the scene
+     *
+     * @param name    the name of the scene
      * @param objects the list of clickable objects in this scene
-     * @param image the path to the background image
+     * @param image   the path to the background image
      * @throws IllegalArgumentException if the name or image path is empty
      */
     public Scene(String name, List<ClickableObject> objects, String image) {
@@ -32,6 +33,23 @@ public class Scene {
         this.name = name;
         this.objects = new ArrayList<>(objects);
         this.image = image;
+    }
+
+    public static Scene fromJson(JSONObject json) {
+        String name = json.getString("name");
+        String image = json.getString("image");
+        JSONArray collectibles = json.getJSONArray("collectibles");
+        JSONArray clickableObjects = json.getJSONArray("clickableObjects");
+
+        List<ClickableObject> objects = new ArrayList<>();
+        for (int i = 0; i < collectibles.length(); i++) {
+            objects.add(Collectibles.fromJson(collectibles.getJSONObject(i)));
+        }
+        for (int i = 0; i < clickableObjects.length(); i++) {
+            objects.add(ClickableObject.fromJson(clickableObjects.getJSONObject(i)));
+        }
+
+        return new Scene(name, objects, image);
     }
 
     public String getName() {
@@ -51,26 +69,24 @@ public class Scene {
         json.put("name", this.name);
         json.put("image", this.image);
 
-        JSONArray objectsArr = new JSONArray();
+        JSONArray collectibles = new JSONArray();
+        JSONArray clickableObjects = new JSONArray();
         for (ClickableObject obj : this.objects) {
-            objectsArr.put(obj.toJson());
+            if (!(obj instanceof NonPlayableCharacter)) {
+                if (obj instanceof Collectibles) {
+                    collectibles.put(obj.toJson());
+                } else {
+                    clickableObjects.put(obj.toJson());
+                }
+            }
         }
-        json.put("objects", objectsArr);
+        json.put("collectibles", collectibles);
+        json.put("clickableObjects", clickableObjects);
 
         return json;
     }
 
-    public static Scene fromJson(JSONObject json) {
-        String name = json.getString("name");
-        String image = json.getString("image");
-        JSONArray objArray = json.getJSONArray("objects");
-
-        List<ClickableObject> objects = new ArrayList<>();
-        for (int i = 0; i < objArray.length(); i++) {
-            objects.add(ClickableObject.fromJson(objArray.getJSONObject(i)));
-        }
-
-        return new Scene(name, objects, image);
+    public void addObject(ClickableObject object) {
+        objects.add(object);
     }
-    public void addObject(ClickableObject object) {objects.add(object);}
 }

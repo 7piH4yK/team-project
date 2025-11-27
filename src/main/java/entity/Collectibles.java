@@ -1,25 +1,27 @@
 package entity;
 
+import org.json.JSONObject;
+
 /**
- * Represents a clickable non-playable character (NPC) in the game that can be interacted with.
+ * Represents a clickable object in the game that can be interacted with.
  */
-public class NonPlayableCharacter extends ClickableObject {
+public class Collectibles extends ClickableObject {
+
     private final String name;
     private final int coordinateX;
     private final int coordinateY;
     private final String image;
-    private final DialogueBox box;
 
     /**
-     * Creates a new NPC.
+     * Creates a new clickable object.
      *
-     * @param name        the name of the NPC
-     * @param coordinateX the x coordinate of the NPC
-     * @param coordinateY the y coordinate of the NPC
+     * @param name        the name of the object
+     * @param coordinateX the x coordinate of the object
+     * @param coordinateY the y coordinate of the object
      * @param image       the path to the image asset
      * @throws IllegalArgumentException if the name or image path is empty
-     **/
-    public NonPlayableCharacter(String name, int coordinateX, int coordinateY, String image, DialogueBox box) {
+     */
+    public Collectibles(String name, int coordinateX, int coordinateY, String image) {
         super(name, coordinateX, coordinateY, image);
         if ("".equals(name)) {
             throw new IllegalArgumentException("Object name cannot be empty");
@@ -31,31 +33,38 @@ public class NonPlayableCharacter extends ClickableObject {
         this.coordinateX = coordinateX;
         this.coordinateY = coordinateY;
         this.image = image;
-        this.box = box;
     }
 
-    @Override
+    public static Collectibles fromJson(JSONObject json) {
+        return new Collectibles(
+                json.getString("name"),
+                json.getInt("coordinateX"),
+                json.getInt("coordinateY"),
+                json.getString("image"));
+    }
+
     public String getName() {
         return name;
     }
 
-    @Override
     public int getCoordinateX() {
         return coordinateX;
     }
 
-    @Override
     public int getCoordinateY() {
         return coordinateY;
     }
 
-    @Override
     public String getImage() {
         return image;
     }
 
-    public DialogueBox getDB() {
-        return box;
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", this.name);
+        json.put("coordinateX", this.coordinateX);
+        json.put("coordinateY", this.coordinateY);
+        json.put("image", this.image);
+        return json;
     }
-
 }

@@ -6,7 +6,7 @@ import java.util.List;
 
 public class LoadOutputData {
     private String backgroundImage;
-    private List<ClickableObject> clickableObjects;
+    private List<ClickableObject> collectibles;
 
     public String getBackgroundImage() {
         return backgroundImage;
@@ -17,10 +17,10 @@ public class LoadOutputData {
     }
 
     public List<ClickableObject> getClickableObjects() {
-        return clickableObjects;
+        return collectibles;
     }
 
-    public void setClickableObjects(List<ClickableObject> clickableObjects) {
-        this.clickableObjects = clickableObjects;
+    public void setClickableObjects(List<ClickableObject> collectibles) {
+        this.collectibles = collectibles;
     }
 }

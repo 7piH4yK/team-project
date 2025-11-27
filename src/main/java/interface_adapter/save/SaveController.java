@@ -3,11 +3,12 @@ package interface_adapter.save;
 import use_case.save.SaveInputBoundary;
 
 /**
- * Controller for the Main Menu.
+ * Controller for the save use case.
  */
 public class SaveController {
 
     private final SaveInputBoundary saveInteractor;
+
 
     public SaveController(SaveInputBoundary saveInteractor) {
         this.saveInteractor = saveInteractor;

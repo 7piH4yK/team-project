@@ -4,28 +4,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents a dialogue box that has dialogue options in it.
+ * Represents a dialogue box that displays text and options to the player.
+ * This is rendered as an overlay on top of the current scene.
  */
-
-public class DialogueBox extends Scene{
-
-
-    private final List<ClickableObject> options;
+public class DialogueBox {
     private final String image;
+    private final DialogueText text;
+    private final List<DialogueOption> options;
 
-    public DialogueBox(List<ClickableObject> options, String image) {
-        super("qq", new ArrayList<>(), "qq");
+    public DialogueBox(DialogueText text, List<DialogueOption> options, String image) {
+        this.text = text;
         this.options = new ArrayList<>(options);
         this.image = image;
     }
 
-
-    @Override
-    public List<ClickableObject> getObjects() {return options;}
-    @Override
-    public String getImage() {return image;}
-    @Override
-    public void addObject(ClickableObject object) {
-        options.add(object);
+    public String getImage() {
+        return image;
     }
+
+    public DialogueText getText() {
+        return text;
+    }
+
+    public List<DialogueOption> getOptions() {
+        return new ArrayList<>(options);
+    }
+
 }

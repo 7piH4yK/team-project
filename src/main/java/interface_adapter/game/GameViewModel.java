@@ -5,7 +5,7 @@ import interface_adapter.ViewModel;
 /**
  * The ViewModel for the Game View.
  */
-public class GameViewModel extends ViewModel<GameState> {
+public class GameViewModel extends ViewModel<Object> {
 
     public GameViewModel() {
         super("game");

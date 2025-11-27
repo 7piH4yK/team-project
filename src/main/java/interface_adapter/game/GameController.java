@@ -9,16 +9,17 @@ import use_case.game.GameInputData;
  */
 public class GameController {
 
-    private final GameInputBoundary clickButtonInteractor;
+    private final GameInputBoundary gameInputBoundary;
 
-    public GameController(GameInputBoundary clickButtonInteractor) {
-        this.clickButtonInteractor = clickButtonInteractor;
+    public GameController(GameInputBoundary gameInputBoundary) {
+        this.gameInputBoundary = gameInputBoundary;
     }
 
     /**
      * Click a clickable object
      */
-    public void click(ClickableObject clickableObject) {
-        clickButtonInteractor.execute(new GameInputData(clickableObject));
+    public void click(ClickableObject clickables) {
+        gameInputBoundary.execute(new GameInputData(clickables));
     }
+
 }

@@ -8,7 +8,6 @@ public class Main {
         JFrame application = appBuilder
                 .addMainMenuView()
                 .addGameView()
-                .addQuestionUseCase()
                 .addSwitchToGameUseCase()
                 .addClickButtonUseCase()
                 .addSaveUseCase()

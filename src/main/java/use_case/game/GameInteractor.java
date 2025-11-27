@@ -21,31 +21,6 @@ public class GameInteractor implements GameInputBoundary {
         ClickableObject clicked = gameInputData.getClickableObject();
 
         Scene cur = gameDataAccessInterface.getCurrentScene();
-
-        // Handle collectable objects
-        if (clicked instanceof Collectibles) {
-            // 1. Add to inventory
-
-            gameDataAccessInterface.getPlayer().addToInventory((Collectibles) clicked);
-
-            // 2. Remove from scene (rebuild because Scene is immutable)
-            java.util.List<ClickableObject> updated = new java.util.ArrayList<>(cur.getObjects());
-            updated.removeIf(o -> o.getName().equals(clicked.getName()));
-            Scene updatedScene = new Scene(cur.getName(), updated, cur.getImage());
-
-            // 3. Save new scene state
-            gameDataAccessInterface.getScenes().put(updatedScene.getName(), updatedScene);
-            gameDataAccessInterface.setCurrentScene(updatedScene);
-
-            // 4. Optional: show popup or in-game message
-            javax.swing.SwingUtilities.invokeLater(() ->
-                    javax.swing.JOptionPane.showMessageDialog(null,
-                            "You collected " + clicked.getName() + "!",
-                            "Item Collected",
-                            javax.swing.JOptionPane.INFORMATION_MESSAGE)
-            );
-        }
-
         // Game logic
         if (clicked instanceof NonPlayableCharacter) {
             gameDataAccessInterface.setCurrentDialogue(((NonPlayableCharacter) clicked).getDB());

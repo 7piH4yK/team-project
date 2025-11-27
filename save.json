@@ -1,71 +1,74 @@
 {
     "scenes": [
         {
-            "image": "scene1.png",
+            "image": "table.jpg",
+            "clickableObjects": [
+                {
+                    "image": "door_classroom.png",
+                    "coordinateY": 155,
+                    "coordinateX": 430,
+                    "name": "Door Classroom"
+                },
+                {
+                    "image": "down.png",
+                    "coordinateY": 500,
+                    "coordinateX": 500,
+                    "name": "Go Stairs From Table"
+                }
+            ],
+            "name": "Scene Table",
+            "collectibles": []
+        },
+        {
+            "image": "stairs.jpg",
+            "clickableObjects": [
+                {
+                    "image": "right.png",
+                    "coordinateY": 250,
+                    "coordinateX": 250,
+                    "name": "Go Exit"
+                },
+                {
+                    "image": "left.png",
+                    "coordinateY": 300,
+                    "coordinateX": 0,
+                    "name": "Go Table"
+                }
+            ],
+            "name": "Scene Stairs",
+            "collectibles": []
+        },
+        {
+            "image": "exit.jpg",
+            "clickableObjects": [
+                {
+                    "image": "door_exit.png",
+                    "coordinateY": 310,
+                    "coordinateX": 260,
+                    "name": "Door Exit"
+                },
+                {
+                    "image": "down.png",
+                    "coordinateY": 500,
+                    "coordinateX": 400,
+                    "name": "Go Stairs From Exit"
+                }
+            ],
+            "name": "Scene Exit",
+            "collectibles": []
+        },
+        {
+            "image": "classroom.jpg",
             "clickableObjects": [{
-                "image": "object2.png",
-                "coordinateY": 300,
-                "coordinateX": 600,
-                "name": "Object2"
-            }],
-            "name": "Scene1",
-            "collectibles": [{
-                "image": "key1.png",
-                "coordinateY": 200,
+                "image": "down.png",
+                "coordinateY": 500,
                 "coordinateX": 200,
-                "name": "Key1"
-            }]
-        },
-        {
-            "image": "scene2.png",
-            "clickableObjects": [
-                {
-                    "image": "object1.png",
-                    "coordinateY": 0,
-                    "coordinateX": 0,
-                    "name": "Object1"
-                },
-                {
-                    "image": "object3.png",
-                    "coordinateY": 200,
-                    "coordinateX": 200,
-                    "name": "Object3"
-                }
-            ],
-            "name": "Scene2",
-            "collectibles": []
-        },
-        {
-            "image": "scene3.png",
-            "clickableObjects": [
-                {
-                    "image": "object1.png",
-                    "coordinateY": 0,
-                    "coordinateX": 0,
-                    "name": "Object1"
-                },
-                {
-                    "image": "door1.png",
-                    "coordinateY": 200,
-                    "coordinateX": 200,
-                    "name": "Door1"
-                }
-            ],
-            "name": "Scene3",
-            "collectibles": []
-        },
-        {
-            "image": "scene4.png",
-            "clickableObjects": [{
-                "image": "object1.png",
-                "coordinateY": 0,
-                "coordinateX": 0,
-                "name": "Object1"
+                "name": "Go Table From Classroom"
             }],
-            "name": "Scene4",
+            "name": "Scene Classroom",
             "collectibles": []
         }
     ],
     "player": {"inventory": []},
-    "currentScene": "Scene2"
+    "currentScene": "Scene Classroom"
 }

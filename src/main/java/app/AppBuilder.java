@@ -5,6 +5,8 @@ import entity.PlayerFactory;
 import entity.SceneFactory;
 import interface_adapter.AppContext;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.collect_item.CollectItemController;
+import interface_adapter.collect_item.CollectItemPresenter;
 import interface_adapter.game.GameViewModel;
 import interface_adapter.load.LoadPresenter;
 import interface_adapter.main_menu.MainMenuController;
@@ -12,6 +14,7 @@ import interface_adapter.main_menu.MainMenuPresenter;
 import interface_adapter.main_menu.MainMenuViewModel;
 import interface_adapter.save.SaveController;
 import interface_adapter.save.SavePresenter;
+import use_case.collect_item.CollectItemInteractor;
 import use_case.load.LoadInputBoundary;
 import use_case.load.LoadInteractor;
 import use_case.load.LoadOutputBoundary;
@@ -56,6 +59,17 @@ public class AppBuilder {
     public AppBuilder addGameView() {
         gameViewModel = new GameViewModel();
         gameView = new GameView(gameViewModel);
+        CollectItemPresenter collectPresenter =
+                new CollectItemPresenter(gameViewModel, viewManagerModel);
+
+        CollectItemInteractor collectInteractor =
+                new CollectItemInteractor(gameDataAccessObject, collectPresenter);
+
+        CollectItemController collectController =
+                new CollectItemController(collectInteractor);
+
+        gameView.setCollectItemController(collectController);
+
         cardPanel.add(gameView, gameView.getViewName());
         return this;
     }

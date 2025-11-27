@@ -1,6 +1,7 @@
 package view;
 
 import entity.*;
+import interface_adapter.collect_item.CollectItemController;
 import interface_adapter.dialogue.DialogueController;
 import interface_adapter.dialogue.DialogueState;
 import interface_adapter.game.GameController;
@@ -30,6 +31,7 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
     private GameController gameController;
     private DialogueController dialogueController;
     private SaveController saveController;
+    private CollectItemController collectItemController;
 
     private GameState gameState;
 
@@ -89,6 +91,17 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
             label.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
+
+                    // NEW: Collectible handling
+                    if (clickable instanceof Collectibles) {
+                        collectItemController.collectItem(
+                                clickable.getName(),
+                                ((GameState) gameViewModel.getState()).getSceneName()
+                        );
+                        return; // stop normal logic
+                    }
+
+                    // OLD: NPC and normal logic
                     if (clickable instanceof NonPlayableCharacter) {
                         dialogueController.click(clickable);
                     } else {
@@ -96,6 +109,7 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
                     }
                 }
             });
+
         }
 
         // save and exit button
@@ -211,5 +225,8 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
         inventoryFrame.setVisible(true);
     }
 
+    public void setCollectItemController(CollectItemController collectController) {
+        this.collectItemController = collectController;
+    }
 }
 

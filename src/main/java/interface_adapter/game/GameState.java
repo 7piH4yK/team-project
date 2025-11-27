@@ -2,7 +2,6 @@ package interface_adapter.game;
 
 import entity.ClickableObject;
 import entity.Collectibles;
-import entity.DialogueBox;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +15,13 @@ public class GameState {
     private List<Collectibles> inventoryItems;
     private String sceneName;
 
-    public String getSceneName() { return sceneName; }
-    public void setSceneName(String sceneName) { this.sceneName = sceneName; }
+    public String getSceneName() {
+        return sceneName;
+    }
+
+    public void setSceneName(String sceneName) {
+        this.sceneName = sceneName;
+    }
 
     public String getBackgroundImage() {
         return backgroundImage;
@@ -43,7 +47,6 @@ public class GameState {
     public void setInventoryItems(List<Collectibles> inventoryItems) {
         this.inventoryItems = (inventoryItems == null ? new ArrayList<>() : inventoryItems);
     }
-
 
 
 }

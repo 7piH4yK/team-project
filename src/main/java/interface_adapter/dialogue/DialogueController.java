@@ -3,7 +3,6 @@ package interface_adapter.dialogue;
 import entity.ClickableObject;
 import entity.DialogueOption;
 import use_case.dialogue.DialogueInputBoundary;
-import use_case.game.GameInputBoundary;
 import use_case.game.GameInputData;
 
 public class DialogueController {

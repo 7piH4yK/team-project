@@ -1,6 +1,5 @@
 package interface_adapter.dialogue;
 
-import interface_adapter.game.GameState;
 import interface_adapter.game.GameViewModel;
 import use_case.dialogue.DialogueOutputBoundary;
 import use_case.dialogue.DialogueOutputData;

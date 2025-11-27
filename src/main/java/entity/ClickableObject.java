@@ -17,19 +17,6 @@ public class ClickableObject {
         this.image = image;
     }
 
-    public String getName() { return name; }
-    public int getCoordinateX() { return coordinateX; }
-    public int getCoordinateY() { return coordinateY; }
-
-    public String getImage() { return image; }
-    public JSONObject toJson() {
-        JSONObject json = new JSONObject();
-        json.put("name", this.name);
-        json.put("coordinateX", this.coordinateX);
-        json.put("coordinateY", this.coordinateY);
-        json.put("image", this.image);
-        return json;
-    }
     public static ClickableObject fromJson(JSONObject json) {
         return new ClickableObject(
                 json.getString("name"),
@@ -39,6 +26,30 @@ public class ClickableObject {
         );
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getCoordinateX() {
+        return coordinateX;
+    }
+
+    public int getCoordinateY() {
+        return coordinateY;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", this.name);
+        json.put("coordinateX", this.coordinateX);
+        json.put("coordinateY", this.coordinateY);
+        json.put("image", this.image);
+        return json;
+    }
 
 
 }

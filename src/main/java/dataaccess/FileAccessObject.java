@@ -2,20 +2,23 @@ package dataaccess;
 
 import entity.Player;
 import entity.Scene;
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import use_case.save.SaveOutputData;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
- Class that handles JSON access.
+ * Class that handles JSON access.
  **/
-public class FileAccessObject{
+public class FileAccessObject {
     final private JSONObject gameState;
 
     public FileAccessObject() {
@@ -36,7 +39,7 @@ public class FileAccessObject{
     }
 
     /**
-    Saves game into a save file that can be loaded later.
+     * Saves game into a save file that can be loaded later.
      **/
     public void saveGame(SaveOutputData outputData) {
         final int prettyPrint = 4;
@@ -54,14 +57,13 @@ public class FileAccessObject{
         // Save to file
         try (FileWriter file = new FileWriter("save.json")) {
             file.write(gameState.toString(prettyPrint));
-        }
-        catch (IOException exception) {
+        } catch (IOException exception) {
             System.out.println("Error writing JSON: " + exception.getMessage());
         }
     }
 
     /**
-     Load all scenes through save file.
+     * Load all scenes through save file.
      **/
     public Map<String, Scene> loadScenes() {
         final JSONArray scenesArray = this.gameState.getJSONArray("scenes");
@@ -74,7 +76,7 @@ public class FileAccessObject{
     }
 
     /**
-     Load current player state through save file.
+     * Load current player state through save file.
      **/
     public Player loadPlayer() {
         JSONObject playerJson = this.gameState.getJSONObject("player");
@@ -82,7 +84,7 @@ public class FileAccessObject{
     }
 
     /**
-     Load current scene through save file.
+     * Load current scene through save file.
      **/
     public String loadCurrentScene() {
         return this.gameState.getString("currentScene");

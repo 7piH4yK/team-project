@@ -1,9 +1,5 @@
 package app;
 
-import java.awt.*;
-
-import javax.swing.*;
-
 import dataaccess.InMemoryGameDataAccessObject;
 import entity.PlayerFactory;
 import entity.SceneFactory;
@@ -32,17 +28,18 @@ import view.GameView;
 import view.MainMenuView;
 import view.ViewManager;
 
-public class AppBuilder {
-    private final JPanel cardPanel = new JPanel();
-    private final CardLayout cardLayout = new CardLayout();
-    final ViewManagerModel viewManagerModel = new ViewManagerModel();
-    ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
+import javax.swing.*;
+import java.awt.*;
 
+public class AppBuilder {
+    final ViewManagerModel viewManagerModel = new ViewManagerModel();
     // Create initial game data
     final SceneFactory sceneFactory = new SceneFactory();
     final PlayerFactory playerFactory = new PlayerFactory();
     final InMemoryGameDataAccessObject gameDataAccessObject = new InMemoryGameDataAccessObject();
-
+    private final JPanel cardPanel = new JPanel();
+    private final CardLayout cardLayout = new CardLayout();
+    ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
     private MainMenuView mainMenuView;
     private MainMenuViewModel mainMenuViewModel;
     private GameViewModel gameViewModel;
@@ -159,6 +156,7 @@ public class AppBuilder {
 
         return application;
     }
+
     // In AppBuilder.java
     public InMemoryGameDataAccessObject getGameDataAccessObject() {
         return gameDataAccessObject;

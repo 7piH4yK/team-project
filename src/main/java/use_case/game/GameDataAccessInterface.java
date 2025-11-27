@@ -23,19 +23,20 @@ public interface GameDataAccessInterface {
 
     /**
      * Returns the current scene.
+     *
      * @return the current scene
      */
     Scene getCurrentScene();
 
     /**
-     * Returns all scenes.
-     */
-    Map<String, Scene> getScenes();
-
-    /**
      * Set current scene
      */
     void setCurrentScene(Scene scene);
+
+    /**
+     * Returns all scenes.
+     */
+    Map<String, Scene> getScenes();
 
     /**
      * Get the player

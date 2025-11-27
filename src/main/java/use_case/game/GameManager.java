@@ -4,7 +4,10 @@ import entity.ClickableObject;
 import entity.Collectibles;
 import entity.Scene;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GameManager {
 
@@ -14,7 +17,9 @@ public class GameManager {
         this.rulesByObjectName = new HashMap<>(rulesByObjectName);
     }
 
-    /** Fallback to NONE if an object has no rule. */
+    /**
+     * Fallback to NONE if an object has no rule.
+     */
     public ClickRule ruleFor(Collectibles obj) {
         return rulesByObjectName.getOrDefault(
                 obj.getName(),

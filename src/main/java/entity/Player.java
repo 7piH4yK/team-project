@@ -22,10 +22,20 @@ public class Player {
 
     /**
      * Creates a new player with the given inventory.
+     *
      * @param inventory the initial inventory
      */
     public Player(List<Collectibles> inventory) {
         this.inventory = new ArrayList<>(inventory);
+    }
+
+    public static Player fromJson(JSONObject json) {
+        JSONArray invArray = json.getJSONArray("inventory");
+        List<Collectibles> inventory = new ArrayList<>();
+        for (int i = 0; i < invArray.length(); i++) {
+            inventory.add(Collectibles.fromJson(invArray.getJSONObject(i)));
+        }
+        return new Player(inventory);
     }
 
     public List<Collectibles> getInventory() {
@@ -34,6 +44,7 @@ public class Player {
 
     /**
      * Adds an object to the player's inventory.
+     *
      * @param object the object to add
      */
     public void addToInventory(Collectibles object) {
@@ -42,6 +53,7 @@ public class Player {
 
     /**
      * Removes an object from the player's inventory.
+     *
      * @param object the object to remove
      */
     public void removeFromInventory(Collectibles object) {
@@ -60,25 +72,20 @@ public class Player {
         return json;
     }
 
-    public static Player fromJson(JSONObject json) {
-        JSONArray invArray = json.getJSONArray("inventory");
-        List<Collectibles> inventory = new ArrayList<>();
-        for (int i = 0; i < invArray.length(); i++) {
-            inventory.add(Collectibles.fromJson(invArray.getJSONObject(i)));
-        }
-        return new Player(inventory);
-    }
     public boolean hasItemNamed(String name) {
         for (Collectibles obj : inventory) {
             if (obj.getName().equals(name)) return true;
         }
         return false;
     }
+
     public void removeItemNamed(String name) {
         inventory.removeIf(obj -> obj.getName().equals(name));
     }
 
-    /** Optional: returns the first item with this name, or null if none. */
+    /**
+     * Optional: returns the first item with this name, or null if none.
+     */
     public Collectibles findItemNamed(String name) {
         for (Collectibles obj : inventory) {
             if (obj.getName().equals(name)) return obj;

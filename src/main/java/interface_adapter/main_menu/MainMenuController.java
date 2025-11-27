@@ -1,8 +1,8 @@
 package interface_adapter.main_menu;
 
+import dataaccess.InMemoryGameDataAccessObject;
 import use_case.load.LoadInputBoundary;
 import use_case.switch_to_game.SwitchToGameViewInputBoundary;
-import dataaccess.InMemoryGameDataAccessObject;
 
 /**
  * Controller for the Main Menu.

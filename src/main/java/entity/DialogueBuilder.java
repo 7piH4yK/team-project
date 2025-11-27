@@ -5,14 +5,12 @@ import java.util.List;
 
 public class DialogueBuilder {
     private final int option_xpos = 50;
-    private int option_ypos = 350;
     private final int text_xpos = 400;
     private final int text_ypos = 350;
-
     private final String image;
-
     public String text = "";
     public List<DialogueOption> options = new ArrayList<>();
+    private int option_ypos = 350;
 
     public DialogueBuilder(String image) {
         this.image = image;

@@ -1,9 +1,8 @@
 package use_case.save;
 
-import entity.Scene;
 import entity.Player;
+import entity.Scene;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,11 +12,15 @@ public interface SaveDataAccessInterface {
 
     /**
      * Returns the current scene.
+     *
      * @return the current scene
      */
     Scene getCurrentScene();
+
     Map<String, Scene> getScenes();
+
     Player getPlayer();
+
     void saveGame(SaveOutputData outputData);
 
 }

@@ -2,7 +2,6 @@ package interface_adapter.game;
 
 import entity.ClickableObject;
 import entity.Collectibles;
-import entity.DialogueBox;
 
 import java.util.List;
 

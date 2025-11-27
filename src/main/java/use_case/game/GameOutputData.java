@@ -2,7 +2,6 @@ package use_case.game;
 
 import entity.ClickableObject;
 import entity.Collectibles;
-import entity.DialogueBox;
 
 import java.util.List;
 
@@ -16,12 +15,12 @@ public class GameOutputData {
 
     private List<Collectibles> inventory;
 
-    public void setBackgroundImage(String backgroundImage) {
-        this.backgroundImage = backgroundImage;
-    }
-
     public String getBackgroundImage() {
         return backgroundImage;
+    }
+
+    public void setBackgroundImage(String backgroundImage) {
+        this.backgroundImage = backgroundImage;
     }
 
     public List<ClickableObject> getClickableObjects() {

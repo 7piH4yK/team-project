@@ -9,8 +9,10 @@ public interface SwitchToGameViewDataAccessInterface {
 
     /**
      * Returns the current scene.
+     *
      * @return the current scene
      */
     Scene getCurrentScene();
+
     void resetGame();
 }

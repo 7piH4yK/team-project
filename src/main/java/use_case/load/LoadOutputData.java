@@ -1,7 +1,6 @@
 package use_case.load;
 
 import entity.ClickableObject;
-import entity.Collectibles;
 
 import java.util.List;
 

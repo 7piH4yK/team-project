@@ -1,7 +1,5 @@
 package dataaccess;
 
-import java.util.*;
-
 import entity.*;
 import use_case.dialogue.DialogueDataAccessInterface;
 import use_case.game.GameDataAccessInterface;
@@ -10,16 +8,21 @@ import use_case.save.SaveDataAccessInterface;
 import use_case.save.SaveOutputData;
 import use_case.switch_to_game.SwitchToGameViewDataAccessInterface;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * In-memory implementation of game data access.
  */
 public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessInterface, GameDataAccessInterface,
-    SaveDataAccessInterface, LoadDataAccessInterface, DialogueDataAccessInterface {
+        SaveDataAccessInterface, LoadDataAccessInterface, DialogueDataAccessInterface {
 
+    private final java.util.Set<String> unlockedDoors = new java.util.HashSet<>();
     private Scene currentScene;
     private Player player;
     private Map<String, Scene> scenes = new HashMap<>();
-    private final java.util.Set<String> unlockedDoors = new java.util.HashSet<>();
     private DialogueBox currentDialogue;
 
 
@@ -32,20 +35,24 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
         return currentScene;
     }
 
-    public Map<String, Scene> getScenes() {
-        return scenes;
-    }
-
     public void setCurrentScene(Scene scene) {
         this.currentScene = scene;
+    }
+
+    public Map<String, Scene> getScenes() {
+        return scenes;
     }
 
     public Player getPlayer() {
         return player;
     }
 
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
     /**
-     Creates a FileAccessObject to handle the save.
+     * Creates a FileAccessObject to handle the save.
      **/
     public void saveGame(SaveOutputData outputData) {
         FileAccessObject fileAccessObject = new FileAccessObject();
@@ -53,7 +60,7 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
     }
 
     /**
-     Creates a FileAccessObject to handle the load.
+     * Creates a FileAccessObject to handle the load.
      **/
     public void loadGame(String filePath) {
         FileAccessObject fileAccessObject = new FileAccessObject(filePath);
@@ -75,7 +82,7 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
         Collectibles objectKeyExit = new ClickableObjectFactory().createCollectibles("Key Exit", 200, 200, "key1.png");
         ClickableObject objectDoorExit = new ClickableObjectFactory().create("Door Exit", 260, 310, "door_exit.png");
         ClickableObject objectDoorClassroom = new ClickableObjectFactory().create("Door Classroom", 430, 155, "door_classroom.png");
-        ClickableObject objectGoExit = new  ClickableObjectFactory().create("Go Exit", 250, 250, "right.png");
+        ClickableObject objectGoExit = new ClickableObjectFactory().create("Go Exit", 250, 250, "right.png");
         ClickableObject objectGoTable = new ClickableObject("Go Table", 0, 300, "left.png");
         ClickableObject objectGoStairsFromExit = new ClickableObject("Go Stairs From Exit", 400, 500, "down.png");
         ClickableObject objectGoTableFromClassroom = new ClickableObject("Go Table From Classroom", 200, 500, "down.png");
@@ -102,7 +109,7 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
     }
 
     /**
-     Creates NPC and dialogue.
+     * Creates NPC and dialogue.
      **/
     public void loadGameConstants(Scene sceneStairs, Scene sceneExit, Scene sceneTable, Scene sceneClassroom) {
         DialogueBox dialogBoxOptionOutcome1 = new DialogueBuilder("db1.png")
@@ -138,11 +145,6 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
         NonPlayableCharacter npc2 = new NonPlayableCharacterFactory().create("NPC2", 700, 300, "npc2.png", dialogueBox2);
         sceneStairs.addObject(npc2);
     }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
 
     @Override
     public boolean isDoorUnlocked(String doorName) {

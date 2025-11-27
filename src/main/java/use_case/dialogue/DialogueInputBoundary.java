@@ -7,6 +7,7 @@ public interface DialogueInputBoundary {
 
     /**
      * Executes the click use case for dialogue options.
+     *
      * @param dialogueOption the clicked dialogue option
      */
     void executeDialogueOption(DialogueOption dialogueOption);

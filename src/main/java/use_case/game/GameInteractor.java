@@ -49,8 +49,7 @@ public class GameInteractor implements GameInputBoundary {
         // Game logic
         if (clicked instanceof NonPlayableCharacter) {
             gameDataAccessInterface.setCurrentDialogue(((NonPlayableCharacter) clicked).getDB());
-        }
-        else {
+        } else {
             switch (clicked.getName()) {
                 case "Go Exit":
                     gameDataAccessInterface.setCurrentScene(gameDataAccessInterface.getScenes().get("Scene Exit"));
@@ -113,21 +112,6 @@ public class GameInteractor implements GameInputBoundary {
                                 "Locked", javax.swing.JOptionPane.WARNING_MESSAGE));
             }
         }
-    }
-
-    @Override
-    public void executeDialogueOption(DialogueOption dialogueOption) {
-        if (dialogueOption.leadsToScene()) {
-            // Close dialogue and navigate to scene
-            gameDataAccessInterface.setCurrentDialogue(null);
-            gameDataAccessInterface.setCurrentScene(dialogueOption.getTargetScene());
-        } else if (dialogueOption.leadsToDialogue()) {
-            // Show next dialogue
-            gameDataAccessInterface.setCurrentDialogue(dialogueOption.getTargetDialogue());
-        }
-
-        // Update game UI
-        updateView();
     }
 
     private void updateView() {

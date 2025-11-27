@@ -1,8 +1,6 @@
 package use_case.switch_to_game;
 
 import entity.Scene;
-import use_case.game.GameOutputBoundary;
-import use_case.game.GameOutputData;
 
 /**
  * The Switch to Game View Interactor.

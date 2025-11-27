@@ -9,6 +9,7 @@ public class TriviaResponse {
     public int getResponseCode() {
         return response_code;
     }
+
     public List<Question> getResults() {
         return results;
     }

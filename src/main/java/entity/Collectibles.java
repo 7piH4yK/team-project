@@ -14,14 +14,15 @@ public class Collectibles extends ClickableObject {
 
     /**
      * Creates a new clickable object.
-     * @param name the name of the object
+     *
+     * @param name        the name of the object
      * @param coordinateX the x coordinate of the object
      * @param coordinateY the y coordinate of the object
-     * @param image the path to the image asset
+     * @param image       the path to the image asset
      * @throws IllegalArgumentException if the name or image path is empty
      */
     public Collectibles(String name, int coordinateX, int coordinateY, String image) {
-        super(name,coordinateX,coordinateY, image);
+        super(name, coordinateX, coordinateY, image);
         if ("".equals(name)) {
             throw new IllegalArgumentException("Object name cannot be empty");
         }
@@ -32,6 +33,14 @@ public class Collectibles extends ClickableObject {
         this.coordinateX = coordinateX;
         this.coordinateY = coordinateY;
         this.image = image;
+    }
+
+    public static Collectibles fromJson(JSONObject json) {
+        return new Collectibles(
+                json.getString("name"),
+                json.getInt("coordinateX"),
+                json.getInt("coordinateY"),
+                json.getString("image"));
     }
 
     public String getName() {
@@ -57,13 +66,5 @@ public class Collectibles extends ClickableObject {
         json.put("coordinateY", this.coordinateY);
         json.put("image", this.image);
         return json;
-    }
-
-    public static Collectibles fromJson(JSONObject json) {
-        return new Collectibles(
-                json.getString("name"),
-                json.getInt("coordinateX"),
-                json.getInt("coordinateY"),
-                json.getString("image"));
     }
 }

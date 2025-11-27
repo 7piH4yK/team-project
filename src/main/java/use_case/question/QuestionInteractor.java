@@ -1,7 +1,7 @@
 package use_case.question;
 
-import data_access.api.Question;
-import data_access.api.TriviaResponse;
+import dataaccess.api.Question;
+import dataaccess.api.TriviaResponse;
 
 import java.util.List;
 

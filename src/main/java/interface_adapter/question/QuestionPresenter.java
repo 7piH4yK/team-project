@@ -1,7 +1,6 @@
 package interface_adapter.question;
 
-import data_access.InMemoryGameDataAccessObject;
-import data_access.api.Question;
+import dataaccess.api.Question;
 import entity.QuestionBox;
 import entity.QuestionBoxBuilder;
 

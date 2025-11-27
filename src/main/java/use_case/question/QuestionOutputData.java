@@ -1,6 +1,6 @@
 package use_case.question;
 
-import data_access.api.Question;
+import dataaccess.api.Question;
 
 import java.util.List;
 

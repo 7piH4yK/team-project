@@ -1,8 +1,8 @@
 package interface_adapter.gateways.trivia;
 
-import data_access.api.RetrofitClientDataAccessObject;
-import data_access.api.TriviaAPI;
-import data_access.api.TriviaResponse;
+import dataaccess.api.RetrofitClientDataAccessObject;
+import dataaccess.api.TriviaAPI;
+import dataaccess.api.TriviaResponse;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;

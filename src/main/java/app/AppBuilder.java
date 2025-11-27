@@ -1,10 +1,7 @@
 package app;
 
-import data_access.InMemoryGameDataAccessObject;
 import entity.*;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.game.GameController;
-import interface_adapter.game.GamePresenter;
 import interface_adapter.game.GameViewModel;
 import interface_adapter.load.LoadPresenter;
 import interface_adapter.main_menu.MainMenuController;
@@ -13,13 +10,9 @@ import interface_adapter.main_menu.MainMenuViewModel;
 import interface_adapter.save.SaveController;
 import interface_adapter.save.SavePresenter;
 import interface_adapter.gateways.trivia.TriviaApiDataAccessObject;
-import interface_adapter.question.QuestionController;
 import interface_adapter.question.QuestionPresenter;
 import use_case.game.ClickActionType;
 import use_case.question.*;
-import use_case.game.GameInputBoundary;
-import use_case.game.GameInteractor;
-import use_case.game.GameOutputBoundary;
 import use_case.load.LoadInteractor;
 import use_case.load.LoadOutputBoundary;
 import use_case.load.LoadInputBoundary;

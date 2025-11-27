@@ -1,6 +1,5 @@
 package view;
 
-import data_access.InMemoryGameDataAccessObject;
 import entity.ClickableObject;
 import entity.DialogueOption;
 import entity.DialogueText;
@@ -20,8 +19,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
-import interface_adapter.question.QuestionController;
-import java.util.Objects;
 
 /**
  * The View for the Game.

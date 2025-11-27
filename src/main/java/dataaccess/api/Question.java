@@ -1,4 +1,4 @@
-package data_access.api;
+package dataaccess.api;
 
 import com.google.gson.annotations.SerializedName;
 import java.util.List;

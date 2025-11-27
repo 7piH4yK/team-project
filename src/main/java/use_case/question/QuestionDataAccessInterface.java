@@ -1,6 +1,6 @@
 package use_case.question;
 
-import data_access.api.TriviaResponse;
+import dataaccess.api.TriviaResponse;
 
 public interface QuestionDataAccessInterface {
     /**

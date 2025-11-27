@@ -1,10 +1,8 @@
 package use_case.load;
 
-import java.io.File;
-import java.util.Map;
-
 import entity.Scene;
-import entity.Player;
+
+import java.io.File;
 
 /**
  * The save interactor.
@@ -26,7 +24,6 @@ public class LoadInteractor implements LoadInputBoundary {
             presenter.displayError("No saved game found!");
             return;
         }
-
 
         loadDataAccessObject.loadGame("save.json");
 

@@ -17,12 +17,11 @@ public class MainMenuView extends JPanel implements ActionListener, PropertyChan
 
     private final String viewName = "main menu";
     private final MainMenuViewModel mainMenuViewModel;
-    private MainMenuController mainMenuController;
-
     private final JButton startGameButton;
     private final JButton loadGameButton;
     private final JButton exitGameButton;
     private final JLabel errorLabel;
+    private MainMenuController mainMenuController;
 
     public MainMenuView(MainMenuViewModel mainMenuViewModel) {
         this.mainMenuViewModel = mainMenuViewModel;
@@ -76,7 +75,7 @@ public class MainMenuView extends JPanel implements ActionListener, PropertyChan
         loadGameButton.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
-                        if  (evt.getSource().equals(loadGameButton)) {
+                        if (evt.getSource().equals(loadGameButton)) {
                             mainMenuController.loadGame();
                         }
                     }
@@ -108,7 +107,7 @@ public class MainMenuView extends JPanel implements ActionListener, PropertyChan
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getSource() == mainMenuViewModel) {
             String error = mainMenuViewModel.getState().getErrorMessage();
-            errorLabel.setText(error != null ? error:"");
+            errorLabel.setText(error != null ? error : "");
         }
     }
 

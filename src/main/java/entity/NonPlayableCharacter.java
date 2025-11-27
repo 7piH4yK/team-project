@@ -12,14 +12,15 @@ public class NonPlayableCharacter extends ClickableObject {
 
     /**
      * Creates a new NPC.
-     * @param name the name of the NPC
+     *
+     * @param name        the name of the NPC
      * @param coordinateX the x coordinate of the NPC
      * @param coordinateY the y coordinate of the NPC
-     * @param image the path to the image asset
+     * @param image       the path to the image asset
      * @throws IllegalArgumentException if the name or image path is empty
      **/
     public NonPlayableCharacter(String name, int coordinateX, int coordinateY, String image, DialogueBox box) {
-        super(name, coordinateX, coordinateY, image, false);
+        super(name, coordinateX, coordinateY, image);
         if ("".equals(name)) {
             throw new IllegalArgumentException("Object name cannot be empty");
         }
@@ -32,20 +33,29 @@ public class NonPlayableCharacter extends ClickableObject {
         this.image = image;
         this.box = box;
     }
+
     @Override
     public String getName() {
         return name;
     }
+
     @Override
     public int getCoordinateX() {
         return coordinateX;
     }
+
     @Override
     public int getCoordinateY() {
         return coordinateY;
     }
-    @Override
-    public String getImage() {return image;}
 
-    public DialogueBox getDB() {return box;}
+    @Override
+    public String getImage() {
+        return image;
+    }
+
+    public DialogueBox getDB() {
+        return box;
+    }
+
 }

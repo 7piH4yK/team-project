@@ -4,7 +4,7 @@ import interface_adapter.ViewModel;
 import interface_adapter.game.GameState;
 
 /**
- * The ViewModel for the Game View.
+ * The ViewModel for the load view.
  */
 public class LoadViewModel extends ViewModel<GameState> {
 

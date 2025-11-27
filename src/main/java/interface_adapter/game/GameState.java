@@ -1,7 +1,9 @@
 package interface_adapter.game;
 
 import entity.ClickableObject;
+import entity.Collectibles;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,8 +11,18 @@ import java.util.List;
  */
 public class GameState {
     private String backgroundImage;
-    private List<ClickableObject> clickableObjects;
-//    currentDialogBox
+    private List<ClickableObject> clickables;
+    private List<Collectibles> inventoryItems;
+    private String sceneName;
+
+    public String getSceneName() {
+        return sceneName;
+    }
+
+    public void setSceneName(String sceneName) {
+        this.sceneName = sceneName;
+    }
+
     public String getBackgroundImage() {
         return backgroundImage;
     }
@@ -20,10 +32,21 @@ public class GameState {
     }
 
     public List<ClickableObject> getClickableObjects() {
-        return clickableObjects;
+        return clickables;
     }
 
-    public void setClickableObjects(List<ClickableObject> clickableObjects) {
-        this.clickableObjects = clickableObjects;
+    public void setClickableObjects(List<ClickableObject> collectibles) {
+        this.clickables = collectibles;
     }
+
+    public List<Collectibles> getInventoryItems() {
+        return inventoryItems == null ? new ArrayList<>() : inventoryItems;
+    }
+
+
+    public void setInventoryItems(List<Collectibles> inventoryItems) {
+        this.inventoryItems = (inventoryItems == null ? new ArrayList<>() : inventoryItems);
+    }
+
+
 }

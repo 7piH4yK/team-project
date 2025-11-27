@@ -57,16 +57,16 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
         try {
 
             if (object instanceof DialogueState) {
-                final DialogueState state =  (DialogueState) object;
+                final DialogueState state = (DialogueState) object;
                 // Render dialogue overlay if active
                 DialogueBox dialogue = state.getCurrentDialogue();
                 if (dialogue != null) {
                     renderDialogueOverlay(dialogue);
+                } else {
+                    drawScene(gameState);
                 }
-                else { drawScene(gameState); }
-            }
-            else {
-                final GameState state =  (GameState) object;
+            } else {
+                final GameState state = (GameState) object;
 
                 drawScene(state);
 
@@ -187,7 +187,9 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
         this.dialogueController = controller;
     }
 
-    public void setSaveController(SaveController controller) {this.saveController = controller;}
+    public void setSaveController(SaveController controller) {
+        this.saveController = controller;
+    }
 
     private void openInventoryPanel() {
         JFrame inventoryFrame = new JFrame("Inventory");

@@ -1,11 +1,10 @@
 package use_case.collect_item;
 
-import use_case.game.GameDataAccessInterface;
 import entity.ClickableObject;
 import entity.Collectibles;
 import entity.Scene;
+import use_case.game.GameDataAccessInterface;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 

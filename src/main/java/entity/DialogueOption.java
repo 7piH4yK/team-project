@@ -1,7 +1,5 @@
 package entity;
 
-import org.json.JSONObject;
-
 /**
  * Represents a clickable option in a dialogue box.
  */
@@ -14,7 +12,8 @@ public class DialogueOption {
 
     /**
      * Creates a dialogue option that leads to a scene.
-     * @param name the text displayed for this option
+     *
+     * @param name        the text displayed for this option
      * @param coordinateX the x coordinate of the option
      * @param coordinateY the y coordinate of the option
      * @param targetScene the scene to navigate to when clicked
@@ -32,9 +31,10 @@ public class DialogueOption {
 
     /**
      * Creates a dialogue option that leads to another dialogue.
-     * @param name the text displayed for this option
-     * @param coordinateX the x coordinate of the option
-     * @param coordinateY the y coordinate of the option
+     *
+     * @param name           the text displayed for this option
+     * @param coordinateX    the x coordinate of the option
+     * @param coordinateY    the y coordinate of the option
      * @param targetDialogue the dialogue box to show when clicked
      */
     public DialogueOption(String name, int coordinateX, int coordinateY, DialogueBox targetDialogue) {

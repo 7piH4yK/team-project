@@ -3,13 +3,11 @@ package use_case.dialogue;
 import entity.ClickableObject;
 import entity.DialogueOption;
 import entity.NonPlayableCharacter;
-import entity.Scene;
 import use_case.game.GameInputData;
 
 public class DialogueInteractor implements DialogueInputBoundary {
     private final DialogueOutputBoundary presenter;
     private final DialogueDataAccessInterface dialogueDataAccessInterface;
-
 
 
     public DialogueInteractor(DialogueDataAccessInterface gameDataAccessInterface, DialogueOutputBoundary dialogueOutputBoundary) {

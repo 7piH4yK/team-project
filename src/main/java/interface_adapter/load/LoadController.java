@@ -1,10 +1,9 @@
 package interface_adapter.load;
 
-import use_case.load.LoadDataAccessInterface;
 import use_case.load.LoadInputBoundary;
 
 /**
- Controller that handles the load use case.
+ * Controller that handles the load use case.
  **/
 public class LoadController {
     private final LoadInputBoundary loadInteractor;

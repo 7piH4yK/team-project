@@ -2,8 +2,8 @@ package interface_adapter.collect_item;
 
 import entity.Collectibles;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.game.GameViewModel;
 import interface_adapter.game.GameState;
+import interface_adapter.game.GameViewModel;
 import use_case.collect_item.CollectItemOutputBoundary;
 import use_case.collect_item.CollectItemOutputData;
 

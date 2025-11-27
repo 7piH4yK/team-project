@@ -1,10 +1,6 @@
 package use_case.dialogue;
 
-import entity.ClickableObject;
-import entity.Collectibles;
 import entity.DialogueBox;
-
-import java.util.List;
 
 public class DialogueOutputData {
 

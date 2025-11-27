@@ -1,8 +1,6 @@
 package interface_adapter.game;
 
 import entity.ClickableObject;
-import entity.DialogueOption;
-import use_case.dialogue.DialogueInputBoundary;
 import use_case.game.GameInputBoundary;
 import use_case.game.GameInputData;
 

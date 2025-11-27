@@ -24,8 +24,7 @@ public class GameInteractor implements GameInputBoundary {
         // Game logic
         if (clicked instanceof NonPlayableCharacter) {
             gameDataAccessInterface.setCurrentDialogue(((NonPlayableCharacter) clicked).getDB());
-        }
-        else {
+        } else {
             switch (clicked.getName()) {
                 case "Go Exit":
                     gameDataAccessInterface.setCurrentScene(gameDataAccessInterface.getScenes().get("Scene Exit"));
@@ -50,7 +49,6 @@ public class GameInteractor implements GameInputBoundary {
         // Update game UI
         updateView();
     }
-
 
 
     private void attemptUseDoor(String doorName, String keyName, String newScene) {

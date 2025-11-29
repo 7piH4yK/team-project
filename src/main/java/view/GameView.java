@@ -66,36 +66,39 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
     }
 
     private void drawScene(GameState state) throws IOException {
-        // add clickable objects
-        for (ClickableObject clickable : state.getClickableObjects()) {
-            ImageIcon imageIcon = new ImageIcon();
-            imageIcon.setImage(ImageIO.read(new File("src/main/resources", clickable.getImage())));
-            JLabel label = new JLabel(imageIcon);
-            label.setBounds(clickable.getCoordinateX(), clickable.getCoordinateY(), imageIcon.getIconWidth(), imageIcon.getIconHeight());
-            add(label);
-            label.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
+        if (state.getClickableObjects() != null) {
+            // add clickable objects
+            for (ClickableObject clickable : state.getClickableObjects()) {
+                ImageIcon imageIcon = new ImageIcon();
+                imageIcon.setImage(ImageIO.read(new File("src/main/resources", clickable.getImage())));
+                JLabel label = new JLabel(imageIcon);
+                label.setBounds(clickable.getCoordinateX(), clickable.getCoordinateY(), imageIcon.getIconWidth(), imageIcon.getIconHeight());
+                add(label);
+                label.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
 
-                    // NEW: Collectible handling
-                    if (clickable instanceof Collectibles) {
-                        collectItemController.collectItem(
-                                clickable.getName(),
-                                ((GameState) gameViewModel.getState()).getSceneName()
-                        );
-                        return; // stop normal logic
+                        // NEW: Collectible handling
+                        if (clickable instanceof Collectibles) {
+                            collectItemController.collectItem(
+                                    clickable.getName(),
+                                    ((GameState) gameViewModel.getState()).getSceneName()
+                            );
+                            return; // stop normal logic
+                        }
+
+                        // OLD: NPC and normal logic
+                        if (clickable instanceof NonPlayableCharacter) {
+                            dialogueController.click(clickable);
+                        } else {
+                            gameController.click(clickable);
+                        }
                     }
+                });
 
-                    // OLD: NPC and normal logic
-                    if (clickable instanceof NonPlayableCharacter) {
-                        dialogueController.click(clickable);
-                    } else {
-                        gameController.click(clickable);
-                    }
-                }
-            });
-
+            }
         }
+
 
         // save and exit button
         JButton saveExitButton = new JButton("Save & Exit");

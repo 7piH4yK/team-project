@@ -11,6 +11,7 @@ import interface_adapter.game.GameViewModel;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.main_menu.MainMenuState;
 import interface_adapter.main_menu.MainMenuViewModel;
+import interface_adapter.dialogue.DialogueState;
 import use_case.question.QuestionOutputBoundary;
 import use_case.question.QuestionOutputData;
 
@@ -36,7 +37,7 @@ public class QuestionPresenter implements QuestionOutputBoundary {
         viewManagerModel.firePropertyChange();
 
         List<Question> questions = outputData.getQuestions();
-        if (questions.isEmpty()) {
+        if (questions == null || questions.isEmpty()) {
             displayError("No riddles available.");
             return;
         }
@@ -53,7 +54,6 @@ public class QuestionPresenter implements QuestionOutputBoundary {
         class Answer {
             final String text;
             final boolean correct;
-
             Answer(String text, boolean correct) {
                 this.text = text;
                 this.correct = correct;
@@ -79,11 +79,8 @@ public class QuestionPresenter implements QuestionOutputBoundary {
 
         QuestionBox questionBox = builder.build();
 
-        java.util.List<ClickableObject> objects = questionBox.getObjects();
-
-        GameState state = gameViewModel.getState();
-        state.setBackgroundImage(questionBox.getImage());
-        state.setClickableObjects(objects);
+        DialogueState state = new DialogueState();
+        state.setCurrentDialogue(questionBox);
         gameViewModel.setState(state);
         gameViewModel.firePropertyChange();
     }

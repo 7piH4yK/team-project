@@ -36,13 +36,8 @@ public class QuestionBoxBuilder extends DialogueBuilder{
 //            throw new IllegalArgumentException("null nextScene");
 //        }
 
-        QuestionOption option = new QuestionOption(
-                answerText,
-                OPTION_X,
-                optionY,
-                nextScene,
-                correct
-        );
+        QuestionOption option = new QuestionOptionFactory()
+                .create(answerText, OPTION_X, optionY, nextScene, correct);
 
         this.questionOptions.add(option);
         optionY += 50;
@@ -51,7 +46,7 @@ public class QuestionBoxBuilder extends DialogueBuilder{
 
     @Override
     public QuestionBox build() {
-        QuestionText qText = new QuestionText(questionText, TEXT_X, TEXT_Y);
-        return new QuestionBox(qText, questionOptions, image);
+        QuestionText qText = new QuestionTextFactory().create(questionText, TEXT_X, TEXT_Y);
+        return new QuestionBox(qText, questionOptions, getImage());
     }
 }

@@ -14,17 +14,9 @@ public class QuestionBox extends DialogueBox {
     public QuestionBox(QuestionText questionText,
                        List<QuestionOption> answerOptions,
                        String image) {
-        super(buildObjects(questionText, answerOptions), image);
+        super(questionText, new ArrayList<DialogueOption>(answerOptions), image);
         this.questionText = questionText;
         this.answerOptions = new ArrayList<>(answerOptions);
-    }
-
-    private static List<ClickableObject> buildObjects(QuestionText questionText,
-                                                      List<QuestionOption> answerOptions) {
-        List<ClickableObject> objects = new ArrayList<>();
-        objects.add(questionText);
-        objects.addAll(answerOptions);
-        return objects;
     }
 
     public QuestionText getQuestionText() {

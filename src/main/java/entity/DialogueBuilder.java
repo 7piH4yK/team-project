@@ -16,6 +16,10 @@ public class DialogueBuilder {
         this.image = image;
     }
 
+    protected String getImage() {
+        return image;
+    }
+
     public DialogueBuilder setText(String text) {
         this.text = text;
         return this;

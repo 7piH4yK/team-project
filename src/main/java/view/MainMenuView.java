@@ -2,6 +2,7 @@ package view;
 
 import interface_adapter.main_menu.MainMenuController;
 import interface_adapter.main_menu.MainMenuViewModel;
+import interface_adapter.question.QuestionController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,7 +22,9 @@ public class MainMenuView extends JPanel implements ActionListener, PropertyChan
     private final JButton loadGameButton;
     private final JButton exitGameButton;
     private final JLabel errorLabel;
+
     private MainMenuController mainMenuController;
+    private QuestionController questionController;
 
     public MainMenuView(MainMenuViewModel mainMenuViewModel) {
         this.mainMenuViewModel = mainMenuViewModel;
@@ -55,6 +58,13 @@ public class MainMenuView extends JPanel implements ActionListener, PropertyChan
         buttons.add(loadGameButton);
         buttons.add(Box.createRigidArea(new Dimension(0, 20)));
 
+        JButton testQuestionButton = new JButton("Test Trivia Question");
+        testQuestionButton.setPreferredSize(buttonsSize);
+        testQuestionButton.setMaximumSize(buttonsSize);
+        testQuestionButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        buttons.add(testQuestionButton);
+        buttons.add(Box.createRigidArea(new Dimension(0, 20)));
+
         exitGameButton = new JButton(MainMenuViewModel.EXIT_GAME_BUTTON_LABEL);
         exitGameButton.setPreferredSize(buttonsSize);
         exitGameButton.setMaximumSize(buttonsSize);
@@ -77,6 +87,19 @@ public class MainMenuView extends JPanel implements ActionListener, PropertyChan
                     public void actionPerformed(ActionEvent evt) {
                         if (evt.getSource().equals(loadGameButton)) {
                             mainMenuController.loadGame();
+                        }
+                    }
+                }
+        );
+
+        testQuestionButton.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        if (evt.getSource().equals(testQuestionButton)) {
+                            if (questionController != null) {
+                                questionController.loadQuestions();
+                            }
                         }
                     }
                 }
@@ -117,5 +140,9 @@ public class MainMenuView extends JPanel implements ActionListener, PropertyChan
 
     public void setMainMenuController(MainMenuController controller) {
         this.mainMenuController = controller;
+    }
+
+    public void setQuestionController(QuestionController questionController) {
+        this.questionController = questionController;
     }
 }

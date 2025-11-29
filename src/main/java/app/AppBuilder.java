@@ -14,6 +14,11 @@ import interface_adapter.main_menu.MainMenuPresenter;
 import interface_adapter.main_menu.MainMenuViewModel;
 import interface_adapter.save.SaveController;
 import interface_adapter.save.SavePresenter;
+import interface_adapter.question.QuestionPresenter;
+import interface_adapter.question.QuestionController;
+import use_case.question.QuestionDataAccessInterface;
+import use_case.question.QuestionInputBoundary;
+import use_case.question.QuestionInteractor;
 import use_case.collect_item.CollectItemInteractor;
 import use_case.load.LoadInputBoundary;
 import use_case.load.LoadInteractor;
@@ -138,6 +143,23 @@ public class AppBuilder {
         SaveInputBoundary saveInteractor = new SaveInteractor(gameDataAccessObject, savePresenter);
         SaveController saveController = new SaveController(saveInteractor);
         gameView.setSaveController(saveController);
+        return this;
+    }
+
+    public AppBuilder addQuestionUseCase(QuestionDataAccessInterface riddleDAO) {
+        QuestionPresenter questionPresenter =
+                new QuestionPresenter(mainMenuViewModel, viewManagerModel, gameViewModel, gameDataAccessObject);
+
+        // Interactor: talks to API DAO + presenter
+        QuestionInputBoundary questionInteractor =
+                new QuestionInteractor(riddleDAO, questionPresenter);
+
+        // Controller: called by UI button
+        QuestionController questionController =
+                new QuestionController(questionInteractor);
+
+        mainMenuView.setQuestionController(questionController);
+
         return this;
     }
 

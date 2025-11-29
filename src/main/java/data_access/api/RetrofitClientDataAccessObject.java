@@ -1,4 +1,4 @@
-package dataaccess.api;
+package data_access.api;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -9,9 +9,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * basic implementation of retrofitclient which implements the riddle api that we selected
  */
 
-public class RetrofitClient {
+public class RetrofitClientDataAccessObject {
     private static final String BASE_URL = "https://opentdb.com/";
     private static Retrofit retrofit = null;
+
+    private RetrofitClientDataAccessObject() {}
 
     public static Retrofit getClient() {
         if (retrofit == null) {
@@ -32,4 +34,3 @@ public class RetrofitClient {
         return retrofit;
     }
 }
-

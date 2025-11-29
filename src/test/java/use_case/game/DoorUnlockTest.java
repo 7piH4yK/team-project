@@ -36,7 +36,7 @@ public class DoorUnlockTest {
 
     @Test
     public void testDoorOpensWithKey() {
-        Collectibles key = new Collectibles("Object3", 0,0,"key.png", true);
+        Collectibles key = new Collectibles("Object3", 0,0,"key.png");
 
         // Collect key
         player.addToInventory(key);
@@ -65,7 +65,7 @@ public class DoorUnlockTest {
 
     @Test
     public void testKeyConsumption() {
-        Collectibles key = new Collectibles("Object3", 0,0,"key.png", true);
+        Collectibles key = new Collectibles("Object3", 0,0,"key.png");
 
         player.addToInventory(key);
         assertTrue(player.hasItemNamed("Object3"));

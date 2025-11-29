@@ -1,14 +1,27 @@
-package entity.model;
+package data_access.api;
 
+import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class Question {
+
+    @SerializedName("category")
     private String category;
+
+    @SerializedName("type")
     private String type;
+
+    @SerializedName("difficulty")
     private String difficulty;
+
+    @SerializedName("question")
     private String question;
-    private String correct_answer;
-    private List<String> incorrect_answers;
+
+    @SerializedName("correct_answer")
+    private String correctAnswer;
+
+    @SerializedName("incorrect_answers")
+    private List<String> incorrectAnswers;
 
     public String getCategory() {
         return category;
@@ -27,10 +40,10 @@ public class Question {
     }
 
     public String getCorrectAnswer() {
-        return correct_answer;
+        return correctAnswer;
     }
 
     public List<String> getIncorrectAnswers() {
-        return incorrect_answers;
+        return incorrectAnswers;
     }
 }

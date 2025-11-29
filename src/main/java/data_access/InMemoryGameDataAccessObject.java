@@ -1,4 +1,4 @@
-package dataaccess;
+package data_access;
 
 import entity.*;
 import use_case.dialogue.DialogueDataAccessInterface;
@@ -80,20 +80,20 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
     public void resetGame() {
         Collectibles objectKeyClassroom = new ClickableObjectFactory().createCollectibles("Key Classroom", 200, 200, "key1.png");
         Collectibles objectKeyExit = new ClickableObjectFactory().createCollectibles("Key Exit", 200, 200, "key1.png");
-        ClickableObject objectDoorExit = new ClickableObjectFactory().create("Door Exit", 260, 310, "door_exit.png");
+        ClickableObject objectDoorExit = new ClickableObjectFactory().create("Door Exit", 260, 310, "door.png");
         ClickableObject objectDoorClassroom = new ClickableObjectFactory().create("Door Classroom", 430, 155, "door_classroom.png");
         ClickableObject objectGoExit = new ClickableObjectFactory().create("Go Exit", 250, 250, "right.png");
         ClickableObject objectGoTable = new ClickableObject("Go Table", 0, 300, "left.png");
-        ClickableObject objectGoStairsFromExit = new ClickableObject("Go Stairs From Exit", 400, 500, "down.png");
-        ClickableObject objectGoTableFromClassroom = new ClickableObject("Go Table From Classroom", 200, 500, "down.png");
-        ClickableObject objectGoStairsFromTable = new ClickableObject("Go Stairs From Table", 500, 500, "down.png");
+        ClickableObject objectGoStairsFromExit = new ClickableObject("Go Stairs From Exit", 130, 460, "down.png");
+        ClickableObject objectGoTableFromClassroom = new ClickableObject("Go Table From Classroom", 200, 465, "down.png");
+        ClickableObject objectGoStairsFromTable = new ClickableObject("Go Stairs From Table", 500, 465, "down.png");
 
         this.player = new PlayerFactory().create();
 
-        Scene sceneStairs = new SceneFactory().create("Scene Stairs", new ArrayList<>(List.of(objectGoExit, objectGoTable)), "stairs.jpg");
-        Scene sceneExit = new SceneFactory().create("Scene Exit", new ArrayList<>(List.of(objectDoorExit, objectGoStairsFromExit)), "exit.jpg");
-        Scene sceneTable = new SceneFactory().create("Scene Table", new ArrayList<>(List.of(objectDoorClassroom, objectKeyClassroom, objectGoStairsFromTable)), "table.jpg");
-        Scene sceneClassroom = new SceneFactory().create("Scene Classroom", new ArrayList<>(List.of(objectGoTableFromClassroom)), "classroom.jpg");
+        Scene sceneStairs = new SceneFactory().create("Scene Stairs", new ArrayList<>(List.of(objectGoExit, objectGoTable)), "scene1.png");
+        Scene sceneExit = new SceneFactory().create("Scene Exit", new ArrayList<>(List.of(objectDoorExit, objectGoStairsFromExit)), "scene2.png");
+        Scene sceneTable = new SceneFactory().create("Scene Table", new ArrayList<>(List.of(objectDoorClassroom, objectKeyClassroom, objectGoStairsFromTable)), "scene3.png");
+        Scene sceneClassroom = new SceneFactory().create("Scene Classroom", new ArrayList<>(List.of(objectGoTableFromClassroom)), "scene4.png");
 
         // This method loads and creates all the NPCs and their dialogues
         loadGameConstants(sceneStairs, sceneExit, sceneTable, sceneClassroom);
@@ -112,38 +112,52 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
      * Creates NPC and dialogue.
      **/
     public void loadGameConstants(Scene sceneStairs, Scene sceneExit, Scene sceneTable, Scene sceneClassroom) {
-        DialogueBox dialogBoxOptionOutcome1 = new DialogueBuilder("db1.png")
-                .setText("OUTCOME1")
+        DialogueBox dialogBoxOptionOutcome1 = new DialogueBuilder("robber_db.png")
+                .setText("Well, maybe if you answer a riddle, that is!")
                 .addOption("OK", sceneExit)
                 .build();
 
-        DialogueBox dialogBoxOptionOutcome2 = new DialogueBuilder("db1.png")
-                .setText("OUTCOME2")
+        DialogueBox dialogBoxOptionOutcome2 = new DialogueBuilder("janitor_db.png")
+                .setText("I would've helped you, but somebody stole my keys and ran down the hallway!" +
+                        " If you find them and bring back my keys, I will get you out!")
+                .addOption("I'll see what I can do.", sceneExit)
+                .build();
+
+        DialogueBox dialogBoxOptionOutcome4 = new DialogueBuilder("laptop_db.png")
+                .setText("(Insert riddle here)")
                 .addOption("OK", sceneExit)
                 .build();
 
-        DialogueBox dialogueBox = new DialogueBuilder("db1.png")
-                .setText("At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis " +
-                        "praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, " +
-                        "similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et " +
-                        "expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat " +
-                        "facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum " +
-                        "necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente " +
-                        "delectus, ut aut reiciendis.")
-                .addOption("What do you think of me?", dialogBoxOptionOutcome1)
-                .addOption("Option 2", dialogBoxOptionOutcome2)
+        DialogueBox dialogBoxOptionOutcome3 = new DialogueBuilder("laptop_db.png")
+                .setText("If you want to get past that door to the right, you must answer my question first!")
+                .addOption("What?", dialogBoxOptionOutcome4)
+                .build();
+
+        DialogueBox dialogueBox = new DialogueBuilder("robber_db.png")
+                .setText("I stole the keys and you will never get them back!!!")
+                .addOption("Really, never?", dialogBoxOptionOutcome1)
+                .addOption("OK, fine.", sceneClassroom)
                 .build();
 
 
-        DialogueBox dialogueBox2 = new DialogueBuilder("db1.png")
-                .setText("Hello, world! I am NPC2")
-                .addOption("Goodbye", sceneClassroom)
+        DialogueBox dialogueBox2 = new DialogueBuilder("janitor_db.png")
+                .setText("Oh, what are you doing here? I thought the building was already closed!")
+                .addOption("Yeah, I'm stuck here.", dialogBoxOptionOutcome2)
+                .addOption("*Run away*", sceneExit)
                 .build();
 
-        NonPlayableCharacter npc1 = new NonPlayableCharacterFactory().create("NPC1", 300, 300, "npc1.png", dialogueBox);
+        DialogueBox dialogueBox3 = new DialogueBuilder("laptop_db.png")
+                .setText("Somebody seems to have forgotten their laptop here.")
+                .addOption("Investigate.", dialogBoxOptionOutcome3)
+                .addOption("*Step Away*", sceneExit)
+                .build();
+
+        NonPlayableCharacter npc1 = new NonPlayableCharacterFactory().create("NPC1", 300, 200, "robber.png", dialogueBox);
         sceneClassroom.addObject(npc1);
-        NonPlayableCharacter npc2 = new NonPlayableCharacterFactory().create("NPC2", 700, 300, "npc2.png", dialogueBox2);
+        NonPlayableCharacter npc2 = new NonPlayableCharacterFactory().create("NPC2", 500, 200, "janitor1.png", dialogueBox2);
         sceneStairs.addObject(npc2);
+        NonPlayableCharacter npc3 = new NonPlayableCharacterFactory().create("NPC3", 80, 330, "laptop.png", dialogueBox3);
+        sceneTable.addObject(npc3);
     }
 
     @Override

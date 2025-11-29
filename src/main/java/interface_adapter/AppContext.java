@@ -1,6 +1,6 @@
 package interface_adapter;
 
-import dataaccess.InMemoryGameDataAccessObject;
+import data_access.InMemoryGameDataAccessObject;
 
 // AppContext.java
 public class AppContext {

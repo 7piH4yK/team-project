@@ -1,9 +1,8 @@
-package dataaccess.api;
+package data_access.api;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import data_access.api.TriviaResponse;
 
 public interface TriviaAPI {
     @GET("api.php")

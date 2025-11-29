@@ -1,4 +1,4 @@
-package dataaccess.api;
+package data_access.api;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -34,4 +34,3 @@ public class RetrofitClientDataAccessObject {
         return retrofit;
     }
 }
-

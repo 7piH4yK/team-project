@@ -1,4 +1,4 @@
-package dataaccess;
+package data_access;
 
 import entity.Player;
 import entity.Scene;

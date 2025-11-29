@@ -1,6 +1,6 @@
 package app;
 
-import dataaccess.InMemoryGameDataAccessObject;
+import data_access.InMemoryGameDataAccessObject;
 import entity.PlayerFactory;
 import entity.SceneFactory;
 import interface_adapter.AppContext;

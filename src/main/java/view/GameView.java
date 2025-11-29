@@ -119,7 +119,7 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
         add(saveExitButton);
 
         // Add a small bag icon (top-right corner)
-        ImageIcon bagIcon = new ImageIcon(ImageIO.read(new File("src/main/resources/bag.png")));
+        ImageIcon bagIcon = new ImageIcon(ImageIO.read(new File("src/main/resources/bag1.png")));
         JButton bagButton = new JButton(bagIcon);
         bagButton.setBounds(20, 480, 64, 64); // Adjust position and size
         bagButton.setContentAreaFilled(false);
@@ -152,7 +152,7 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
 
         // Add dialogue options
         for (DialogueOption option : dialogue.getOptions()) {
-            JLabel optionLabel = new JLabel(option.getText());
+            JLabel optionLabel = new JLabel(option.getName());
             optionLabel.setForeground(Color.RED);
             optionLabel.setFont(new Font(optionLabel.getFont().getName(), Font.BOLD, optionLabel.getFont().getSize()));
             Dimension preferredSize = optionLabel.getPreferredSize();

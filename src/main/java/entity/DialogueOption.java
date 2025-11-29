@@ -60,10 +60,6 @@ public class DialogueOption {
         return coordinateY;
     }
 
-    public String getText() {
-        return name;
-    }
-
     /**
      * Returns the target scene, or null if this option leads to a dialogue.
      */

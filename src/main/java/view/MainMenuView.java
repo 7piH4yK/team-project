@@ -48,7 +48,7 @@ public class MainMenuView extends JPanel implements ActionListener, PropertyChan
         buttons.add(startGameButton);
         buttons.add(Box.createRigidArea(new Dimension(0, 20)));
 
-        loadGameButton = new JButton(MainMenuViewModel.LAOD_GAME_BUTTON_LABEL);
+        loadGameButton = new JButton(MainMenuViewModel.LOAD_GAME_BUTTON_LABEL);
         loadGameButton.setPreferredSize(buttonsSize);
         loadGameButton.setMaximumSize(buttonsSize);
         loadGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);

@@ -22,32 +22,55 @@ public class CollectItemInteractor implements CollectItemInputBoundary {
     @Override
     public void collect(CollectItemInputData inputData) {
 
+        String error = null;
+        CollectItemOutputData successData = null;
+
         final Scene scene = dao.getScenes().get(inputData.getSceneName());
-         if (scene == null) {
-            presenter.prepareFailView("Scene not found: " + inputData.getSceneName());
-            return;
-         }
-
-        final ClickableObject target = scene.getObjects().stream()
-                .filter(clickableO -> clickableO.getName().equals(inputData.getObjectName()))
-                .findFirst()
-                .orElse(null);
-
-        if (!(target instanceof Collectibles)) {
-            presenter.prepareFailView("This object cannot be collected.");
+        if (scene == null) {
+            error = "Scene not found: " + inputData.getSceneName();
         }
 
-        dao.getPlayer().addToInventory((Collectibles) target);
+        final ClickableObject target;
+        if (error == null) {
+            target = scene.getObjects().stream()
+                    .filter(clickableO -> clickableO.getName().equals(inputData.getObjectName()))
+                    .findFirst()
+                    .orElse(null);
 
-        final List<ClickableObject> updated = new ArrayList<>(scene.getObjects());
-        updated.removeIf(clickableO -> clickableO.getName().equals(target.getName()));
+            if (!(target instanceof Collectibles)) {
+                error = "This object cannot be collected.";
+            }
+        }
+        else {
+            target = null;
+        }
 
-        final Scene updatedScene = new Scene(scene.getName(), updated, scene.getImage());
-        dao.getScenes().put(updatedScene.getName(), updatedScene);
-        dao.setCurrentScene(updatedScene);
+        if (error == null) {
+            // Update inventory
+            dao.getPlayer().addToInventory((Collectibles) target);
 
-        presenter.prepareSuccessView(
-                new CollectItemOutputData(updatedScene, target.getName(), dao.getPlayer().getInventory())
-        );
+            // Update scene
+            final List<ClickableObject> updated = new ArrayList<>(scene.getObjects());
+            updated.removeIf(clickableO -> clickableO.getName().equals(target.getName()));
+
+            final Scene updatedScene = new Scene(scene.getName(), updated, scene.getImage());
+            dao.getScenes().put(updatedScene.getName(), updatedScene);
+            dao.setCurrentScene(updatedScene);
+
+            successData = new CollectItemOutputData(
+                    updatedScene,
+                    target.getName(),
+                    dao.getPlayer().getInventory()
+            );
+        }
+
+        // ONE exit point
+        if (error != null) {
+            presenter.prepareFailView(error);
+        }
+        else {
+            presenter.prepareSuccessView(successData);
+        }
     }
+
 }

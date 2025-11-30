@@ -49,15 +49,15 @@ class MainMenuViewTest {
 
         view.setMainMenuController(new MainMenuControllerStub(startPressed, loadPressed));
 
-        // The buttons panel is component index 4 inside the MainMenuView
+        // Find the buttons panel (component index 4)
         Component c = view.getComponent(4);
         assertTrue(c instanceof JPanel, "Button panel should be a JPanel");
         JPanel buttonsPanel = (JPanel) c;
 
-        // Extract buttons:
-        JButton startButton = (JButton) buttonsPanel.getComponent(0);
-        JButton loadButton = (JButton) buttonsPanel.getComponent(2);
-        JButton exitButton = (JButton) buttonsPanel.getComponent(4);
+        // Find buttons by text (layout-safe)
+        JButton startButton = findButton(buttonsPanel, "Start Game");
+        JButton loadButton = findButton(buttonsPanel, "Load Game");
+        JButton exitButton = findButton(buttonsPanel, "Exit Game");
 
         // Act
         startButton.doClick();
@@ -67,6 +67,20 @@ class MainMenuViewTest {
         assertTrue(startPressed.get(), "Start should trigger switchToGameView()");
         assertTrue(loadPressed.get(), "Load should trigger loadGame()");
         assertEquals("Exit Game", exitButton.getText());
+    }
+
+    // ---------- Helper method (Java-8 safe) ----------
+    private JButton findButton(JPanel panel, String text) {
+        for (Component comp : panel.getComponents()) {
+            if (comp instanceof JButton) {
+                JButton btn = (JButton) comp;
+                if (text.equals(btn.getText())) {
+                    return btn;
+                }
+            }
+        }
+        fail("Button not found: " + text);
+        return null; // unreachable
     }
 
     @Test

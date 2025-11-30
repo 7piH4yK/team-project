@@ -1,13 +1,9 @@
-package use_case.collect;
+package use_case.collect_item;
 
 import data_access.InMemoryGameDataAccessObject;
 import entity.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import use_case.collect_item.CollectItemInteractor;
-import use_case.collect_item.CollectItemOutputBoundary;
-import use_case.collect_item.CollectItemOutputData;
-import use_case.collect_item.CollectItemInputData;
 
 
 import java.util.ArrayList;
@@ -41,11 +37,14 @@ class CollectItemInteractorTest {
     @BeforeEach
     void setUp() {
         dao = new InMemoryGameDataAccessObject();
+        dao.getScenes().clear();
+        dao.setPlayer(new Player());
+        dao.setCurrentScene(null);
         presenter = new TestPresenter();
         interactor = new CollectItemInteractor(dao, presenter);
 
         // Clear auto-loaded scenes from resetGame() and build our own test scene
-        dao.getScenes().clear();
+
     }
 
     // ----------------------------------------------------------

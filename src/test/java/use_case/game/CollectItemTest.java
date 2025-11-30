@@ -14,7 +14,7 @@ public class CollectItemTest {
     @Test
     public void testCollectableItemAddedToInventory() {
         Player player = new Player();
-        Collectibles key = new Collectibles("Object3", 0,0,"key.png", true);
+        Collectibles key = new Collectibles("Object3", 0,0,"key.png");
 
         player.addToInventory(key);
 
@@ -24,7 +24,7 @@ public class CollectItemTest {
     @Test
     public void testNonCollectableItemNotCollectedAutomatically() {
         Player player = new Player();
-        Collectibles door = new Collectibles("Object2", 0,0,"door.png", false);
+        Collectibles door = new Collectibles("Object2", 0,0,"door.png");
 
         // Normally not added unless explicitly done
         assertFalse(player.hasItemNamed("Object2"));
@@ -32,12 +32,12 @@ public class CollectItemTest {
 
     @Test
     public void testCollectableIsRemovedFromScene() {
-        Collectibles key = new Collectibles("key", 100,100,"key.png", true);
+        Collectibles key = new Collectibles("key", 100,100,"key.png");
 
         Scene scene = new Scene(
                 "Scene1",
                 List.of(
-                        new Collectibles("Object1", 0,0,"obj1.png", false),
+                        new Collectibles("Object1", 0,0,"obj1.png"),
                         key
                 ),
                 "bg.png"

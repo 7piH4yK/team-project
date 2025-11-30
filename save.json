@@ -1,7 +1,7 @@
 {
     "scenes": [
         {
-            "image": "scene3.png",
+            "image": "table.jpg",
             "clickableObjects": [
                 {
                     "image": "door_classroom.png",
@@ -11,21 +11,16 @@
                 },
                 {
                     "image": "down.png",
-                    "coordinateY": 465,
+                    "coordinateY": 500,
                     "coordinateX": 500,
                     "name": "Go Stairs From Table"
                 }
             ],
             "name": "Scene Table",
-            "collectibles": [{
-                "image": "key1.png",
-                "coordinateY": 200,
-                "coordinateX": 200,
-                "name": "Key Classroom"
-            }]
+            "collectibles": []
         },
         {
-            "image": "scene1.png",
+            "image": "stairs.jpg",
             "clickableObjects": [
                 {
                     "image": "right.png",
@@ -44,18 +39,18 @@
             "collectibles": []
         },
         {
-            "image": "scene2.png",
+            "image": "exit.jpg",
             "clickableObjects": [
                 {
-                    "image": "door.png",
+                    "image": "door_exit.png",
                     "coordinateY": 310,
                     "coordinateX": 260,
                     "name": "Door Exit"
                 },
                 {
                     "image": "down.png",
-                    "coordinateY": 460,
-                    "coordinateX": 130,
+                    "coordinateY": 500,
+                    "coordinateX": 400,
                     "name": "Go Stairs From Exit"
                 }
             ],
@@ -63,10 +58,10 @@
             "collectibles": []
         },
         {
-            "image": "scene4.png",
+            "image": "classroom.jpg",
             "clickableObjects": [{
                 "image": "down.png",
-                "coordinateY": 465,
+                "coordinateY": 500,
                 "coordinateX": 200,
                 "name": "Go Table From Classroom"
             }],
@@ -75,5 +70,5 @@
         }
     ],
     "player": {"inventory": []},
-    "currentScene": "Scene Stairs"
+    "currentScene": "Scene Classroom"
 }

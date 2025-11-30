@@ -2,7 +2,6 @@ package interface_adapter.game;
 
 import entity.ClickableObject;
 import entity.Collectibles;
-import entity.DialogueBox;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,6 @@ public class GameState {
     private List<ClickableObject> clickables;
     private List<Collectibles> inventoryItems;
     private String sceneName;
-    private DialogueBox currentDialogue;
 
     public String getSceneName() {
         return sceneName;
@@ -50,12 +48,5 @@ public class GameState {
         this.inventoryItems = (inventoryItems == null ? new ArrayList<>() : inventoryItems);
     }
 
-    public DialogueBox getCurrentDialogue() {
-        return currentDialogue;
-    }
-
-    public void setCurrentDialogue(DialogueBox currentDialogue) {
-        this.currentDialogue = currentDialogue;
-    }
 
 }

@@ -23,14 +23,20 @@ public class CollectItemPresenter implements CollectItemOutputBoundary {
 
     @Override
     public void prepareSuccessView(CollectItemOutputData outputData) {
-        GameState state = gameViewModel.getState();
 
+        GameState state = new GameState();
+
+        // Scene update
         state.setSceneName(outputData.getUpdatedScene().getName());
         state.setBackgroundImage(outputData.getUpdatedScene().getImage());
         state.setClickableObjects(outputData.getUpdatedScene().getObjects());
 
-        // Use the NEW updated inventory from the Player (DAO)
-        List<Collectibles> newInventory = outputData.getUpdatedInventory();
+        // ⭐ THE IMPORTANT FIX ⭐
+        // Use the NEW updated inventory from the Player (DAO),
+        // not the old GameState!
+        List<Collectibles> newInventory =
+                outputData.getUpdatedInventory(); // <-- you must add this
+
         state.setInventoryItems(newInventory);
 
         gameViewModel.setState(state);

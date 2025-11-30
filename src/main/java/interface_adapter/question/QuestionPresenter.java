@@ -4,8 +4,9 @@ import data_access.InMemoryGameDataAccessObject;
 import data_access.api.Question;
 import entity.QuestionBox;
 import entity.QuestionBoxBuilder;
-
 import entity.Scene;
+import entity.DialogueBox;
+
 import interface_adapter.game.GameState;
 import interface_adapter.game.GameViewModel;
 import interface_adapter.ViewManagerModel;
@@ -59,8 +60,6 @@ public class QuestionPresenter implements QuestionOutputBoundary {
             }
         }
 
-        Scene returnScene = gameDAO.getCurrentScene();
-
         java.util.List<Answer> answers = new java.util.ArrayList<>();
         answers.add(new Answer(q.getCorrectAnswer(), true));
         answers.add(new Answer(q.getIncorrectAnswers().get(0), false));
@@ -69,7 +68,14 @@ public class QuestionPresenter implements QuestionOutputBoundary {
 
         java.util.Collections.shuffle(answers);
 
-        QuestionBoxBuilder builder = new QuestionBoxBuilder("trivia_bg.png")
+        String questionBackground = "trivia_bg.png";  // default fallback
+
+        DialogueBox activeDialogue = gameDAO.getCurrentDialogue();
+        if (activeDialogue != null && activeDialogue.getImage() != null) {
+            questionBackground = activeDialogue.getImage();
+        }
+
+        QuestionBoxBuilder builder = new QuestionBoxBuilder(questionBackground)
                 .setQuestionText(q.getQuestion());
 
         for (Answer a : answers) {

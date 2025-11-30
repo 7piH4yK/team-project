@@ -158,7 +158,7 @@ public class AppBuilder {
         QuestionController questionController =
                 new QuestionController(questionInteractor);
 
-        mainMenuView.setQuestionController(questionController);
+        gameView.setQuestionController(questionController);
 
         return this;
     }

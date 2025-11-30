@@ -114,7 +114,7 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
     public void loadGameConstants(Scene sceneStairs, Scene sceneExit, Scene sceneTable, Scene sceneClassroom) {
         DialogueBox dialogBoxOptionOutcome1 = new DialogueBuilder("robber_db.png")
                 .setText("Well, maybe if you answer a riddle, that is!")
-                .addOption("OK", sceneExit)
+                .addOption("Answer riddle", sceneExit)
                 .build();
 
         DialogueBox dialogBoxOptionOutcome2 = new DialogueBuilder("janitor_db.png")
@@ -123,14 +123,14 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
                 .addOption("I'll see what I can do.", sceneExit)
                 .build();
 
-        DialogueBox dialogBoxOptionOutcome4 = new DialogueBuilder("laptop_db.png")
-                .setText("(Insert riddle here)")
-                .addOption("OK", sceneExit)
-                .build();
+//        QuestionBox dialogBoxOptionOutcome4 = new QuestionBoxBuilder("laptop_db.png")
+//                .setText("(Insert riddle here)")
+//                .addOption("OK", sceneExit)
+//                .build();
 
         DialogueBox dialogBoxOptionOutcome3 = new DialogueBuilder("laptop_db.png")
                 .setText("If you want to get past that door to the right, you must answer my question first!")
-                .addOption("What?", dialogBoxOptionOutcome4)
+                .addOption("Answer riddle", sceneExit)
                 .build();
 
         DialogueBox dialogueBox = new DialogueBuilder("robber_db.png")

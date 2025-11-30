@@ -15,10 +15,21 @@ public class ClickRule {
         this.removeOnCollect = b.removeOnCollect;
     }
 
-    public ClickActionType getType() { return type; }
-    public Optional<String> getTargetScene() { return Optional.ofNullable(targetScene); }
-    public Optional<String> getMessage() { return Optional.ofNullable(message); }
-    public boolean removeOnCollect() { return removeOnCollect; }
+    public ClickActionType getType() {
+        return type;
+    }
+
+    public Optional<String> getTargetScene() {
+        return Optional.ofNullable(targetScene);
+    }
+
+    public Optional<String> getMessage() {
+        return Optional.ofNullable(message);
+    }
+
+    public boolean removeOnCollect() {
+        return removeOnCollect;
+    }
 
     public static class Builder {
         private ClickActionType type = ClickActionType.NONE;
@@ -26,10 +37,28 @@ public class ClickRule {
         private String message;
         private boolean removeOnCollect = false;
 
-        public Builder type(ClickActionType t) { this.type = t; return this; }
-        public Builder targetScene(String s) { this.targetScene = s; return this; }
-        public Builder message(String m) { this.message = m; return this; }
-        public Builder removeOnCollect(boolean r) { this.removeOnCollect = r; return this; }
-        public ClickRule build() { return new ClickRule(this); }
+        public Builder type(ClickActionType t) {
+            this.type = t;
+            return this;
+        }
+
+        public Builder targetScene(String s) {
+            this.targetScene = s;
+            return this;
+        }
+
+        public Builder message(String m) {
+            this.message = m;
+            return this;
+        }
+
+        public Builder removeOnCollect(boolean r) {
+            this.removeOnCollect = r;
+            return this;
+        }
+
+        public ClickRule build() {
+            return new ClickRule(this);
+        }
     }
 }

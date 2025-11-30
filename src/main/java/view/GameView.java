@@ -1,11 +1,14 @@
 package view;
 
 import entity.*;
+import interface_adapter.collect_item.CollectItemController;
+import interface_adapter.dialogue.DialogueController;
+import interface_adapter.dialogue.DialogueState;
 import interface_adapter.game.GameController;
 import interface_adapter.game.GameState;
 import interface_adapter.game.GameViewModel;
 import interface_adapter.save.SaveController;
-import interface_adapter.pause_menu.PauseController;
+import interface_adapter.question.QuestionController;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -27,12 +30,13 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
     private final String viewName = "game";
     private final GameViewModel gameViewModel;
     private GameController gameController;
+    private DialogueController dialogueController;
     private SaveController saveController;
-    private PauseController pauseController;
+    private CollectItemController collectItemController;
+    private QuestionController questionController;
 
-    public void setPauseController(PauseController pauseController) {
-        this.pauseController = pauseController;
-    }
+    private GameState gameState;
+
 
     public GameView(GameViewModel gameViewModel) {
         this.gameViewModel = gameViewModel;
@@ -47,60 +51,29 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        final GameState state = (GameState) evt.getNewValue();
+        final Object object = evt.getNewValue();
 
         // remove all children
         this.removeAll();
 
         try {
 
+            if (object instanceof DialogueState) {
+                final DialogueState state = (DialogueState) object;
+                // Render dialogue overlay if active
+                DialogueBox dialogue = state.getCurrentDialogue();
+                if (dialogue != null) {
+                    renderDialogueOverlay(dialogue);
+                } else {
+                    drawScene(gameState);
+                }
+            } else {
+                final GameState state = (GameState) object;
 
-            // Render dialogue overlay if active
-            DialogueBox dialogue = state.getCurrentDialogue();
-            if (dialogue != null) {
-                renderDialogueOverlay(dialogue);
+                drawScene(state);
+
+
             }
-
-
-            // add clickable objects
-            for (ClickableObject clickables : state.getClickableObjects()) {
-                ImageIcon imageIcon = new ImageIcon();
-                imageIcon.setImage(ImageIO.read(new File("src/main/resources", clickables.getImage())));
-                JLabel label = new JLabel(imageIcon);
-                label.setBounds(clickables.getCoordinateX(), clickables.getCoordinateY(), imageIcon.getIconWidth(), imageIcon.getIconHeight());
-                add(label);
-                label.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        gameController.click(clickables);
-                    }
-                });
-            }
-
-            // pause button
-            JButton pauseButton = new JButton("Pause");
-            pauseButton.setBounds(650, 20, 120, 40);
-            pauseButton.addActionListener(e -> pauseController.pause());
-            add(pauseButton);
-
-            // Add a small bag icon (top-right corner)
-            ImageIcon bagIcon = new ImageIcon(ImageIO.read(new File("src/main/resources/bag.png")));
-            JButton bagButton = new JButton(bagIcon);
-            bagButton.setBounds(20, 480, 64, 64); // Adjust position and size
-            bagButton.setContentAreaFilled(false);
-            bagButton.setBorderPainted(false);
-            bagButton.setFocusPainted(false);
-            bagButton.addActionListener(e -> openInventoryPanel());
-            add(bagButton);
-
-            // add background image
-            ImageIcon background = new ImageIcon();
-            background.setImage(ImageIO.read(new File("src/main/resources", state.getBackgroundImage())));
-            JLabel backgroundLabel = new JLabel(background);
-            backgroundLabel.setBounds(0, 0, background.getIconWidth(), background.getIconHeight());
-            add(backgroundLabel);
-
-
             // force update ui
             repaint();
         } catch (IOException e) {
@@ -108,7 +81,67 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
         }
     }
 
+    private void drawScene(GameState state) throws IOException {
+        gameState = state;
+        // add clickable objects
+        for (ClickableObject clickable : state.getClickableObjects()) {
+            ImageIcon imageIcon = new ImageIcon();
+            imageIcon.setImage(ImageIO.read(new File("src/main/resources", clickable.getImage())));
+            JLabel label = new JLabel(imageIcon);
+            label.setBounds(clickable.getCoordinateX(), clickable.getCoordinateY(), imageIcon.getIconWidth(), imageIcon.getIconHeight());
+            add(label);
+            label.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+
+                    // NEW: Collectible handling
+                    if (clickable instanceof Collectibles) {
+                        collectItemController.collectItem(
+                                clickable.getName(),
+                                ((GameState) gameViewModel.getState()).getSceneName()
+                        );
+                        return; // stop normal logic
+                    }
+
+                    // OLD: NPC and normal logic
+                    if (clickable instanceof NonPlayableCharacter) {
+                        dialogueController.click(clickable);
+                    } else {
+                        gameController.click(clickable);
+                    }
+                }
+            });
+
+        }
+
+        // save and exit button
+        JButton saveExitButton = new JButton("Save & Exit");
+        saveExitButton.setBounds(650, 20, 120, 40);
+        saveExitButton.addActionListener(e -> saveController.save());
+        add(saveExitButton);
+
+        // Add a small bag icon (top-right corner)
+        ImageIcon bagIcon = new ImageIcon(ImageIO.read(new File("src/main/resources/bag1.png")));
+        JButton bagButton = new JButton(bagIcon);
+        bagButton.setBounds(20, 480, 64, 64); // Adjust position and size
+        bagButton.setContentAreaFilled(false);
+        bagButton.setBorderPainted(false);
+        bagButton.setFocusPainted(false);
+        bagButton.addActionListener(e -> openInventoryPanel());
+        add(bagButton);
+
+        // add background image
+        ImageIcon background = new ImageIcon();
+        background.setImage(ImageIO.read(new File("src/main/resources", state.getBackgroundImage())));
+        JLabel backgroundLabel = new JLabel(background);
+        backgroundLabel.setBounds(0, 0, background.getIconWidth(), background.getIconHeight());
+        add(backgroundLabel);
+    }
+
     private void renderDialogueOverlay(DialogueBox dialogue) throws IOException {
+        // NEW: detect if this is a QuestionBox
+        final boolean isQuestionBox = dialogue instanceof QuestionBox;
+
         // Add dialogue text
         DialogueText dialogueText = dialogue.getText();
         JTextArea textArea = new JTextArea(dialogueText.getText());
@@ -124,7 +157,7 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
 
         // Add dialogue options
         for (DialogueOption option : dialogue.getOptions()) {
-            JLabel optionLabel = new JLabel(option.getText());
+            JLabel optionLabel = new JLabel(option.getName());
             optionLabel.setForeground(Color.RED);
             optionLabel.setFont(new Font(optionLabel.getFont().getName(), Font.BOLD, optionLabel.getFont().getSize()));
             Dimension preferredSize = optionLabel.getPreferredSize();
@@ -133,7 +166,46 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
             optionLabel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    gameController.clickDialogueOption(option);
+
+                    /// ---------- CASE 1: this is the special prompt option that starts the riddle ----------
+                    // (This is in the dialogue BEFORE the question, e.g. laptop "Answer riddle")
+                    if (!isQuestionBox && "Answer riddle".equals(option.getName())) {
+                        if (questionController != null) {
+                            questionController.loadQuestions();  // triggers API + QuestionPresenter
+                        }
+                        // DO NOT call dialogueController here, or it will navigate away
+                        return;
+                    }
+
+                    // ---------- CASE 2: we are inside a QuestionBox (the actual riddle) ----------
+                    if (isQuestionBox && option instanceof QuestionOption) {
+                        QuestionOption qOpt = (QuestionOption) option;
+
+                        if (qOpt.isCorrect()) {
+                            JOptionPane.showMessageDialog(
+                                    GameView.this,
+                                    "Correct!",
+                                    "Riddle",
+                                    JOptionPane.INFORMATION_MESSAGE
+                            );
+
+                            // After a correct answer: return to main game view (scene-only)
+                            if (gameState != null) {
+                                gameViewModel.setState(gameState);
+                                gameViewModel.firePropertyChange();
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(
+                                    GameView.this,
+                                    "Wrong answer, try again!",
+                                    "Riddle",
+                                    JOptionPane.ERROR_MESSAGE
+                            );
+                            // Wrong answer: keep the QuestionBox overlay, let them try again.
+                        }
+                        return; // IMPORTANT: do not fall through to dialogueController for QuestionBox
+                    }
+                    dialogueController.clickDialogueOption(option);
                 }
             });
         }
@@ -155,7 +227,13 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
         this.gameController = controller;
     }
 
-    public void setSaveController(SaveController controller) {this.saveController = controller;}
+    public void setDialogueController(DialogueController controller) {
+        this.dialogueController = controller;
+    }
+
+    public void setSaveController(SaveController controller) {
+        this.saveController = controller;
+    }
 
     private void openInventoryPanel() {
         JFrame inventoryFrame = new JFrame("Inventory");
@@ -163,21 +241,24 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
         inventoryFrame.setLocationRelativeTo(null);
         inventoryFrame.setLayout(new FlowLayout());
 
-        java.util.List<Collectibles> items = gameViewModel.getState().getInventoryItems();
+        if (gameViewModel.getState() instanceof GameState) {
+            java.util.List<Collectibles> items = ((GameState) gameViewModel.getState()).getInventoryItems();
 
 
-        if (items.isEmpty()) {
-            inventoryFrame.add(new JLabel("Your inventory is empty."));
-        } else {
-            for (Collectibles item : items) {
-                try {
-                    ImageIcon itemIcon = new ImageIcon(ImageIO.read(new File("src/main/resources", item.getImage())));
-                    JLabel itemLabel = new JLabel(itemIcon);
-                    itemLabel.setToolTipText(item.getName());
-                    inventoryFrame.add(itemLabel);
-                } catch (Exception ex) {
-                    inventoryFrame.add(new JLabel(item.getName()));
+            if (items.isEmpty()) {
+                inventoryFrame.add(new JLabel("Your inventory is empty."));
+            } else {
+                for (Collectibles item : items) {
+                    try {
+                        ImageIcon itemIcon = new ImageIcon(ImageIO.read(new File("src/main/resources", item.getImage())));
+                        JLabel itemLabel = new JLabel(itemIcon);
+                        itemLabel.setToolTipText(item.getName());
+                        inventoryFrame.add(itemLabel);
+                    } catch (Exception ex) {
+                        inventoryFrame.add(new JLabel(item.getName()));
+                    }
                 }
+
             }
         }
 
@@ -188,5 +269,12 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
         inventoryFrame.setVisible(true);
     }
 
+    public void setCollectItemController(CollectItemController collectController) {
+        this.collectItemController = collectController;
+    }
+
+    public void setQuestionController(QuestionController controller) {
+        this.questionController = controller;
+    }
 }
 

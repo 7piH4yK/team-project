@@ -5,5 +5,6 @@ public enum ClickActionType {
     CHANGE_SCENE,              // switch to a target scene
     COLLECT,                   // remove clicked object from current scene
     COLLECT_AND_CHANGE_SCENE,  // collect, then change scene
-    MESSAGE_ONLY               // show message only
+    MESSAGE_ONLY,              // show message only
+    TRIVIA                     // for trivia buttons only
 }

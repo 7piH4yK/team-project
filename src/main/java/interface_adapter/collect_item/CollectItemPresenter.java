@@ -1,14 +1,15 @@
 package interface_adapter.collect_item;
 
+import java.util.List;
+
+import javax.swing.JOptionPane;
+
 import entity.Collectibles;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.game.GameState;
 import interface_adapter.game.GameViewModel;
 import use_case.collect_item.CollectItemOutputBoundary;
 import use_case.collect_item.CollectItemOutputData;
-
-import javax.swing.*;
-import java.util.List;
 
 public class CollectItemPresenter implements CollectItemOutputBoundary {
 
@@ -24,7 +25,7 @@ public class CollectItemPresenter implements CollectItemOutputBoundary {
     @Override
     public void prepareSuccessView(CollectItemOutputData outputData) {
 
-        GameState state = new GameState();
+        final GameState state = new GameState();
 
         // Scene update
         state.setSceneName(outputData.getUpdatedScene().getName());
@@ -34,8 +35,8 @@ public class CollectItemPresenter implements CollectItemOutputBoundary {
         // ⭐ THE IMPORTANT FIX ⭐
         // Use the NEW updated inventory from the Player (DAO),
         // not the old GameState!
-        List<Collectibles> newInventory =
-                outputData.getUpdatedInventory(); // <-- you must add this
+        final List<Collectibles> newInventory =
+                outputData.getUpdatedInventory();
 
         state.setInventoryItems(newInventory);
 

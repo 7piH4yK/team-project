@@ -35,6 +35,20 @@ public class Collectibles extends ClickableObject {
         this.image = image;
     }
 
+    /**
+     * Creates a {@code Collectibles} instance from a JSON representation.
+     *
+     * <p>The JSON must contain the fields:</p>
+     * <ul>
+     *     <li>{@code "name"}</li>
+     *     <li>{@code "coordinateX"}</li>
+     *     <li>{@code "coordinateY"}</li>
+     *     <li>{@code "image"}</li>
+     * </ul>
+     *
+     * @param json the JSON object containing collectible data
+     * @return a new {@code Collectibles} instance
+     */
     public static Collectibles fromJson(JSONObject json) {
         return new Collectibles(
                 json.getString("name"),
@@ -59,8 +73,13 @@ public class Collectibles extends ClickableObject {
         return image;
     }
 
+    /**
+     * Converts this collectible into a JSON representation.
+     *
+     * @return a {@link JSONObject} containing the collectible's attributes
+     */
     public JSONObject toJson() {
-        JSONObject json = new JSONObject();
+        final JSONObject json = new JSONObject();
         json.put("name", this.name);
         json.put("coordinateX", this.coordinateX);
         json.put("coordinateY", this.coordinateY);

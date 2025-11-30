@@ -7,8 +7,6 @@ public interface SaveInputBoundary {
 
     /**
      * Executes the save use case.
-     *
-     * @param saveInputData contains scenes and current game states
      */
     void execute();
 }

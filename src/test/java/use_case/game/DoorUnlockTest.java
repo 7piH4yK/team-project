@@ -1,4 +1,4 @@
-package use_case.collect;
+package use_case.game;
 
 import entity.Collectibles;
 import entity.Player;

@@ -142,6 +142,10 @@ public class MainMenuView extends JPanel implements ActionListener, PropertyChan
         this.mainMenuController = controller;
     }
 
+    public JLabel getErrorLabel() {
+        return errorLabel;
+    }
+
     public void setQuestionController(QuestionController questionController) {
         this.questionController = questionController;
     }

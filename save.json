@@ -1,6 +1,14 @@
 {
     "scenes": [
         {
+            "image": "scene1.png",
+            "clickableObjects": [{
+                "image": "object2.png",
+                "coordinateY": 300,
+                "coordinateX": 600,
+                "name": "Object2"
+            }],
+            "name": "Scene1",
             "image": "table.jpg",
             "clickableObjects": [
                 {
@@ -69,6 +77,13 @@
             "collectibles": []
         }
     ],
+    "player": {"inventory": [{
+        "image": "key1.png",
+        "coordinateY": 200,
+        "coordinateX": 200,
+        "name": "Key1"
+    }]},
+    "currentScene": "Scene1"
     "player": {"inventory": []},
     "currentScene": "Scene Classroom"
 }

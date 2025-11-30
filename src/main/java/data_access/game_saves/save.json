@@ -1,0 +1,79 @@
+{
+    "scenes": [
+        {
+            "image": "scene3.png",
+            "clickableObjects": [
+                {
+                    "image": "door_classroom.png",
+                    "coordinateY": 155,
+                    "coordinateX": 430,
+                    "name": "Door Classroom"
+                },
+                {
+                    "image": "down.png",
+                    "coordinateY": 465,
+                    "coordinateX": 500,
+                    "name": "Go Stairs From Table"
+                }
+            ],
+            "name": "Scene Table",
+            "collectibles": []
+        },
+        {
+            "image": "scene1.png",
+            "clickableObjects": [
+                {
+                    "image": "right.png",
+                    "coordinateY": 250,
+                    "coordinateX": 250,
+                    "name": "Go Exit"
+                },
+                {
+                    "image": "left.png",
+                    "coordinateY": 300,
+                    "coordinateX": 0,
+                    "name": "Go Table"
+                }
+            ],
+            "name": "Scene Stairs",
+            "collectibles": []
+        },
+        {
+            "image": "scene2.png",
+            "clickableObjects": [
+                {
+                    "image": "door.png",
+                    "coordinateY": 310,
+                    "coordinateX": 260,
+                    "name": "Door Exit"
+                },
+                {
+                    "image": "down.png",
+                    "coordinateY": 460,
+                    "coordinateX": 130,
+                    "name": "Go Stairs From Exit"
+                }
+            ],
+            "name": "Scene Exit",
+            "collectibles": []
+        },
+        {
+            "image": "scene4.png",
+            "clickableObjects": [{
+                "image": "down.png",
+                "coordinateY": 465,
+                "coordinateX": 200,
+                "name": "Go Table From Classroom"
+            }],
+            "name": "Scene Classroom",
+            "collectibles": []
+        }
+    ],
+    "player": {"inventory": [{
+        "image": "key1.png",
+        "coordinateY": 200,
+        "coordinateX": 200,
+        "name": "Key Classroom"
+    }]},
+    "currentScene": "Scene Table"
+}

@@ -19,6 +19,7 @@ import java.util.Map;
  * Class that handles JSON access.
  **/
 public class FileAccessObject {
+    final private String FILE_PATH = "src/main/java/data_access/game_saves/save.json";
     final private JSONObject gameState;
 
     public FileAccessObject() {
@@ -55,7 +56,7 @@ public class FileAccessObject {
         gameState.put("currentScene", outputData.getCurrentScene().getName());
 
         // Save to file
-        try (FileWriter file = new FileWriter("save.json")) {
+        try (FileWriter file = new FileWriter(FILE_PATH)) {
             file.write(gameState.toString(prettyPrint));
         } catch (IOException exception) {
             System.out.println("Error writing JSON: " + exception.getMessage());

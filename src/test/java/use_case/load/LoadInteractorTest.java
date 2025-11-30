@@ -53,6 +53,13 @@ class FakeLoadPresenter implements LoadOutputBoundary {
  */
 class LoadInteractorTest {
 
+    /**
+     * Tests for the following:
+     *      --> loadGame() is called
+     *      --> presenter swaps views
+     *      --> output data (save data) is passed to presenter
+     *      --> correct scene and objects are presented
+     */
     @Test
     void testExecuteWithExistingSave() {
         // set up
@@ -83,6 +90,12 @@ class LoadInteractorTest {
         dummyFile.delete();
     }
 
+    /**
+     * Tests for the following:
+     *      --> loadGame() is not called
+     *      --> no output data is passed
+     *      --> error message is presented
+     */
     @Test
     void testExecuteWithoutSaveFile() {
         // set up

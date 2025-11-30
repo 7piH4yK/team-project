@@ -32,6 +32,18 @@ import use_case.switch_to_game.SwitchToGameViewOutputBoundary;
 import view.GameView;
 import view.MainMenuView;
 import view.ViewManager;
+import interface_adapter.pause_menu.PauseController;
+import interface_adapter.pause_menu.PauseMenuPresenter;
+import interface_adapter.pause_menu.PauseMenuViewModel;
+import interface_adapter.pause_menu.ResumeController;
+import interface_adapter.pause_menu.ResumePresenter;
+import use_case.pause.PauseInputBoundary;
+import use_case.pause.PauseInteractor;
+import use_case.pause.PauseOutputBoundary;
+import use_case.resume.ResumeInputBoundary;
+import use_case.resume.ResumeInteractor;
+import use_case.resume.ResumeOutputBoundary;
+import view.PauseMenuView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -163,6 +175,43 @@ public class AppBuilder {
         return this;
     }
 
+    public AppBuilder addPauseMenu() {
+
+        // ---- Pause ----
+        PauseMenuViewModel pauseVM = new PauseMenuViewModel();
+        PauseOutputBoundary pausePresenter =
+                new PauseMenuPresenter(viewManagerModel, pauseVM);
+        PauseInputBoundary pauseInteractor =
+                new PauseInteractor(pausePresenter);
+        PauseController pauseController =
+                new PauseController(pauseInteractor);
+
+        // ---- Resume ----
+        ResumeOutputBoundary resumePresenter =
+                new ResumePresenter(viewManagerModel);
+        ResumeInputBoundary resumeInteractor =
+                new ResumeInteractor(resumePresenter);
+        ResumeController resumeController =
+                new ResumeController(resumeInteractor);
+
+        // ---- Save inside Pause Menu ----
+        SaveOutputBoundary savePresenter =
+                new SavePresenter(viewManagerModel, mainMenuViewModel);
+        SaveInputBoundary saveInteractor =
+                new SaveInteractor(gameDataAccessObject, savePresenter);
+        SaveController saveController =
+                new SaveController(saveInteractor);
+
+        // ---- Construct Pause Menu View ----
+        PauseMenuView pauseView = new PauseMenuView(resumeController, saveController);
+
+        cardPanel.add(pauseView, "pause_menu");
+
+        // Inject into GameView (so Pause button works)
+        gameView.setPauseController(pauseController);
+
+        return this;
+    }
 
     public JFrame build() {
         final JFrame application = new JFrame("Point and Click Game");

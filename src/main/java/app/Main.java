@@ -17,6 +17,7 @@ public class Main {
                 .addClickButtonUseCase()
                 .addSaveUseCase()
                 .addQuestionUseCase(triviaDAO)
+                .addPauseMenu()
                 .build();
 
         application.pack();

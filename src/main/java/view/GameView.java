@@ -10,6 +10,7 @@ import interface_adapter.game.GameState;
 import interface_adapter.game.GameViewModel;
 import interface_adapter.save.SaveController;
 import interface_adapter.question.QuestionController;
+import interface_adapter.pause_menu.PauseController;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -37,6 +38,8 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
     private QuestionController questionController;
 
     private GameState gameState;
+
+    private PauseController pauseController;
 
 
     public GameView(GameViewModel gameViewModel) {
@@ -119,11 +122,11 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
 
         }
 
-        // save and exit button
-        JButton saveExitButton = new JButton("Save & Exit");
-        saveExitButton.setBounds(650, 20, 120, 40);
-        saveExitButton.addActionListener(e -> saveController.save());
-        add(saveExitButton);
+        // Pause button
+        JButton pauseButton = new JButton("Pause");
+        pauseButton.setBounds(650, 20, 120, 40);
+        pauseButton.addActionListener(e -> pauseController.pause());
+        add(pauseButton);
 
         // Add a small bag icon (top-right corner)
         ImageIcon bagIcon = new ImageIcon(ImageIO.read(new File("src/main/resources/bag1.png")));
@@ -289,5 +292,10 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
     public void setQuestionController(QuestionController controller) {
         this.questionController = controller;
     }
+
+    public void setPauseController(PauseController controller) {
+        this.pauseController = controller;
+    }
+
 }
 

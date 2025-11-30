@@ -1,28 +1,38 @@
 package app;
 
+import java.awt.*;
+
+import javax.swing.*;
+
+import app.factories.CollectItemUseCaseFactory;
 import data_access.InMemoryGameDataAccessObject;
 import entity.PlayerFactory;
 import entity.SceneFactory;
 import interface_adapter.AppContext;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.collect_item.CollectItemController;
-import interface_adapter.collect_item.CollectItemPresenter;
 import interface_adapter.game.GameViewModel;
 import interface_adapter.load.LoadPresenter;
 import interface_adapter.main_menu.MainMenuController;
 import interface_adapter.main_menu.MainMenuPresenter;
 import interface_adapter.main_menu.MainMenuViewModel;
+import interface_adapter.pause_menu.*;
+import interface_adapter.question.QuestionController;
+import interface_adapter.question.QuestionPresenter;
 import interface_adapter.save.SaveController;
 import interface_adapter.save.SavePresenter;
-import interface_adapter.question.QuestionPresenter;
-import interface_adapter.question.QuestionController;
-import use_case.question.QuestionDataAccessInterface;
-import use_case.question.QuestionInputBoundary;
-import use_case.question.QuestionInteractor;
-import use_case.collect_item.CollectItemInteractor;
 import use_case.load.LoadInputBoundary;
 import use_case.load.LoadInteractor;
 import use_case.load.LoadOutputBoundary;
+import use_case.pause.PauseInputBoundary;
+import use_case.pause.PauseInteractor;
+import use_case.pause.PauseOutputBoundary;
+import use_case.question.QuestionDataAccessInterface;
+import use_case.question.QuestionInputBoundary;
+import use_case.question.QuestionInteractor;
+import use_case.resume.ResumeInputBoundary;
+import use_case.resume.ResumeInteractor;
+import use_case.resume.ResumeOutputBoundary;
 import use_case.save.SaveInputBoundary;
 import use_case.save.SaveInteractor;
 import use_case.save.SaveOutputBoundary;
@@ -31,29 +41,15 @@ import use_case.switch_to_game.SwitchToGameViewInteractor;
 import use_case.switch_to_game.SwitchToGameViewOutputBoundary;
 import view.GameView;
 import view.MainMenuView;
-import view.ViewManager;
-import interface_adapter.pause_menu.PauseController;
-import interface_adapter.pause_menu.PauseMenuPresenter;
-import interface_adapter.pause_menu.PauseMenuViewModel;
-import interface_adapter.pause_menu.ResumeController;
-import interface_adapter.pause_menu.ResumePresenter;
-import use_case.pause.PauseInputBoundary;
-import use_case.pause.PauseInteractor;
-import use_case.pause.PauseOutputBoundary;
-import use_case.resume.ResumeInputBoundary;
-import use_case.resume.ResumeInteractor;
-import use_case.resume.ResumeOutputBoundary;
 import view.PauseMenuView;
-
-import javax.swing.*;
-import java.awt.*;
+import view.ViewManager;
 
 public class AppBuilder {
-    final ViewManagerModel viewManagerModel = new ViewManagerModel();
+    private final ViewManagerModel viewManagerModel = new ViewManagerModel();
     // Create initial game data
-    final SceneFactory sceneFactory = new SceneFactory();
-    final PlayerFactory playerFactory = new PlayerFactory();
-    final InMemoryGameDataAccessObject gameDataAccessObject = new InMemoryGameDataAccessObject();
+    private final SceneFactory sceneFactory = new SceneFactory();
+    private final PlayerFactory playerFactory = new PlayerFactory();
+    private final InMemoryGameDataAccessObject gameDataAccessObject = new InMemoryGameDataAccessObject();
     private final JPanel cardPanel = new JPanel();
     private final CardLayout cardLayout = new CardLayout();
     ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
@@ -76,20 +72,20 @@ public class AppBuilder {
     public AppBuilder addGameView() {
         gameViewModel = new GameViewModel();
         gameView = new GameView(gameViewModel);
-        CollectItemPresenter collectPresenter =
-                new CollectItemPresenter(gameViewModel, viewManagerModel);
-
-        CollectItemInteractor collectInteractor =
-                new CollectItemInteractor(gameDataAccessObject, collectPresenter);
 
         CollectItemController collectController =
-                new CollectItemController(collectInteractor);
+                CollectItemUseCaseFactory.create(
+                        gameDataAccessObject,
+                        gameViewModel,
+                        viewManagerModel
+                );
 
         gameView.setCollectItemController(collectController);
 
         cardPanel.add(gameView, gameView.getViewName());
         return this;
     }
+
 
     public AppBuilder addSwitchToGameUseCase() {
         final SwitchToGameViewOutputBoundary switchOutputBoundary =
@@ -127,8 +123,6 @@ public class AppBuilder {
                 .removeOnCollect(true)                     // remove from scene
                 .build());
 
-        // 2) Create GameManager
-        use_case.game.GameManager manager = new use_case.game.GameManager(rules);
 
         // 3) Standard presenter & interactor, but pass manager
         final use_case.game.GameOutputBoundary gameOutputBoundary =

@@ -14,4 +14,9 @@ public class ClickableObjectFactory {
     public Collectibles createCollectibles(String name, int coordX, int coordY, String image) {
         return new Collectibles(name, coordX, coordY, image);
     }
+
+
+    public ClickableObject create(String name, int x, int y, String image) {
+        return new ClickableObject(name, x, y, image);
+    }
 }

@@ -1,6 +1,5 @@
 package use_case.load;
 
-import entity.Player;
 import entity.Scene;
 
 /**
@@ -8,7 +7,6 @@ import entity.Scene;
  **/
 public interface LoadDataAccessInterface {
     void loadGame(String filepath);
-    Player getPlayer();
 
     Scene getCurrentScene();
 }

@@ -1,12 +1,12 @@
 package use_case.collect_item;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import entity.ClickableObject;
 import entity.Collectibles;
 import entity.Scene;
 import use_case.game.GameDataAccessInterface;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CollectItemInteractor implements CollectItemInputBoundary {
 
@@ -22,28 +22,27 @@ public class CollectItemInteractor implements CollectItemInputBoundary {
     @Override
     public void collect(CollectItemInputData inputData) {
 
-        Scene scene = dao.getScenes().get(inputData.getSceneName());
-        if (scene == null) {
+        final Scene scene = dao.getScenes().get(inputData.getSceneName());
+         if (scene == null) {
             presenter.prepareFailView("Scene not found: " + inputData.getSceneName());
             return;
-        }
+         }
 
-        ClickableObject target = scene.getObjects().stream()
-                .filter(o -> o.getName().equals(inputData.getObjectName()))
+        final ClickableObject target = scene.getObjects().stream()
+                .filter(clickableO -> clickableO.getName().equals(inputData.getObjectName()))
                 .findFirst()
                 .orElse(null);
 
         if (!(target instanceof Collectibles)) {
             presenter.prepareFailView("This object cannot be collected.");
-            return;
         }
 
         dao.getPlayer().addToInventory((Collectibles) target);
 
-        List<ClickableObject> updated = new ArrayList<>(scene.getObjects());
-        updated.removeIf(o -> o.getName().equals(target.getName()));
+        final List<ClickableObject> updated = new ArrayList<>(scene.getObjects());
+        updated.removeIf(clickableO -> clickableO.getName().equals(target.getName()));
 
-        Scene updatedScene = new Scene(scene.getName(), updated, scene.getImage());
+        final Scene updatedScene = new Scene(scene.getName(), updated, scene.getImage());
         dao.getScenes().put(updatedScene.getName(), updatedScene);
         dao.setCurrentScene(updatedScene);
 

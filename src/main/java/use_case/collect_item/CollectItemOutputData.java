@@ -1,9 +1,9 @@
 package use_case.collect_item;
 
+import java.util.List;
+
 import entity.Collectibles;
 import entity.Scene;
-
-import java.util.List;
 
 public class CollectItemOutputData {
 

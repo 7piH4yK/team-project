@@ -13,12 +13,11 @@ public class DialogueOutputDataTest {
     @Test
     public void testGetCurrentDialogue(){
         DialogueBox NextBox = new DialogueBox(new DialogueText("NextBox",1,2), new ArrayList<>(),"bag.png");
-        DialogueOutputData DialogueOutputData = new DialogueOutputData();
 
+        DialogueOutputData DialogueOutputData = new DialogueOutputData();
         assertNotSame(NextBox, DialogueOutputData.getCurrentDialogue());
 
         DialogueOutputData.setCurrentDialogue(NextBox);
-
         assertSame(NextBox, DialogueOutputData.getCurrentDialogue());
     }
 }

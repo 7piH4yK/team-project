@@ -8,7 +8,6 @@ import interface_adapter.game.GameController;
 import interface_adapter.game.GameState;
 import interface_adapter.game.GameViewModel;
 import interface_adapter.save.SaveController;
-import interface_adapter.pause_menu.PauseController;
 import interface_adapter.question.QuestionController;
 
 import javax.imageio.ImageIO;
@@ -33,15 +32,11 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
     private GameController gameController;
     private DialogueController dialogueController;
     private SaveController saveController;
-    private PauseController pauseController;
     private CollectItemController collectItemController;
     private QuestionController questionController;
 
     private GameState gameState;
 
-    public void setPauseController(PauseController pauseController) {
-        this.pauseController = pauseController;
-    }
 
     public GameView(GameViewModel gameViewModel) {
         this.gameViewModel = gameViewModel;

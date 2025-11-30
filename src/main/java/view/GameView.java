@@ -3,7 +3,6 @@ package view;
 import entity.*;
 import interface_adapter.collect_item.CollectItemController;
 import interface_adapter.dialogue.DialogueController;
-import interface_adapter.dialogue.DialogueState;
 import interface_adapter.game.GameController;
 import interface_adapter.game.GameState;
 import interface_adapter.game.GameViewModel;
@@ -35,9 +34,6 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
     private CollectItemController collectItemController;
     private QuestionController questionController;
 
-    private GameState gameState;
-
-
     public GameView(GameViewModel gameViewModel) {
         this.gameViewModel = gameViewModel;
         this.gameViewModel.addPropertyChangeListener(this);
@@ -51,28 +47,18 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        final Object object = evt.getNewValue();
+        final GameState state = (GameState) evt.getNewValue();
 
         // remove all children
         this.removeAll();
 
         try {
-
-            if (object instanceof DialogueState) {
-                final DialogueState state = (DialogueState) object;
-                // Render dialogue overlay if active
-                DialogueBox dialogue = state.getCurrentDialogue();
-                if (dialogue != null) {
-                    renderDialogueOverlay(dialogue);
-                } else {
-                    drawScene(gameState);
-                }
+            // Check if there's an active dialogue
+            DialogueBox dialogue = state.getCurrentDialogue();
+            if (dialogue != null) {
+                renderDialogueOverlay(dialogue, state);
             } else {
-                final GameState state = (GameState) object;
-
                 drawScene(state);
-
-
             }
             // force update ui
             repaint();
@@ -82,37 +68,39 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
     }
 
     private void drawScene(GameState state) throws IOException {
-        gameState = state;
-        // add clickable objects
-        for (ClickableObject clickable : state.getClickableObjects()) {
-            ImageIcon imageIcon = new ImageIcon();
-            imageIcon.setImage(ImageIO.read(new File("src/main/resources", clickable.getImage())));
-            JLabel label = new JLabel(imageIcon);
-            label.setBounds(clickable.getCoordinateX(), clickable.getCoordinateY(), imageIcon.getIconWidth(), imageIcon.getIconHeight());
-            add(label);
-            label.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
+        if (state.getClickableObjects() != null) {
+            // add clickable objects
+            for (ClickableObject clickable : state.getClickableObjects()) {
+                ImageIcon imageIcon = new ImageIcon();
+                imageIcon.setImage(ImageIO.read(new File("src/main/resources", clickable.getImage())));
+                JLabel label = new JLabel(imageIcon);
+                label.setBounds(clickable.getCoordinateX(), clickable.getCoordinateY(), imageIcon.getIconWidth(), imageIcon.getIconHeight());
+                add(label);
+                label.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
 
-                    // NEW: Collectible handling
-                    if (clickable instanceof Collectibles) {
-                        collectItemController.collectItem(
-                                clickable.getName(),
-                                ((GameState) gameViewModel.getState()).getSceneName()
-                        );
-                        return; // stop normal logic
+                        // NEW: Collectible handling
+                        if (clickable instanceof Collectibles) {
+                            collectItemController.collectItem(
+                                    clickable.getName(),
+                                    ((GameState) gameViewModel.getState()).getSceneName()
+                            );
+                            return; // stop normal logic
+                        }
+
+                        // OLD: NPC and normal logic
+                        if (clickable instanceof NonPlayableCharacter) {
+                            dialogueController.click(clickable);
+                        } else {
+                            gameController.click(clickable);
+                        }
                     }
+                });
 
-                    // OLD: NPC and normal logic
-                    if (clickable instanceof NonPlayableCharacter) {
-                        dialogueController.click(clickable);
-                    } else {
-                        gameController.click(clickable);
-                    }
-                }
-            });
-
+            }
         }
+
 
         // save and exit button
         JButton saveExitButton = new JButton("Save & Exit");
@@ -139,7 +127,6 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
     }
 
     private void renderDialogueOverlay(DialogueBox dialogue) throws IOException {
-        // NEW: detect if this is a QuestionBox
         final boolean isQuestionBox = dialogue instanceof QuestionBox;
 
         // Add dialogue text
@@ -216,6 +203,11 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
         JLabel dialogueBackgroundLabel = new JLabel(dialogueBackground);
         dialogueBackgroundLabel.setBounds(0, 0, dialogueBackground.getIconWidth(), dialogueBackground.getIconHeight());
         add(dialogueBackgroundLabel); // Add at front
+
+
+        // First render the scene in the background
+        drawScene(state);
+
 
     }
 

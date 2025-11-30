@@ -29,6 +29,7 @@ public class LoadInteractor implements LoadInputBoundary {
 
         Scene currentScene = loadDataAccessObject.getCurrentScene();
         LoadOutputData loadOutputData = new LoadOutputData();
+        loadOutputData.setInventory(loadDataAccessObject.getPlayer().getInventory());
         loadOutputData.setBackgroundImage(currentScene.getImage());
         loadOutputData.setClickableObjects(currentScene.getObjects());
         presenter.switchToLoadView(loadOutputData);

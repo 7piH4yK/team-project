@@ -12,7 +12,6 @@ import interface_adapter.game.GameViewModel;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.main_menu.MainMenuState;
 import interface_adapter.main_menu.MainMenuViewModel;
-import interface_adapter.dialogue.DialogueState;
 import use_case.question.QuestionOutputBoundary;
 import use_case.question.QuestionOutputData;
 
@@ -85,9 +84,10 @@ public class QuestionPresenter implements QuestionOutputBoundary {
 
         QuestionBox questionBox = builder.build();
 
-        DialogueState state = new DialogueState();
-        state.setCurrentDialogue(questionBox);
-        gameViewModel.setState(state);
+        // update game state
+        GameState gameState = gameViewModel.getState();
+        gameState.setCurrentDialogue(questionBox);
+        gameViewModel.setState(gameState);
         gameViewModel.firePropertyChange();
     }
 

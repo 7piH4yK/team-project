@@ -1,6 +1,7 @@
 package view;
 
 import entity.*;
+import interface_adapter.AppContext;
 import interface_adapter.collect_item.CollectItemController;
 import interface_adapter.dialogue.DialogueController;
 import interface_adapter.dialogue.DialogueState;
@@ -96,9 +97,13 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
 
                     // NEW: Collectible handling
                     if (clickable instanceof Collectibles) {
+                        String sceneName = null;
+                        if (gameState != null) {
+                            sceneName = gameState.getSceneName();
+                        }
                         collectItemController.collectItem(
                                 clickable.getName(),
-                                ((GameState) gameViewModel.getState()).getSceneName()
+                                sceneName
                         );
                         return; // stop normal logic
                     }
@@ -241,24 +246,32 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
         inventoryFrame.setLocationRelativeTo(null);
         inventoryFrame.setLayout(new FlowLayout());
 
-        if (gameViewModel.getState() instanceof GameState) {
-            java.util.List<Collectibles> items = ((GameState) gameViewModel.getState()).getInventoryItems();
+        java.util.List<Collectibles> items = null;
 
+        try {
+            // Pull from DAO as single source of truth
+            var gameDAO = AppContext.getGameDAO();  // your global reference
+            if (gameDAO != null && gameDAO.getPlayer() != null) {
+                items = gameDAO.getPlayer().getInventory();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
-            if (items.isEmpty()) {
-                inventoryFrame.add(new JLabel("Your inventory is empty."));
-            } else {
-                for (Collectibles item : items) {
-                    try {
-                        ImageIcon itemIcon = new ImageIcon(ImageIO.read(new File("src/main/resources", item.getImage())));
-                        JLabel itemLabel = new JLabel(itemIcon);
-                        itemLabel.setToolTipText(item.getName());
-                        inventoryFrame.add(itemLabel);
-                    } catch (Exception ex) {
-                        inventoryFrame.add(new JLabel(item.getName()));
-                    }
+        if (items == null || items.isEmpty()) {
+            inventoryFrame.add(new JLabel("Your inventory is empty."));
+        } else {
+            for (Collectibles item : items) {
+                try {
+                    ImageIcon itemIcon = new ImageIcon(
+                            ImageIO.read(new File("src/main/resources", item.getImage()))
+                    );
+                    JLabel itemLabel = new JLabel(itemIcon);
+                    itemLabel.setToolTipText(item.getName());
+                    inventoryFrame.add(itemLabel);
+                } catch (Exception ex) {
+                    inventoryFrame.add(new JLabel(item.getName()));
                 }
-
             }
         }
 

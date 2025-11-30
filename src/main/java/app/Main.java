@@ -16,6 +16,7 @@ public class Main {
                 .addSwitchToGameUseCase()
                 .addClickButtonUseCase()
                 .addSaveUseCase()
+                .addPauseMenu()
                 .addQuestionUseCase(triviaDAO)
                 .build();
 

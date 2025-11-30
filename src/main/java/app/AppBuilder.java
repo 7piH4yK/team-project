@@ -32,6 +32,17 @@ import use_case.switch_to_game.SwitchToGameViewOutputBoundary;
 import view.GameView;
 import view.MainMenuView;
 import view.ViewManager;
+import interface_adapter.pause_menu.PauseController;
+import view.PauseMenuView;
+import use_case.resume.ResumeInputBoundary;
+import use_case.resume.ResumeInteractor;
+import use_case.resume.ResumeOutputBoundary;
+import use_case.pause.PauseInputBoundary;
+import use_case.pause.PauseInteractor;
+import interface_adapter.pause_menu.PauseMenuPresenter;
+import interface_adapter.pause_menu.PauseMenuViewModel;
+import interface_adapter.pause_menu.ResumeController;
+import interface_adapter.pause_menu.ResumePresenter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -146,6 +157,43 @@ public class AppBuilder {
         return this;
     }
 
+    public AppBuilder addPauseMenu() {
+
+        // ---- Pause setup ----
+        PauseMenuViewModel pauseVM = new PauseMenuViewModel();
+        PauseMenuPresenter pausePresenter =
+                new PauseMenuPresenter(viewManagerModel, pauseVM);
+        PauseInputBoundary pauseInteractor =
+                new PauseInteractor(pausePresenter);
+        PauseController pauseController =
+                new PauseController(pauseInteractor);
+
+        // ---- Resume setup ----
+        ResumePresenter resumePresenter =
+                new ResumePresenter(viewManagerModel);
+        ResumeInputBoundary resumeInteractor =
+                new ResumeInteractor(resumePresenter);
+        ResumeController resumeController =
+                new ResumeController(resumeInteractor);
+
+        // ---- Create SaveController for Pause Menu ----
+        SaveOutputBoundary savePresenter =
+                new SavePresenter(viewManagerModel, mainMenuViewModel);
+        SaveInputBoundary saveInteractor =
+                new SaveInteractor(gameDataAccessObject, savePresenter);
+        SaveController saveController =
+                new SaveController(saveInteractor);
+
+        // ---- Build Pause Menu view ----
+        PauseMenuView pauseView =
+                new PauseMenuView(resumeController, saveController);
+
+        // ---- Register Pause Menu with CardLayout ----
+        cardPanel.add(pauseView, "pause_menu");
+
+        // ---- Inject pause controller into GameView ----
+        gameView.setPauseController(pauseController);
+      
     public AppBuilder addQuestionUseCase(QuestionDataAccessInterface riddleDAO) {
         QuestionPresenter questionPresenter =
                 new QuestionPresenter(mainMenuViewModel, viewManagerModel, gameViewModel, gameDataAccessObject);

@@ -8,6 +8,7 @@ import interface_adapter.game.GameController;
 import interface_adapter.game.GameState;
 import interface_adapter.game.GameViewModel;
 import interface_adapter.save.SaveController;
+import interface_adapter.question.QuestionController;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -32,6 +33,7 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
     private DialogueController dialogueController;
     private SaveController saveController;
     private CollectItemController collectItemController;
+    private QuestionController questionController;
 
     private GameState gameState;
 
@@ -137,6 +139,9 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
     }
 
     private void renderDialogueOverlay(DialogueBox dialogue) throws IOException {
+        // NEW: detect if this is a QuestionBox
+        final boolean isQuestionBox = dialogue instanceof QuestionBox;
+
         // Add dialogue text
         DialogueText dialogueText = dialogue.getText();
         JTextArea textArea = new JTextArea(dialogueText.getText());
@@ -161,6 +166,45 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
             optionLabel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
+
+                    /// ---------- CASE 1: this is the special prompt option that starts the riddle ----------
+                    // (This is in the dialogue BEFORE the question, e.g. laptop "Answer riddle")
+                    if (!isQuestionBox && "Answer riddle".equals(option.getName())) {
+                        if (questionController != null) {
+                            questionController.loadQuestions();  // triggers API + QuestionPresenter
+                        }
+                        // DO NOT call dialogueController here, or it will navigate away
+                        return;
+                    }
+
+                    // ---------- CASE 2: we are inside a QuestionBox (the actual riddle) ----------
+                    if (isQuestionBox && option instanceof QuestionOption) {
+                        QuestionOption qOpt = (QuestionOption) option;
+
+                        if (qOpt.isCorrect()) {
+                            JOptionPane.showMessageDialog(
+                                    GameView.this,
+                                    "Correct!",
+                                    "Riddle",
+                                    JOptionPane.INFORMATION_MESSAGE
+                            );
+
+                            // After a correct answer: return to main game view (scene-only)
+                            if (gameState != null) {
+                                gameViewModel.setState(gameState);
+                                gameViewModel.firePropertyChange();
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(
+                                    GameView.this,
+                                    "Wrong answer, try again!",
+                                    "Riddle",
+                                    JOptionPane.ERROR_MESSAGE
+                            );
+                            // Wrong answer: keep the QuestionBox overlay, let them try again.
+                        }
+                        return; // IMPORTANT: do not fall through to dialogueController for QuestionBox
+                    }
                     dialogueController.clickDialogueOption(option);
                 }
             });
@@ -227,6 +271,10 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
 
     public void setCollectItemController(CollectItemController collectController) {
         this.collectItemController = collectController;
+    }
+
+    public void setQuestionController(QuestionController controller) {
+        this.questionController = controller;
     }
 }
 

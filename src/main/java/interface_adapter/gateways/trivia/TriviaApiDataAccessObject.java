@@ -19,7 +19,7 @@ public class TriviaApiDataAccessObject implements QuestionDataAccessInterface {
     @Override
     public TriviaResponse fetchRiddles() {
         try {
-            Call<TriviaResponse> call = triviaAPI.getQuestions(3, 9, "multiple");
+            Call<TriviaResponse> call = triviaAPI.getQuestions(1, 9, "multiple");
             Response<TriviaResponse> response = call.execute();
             return response.body();
         } catch (Exception e) {

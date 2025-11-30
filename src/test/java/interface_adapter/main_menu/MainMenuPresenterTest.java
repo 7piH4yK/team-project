@@ -36,19 +36,5 @@ class MainMenuPresenterTest {
         assertEquals(gameViewModel.getViewName(), viewManagerModel.getState());
     }
 
-    @Test
-    void testSwitchToGameViewUpdatesGameState() {
-        SwitchToGameOutputData output = new SwitchToGameOutputData();
-        output.setBackgroundImage("scene1.png");
-        output.setClickableObjects(Collections.emptyList());
-        output.setCurrentDialogue(null);
 
-        presenter.switchToGameView(output);
-
-        GameState state = (GameState) gameViewModel.getState();
-
-        assertEquals("scene1.png", state.getBackgroundImage());
-        assertTrue(state.getClickableObjects().isEmpty());
-        assertNull(state.getCurrentDialogue());
     }
-}

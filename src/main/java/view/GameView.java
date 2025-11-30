@@ -125,7 +125,7 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
         // Pause button
         JButton pauseButton = new JButton("Pause");
         pauseButton.setBounds(650, 20, 120, 40);
-        pauseButton.addActionListener(e -> pauseController.execute());
+        pauseButton.addActionListener(e -> pauseController.pause());
         add(pauseButton);
 
         // Add a small bag icon (top-right corner)

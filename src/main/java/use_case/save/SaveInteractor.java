@@ -1,10 +1,9 @@
 package use_case.save;
 
-import java.util.Map;
-
-import entity.Scene;
 import entity.Player;
-import use_case.save.SaveInputBoundary;
+import entity.Scene;
+
+import java.util.Map;
 
 
 /**
@@ -15,7 +14,7 @@ public class SaveInteractor implements SaveInputBoundary {
     private final SaveOutputBoundary presenter;
 
     public SaveInteractor(SaveDataAccessInterface saveDataAccessInterface,
-                                      SaveOutputBoundary saveOutputBoundary) {
+                          SaveOutputBoundary saveOutputBoundary) {
         this.saveDataAccessObject = saveDataAccessInterface;
         this.presenter = saveOutputBoundary;
     }

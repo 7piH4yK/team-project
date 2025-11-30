@@ -1,14 +1,12 @@
 package app;
 
-import java.awt.*;
-
-import javax.swing.*;
-
-import dataaccess.InMemoryGameDataAccessObject;
+import data_access.InMemoryGameDataAccessObject;
 import entity.PlayerFactory;
 import entity.SceneFactory;
 import interface_adapter.AppContext;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.collect_item.CollectItemController;
+import interface_adapter.collect_item.CollectItemPresenter;
 import interface_adapter.game.GameViewModel;
 import interface_adapter.load.LoadPresenter;
 import interface_adapter.main_menu.MainMenuController;
@@ -16,6 +14,12 @@ import interface_adapter.main_menu.MainMenuPresenter;
 import interface_adapter.main_menu.MainMenuViewModel;
 import interface_adapter.save.SaveController;
 import interface_adapter.save.SavePresenter;
+import interface_adapter.question.QuestionPresenter;
+import interface_adapter.question.QuestionController;
+import use_case.question.QuestionDataAccessInterface;
+import use_case.question.QuestionInputBoundary;
+import use_case.question.QuestionInteractor;
+import use_case.collect_item.CollectItemInteractor;
 import use_case.load.LoadInputBoundary;
 import use_case.load.LoadInteractor;
 import use_case.load.LoadOutputBoundary;
@@ -40,17 +44,18 @@ import interface_adapter.pause_menu.PauseMenuViewModel;
 import interface_adapter.pause_menu.ResumeController;
 import interface_adapter.pause_menu.ResumePresenter;
 
-public class AppBuilder {
-    private final JPanel cardPanel = new JPanel();
-    private final CardLayout cardLayout = new CardLayout();
-    final ViewManagerModel viewManagerModel = new ViewManagerModel();
-    ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
+import javax.swing.*;
+import java.awt.*;
 
+public class AppBuilder {
+    final ViewManagerModel viewManagerModel = new ViewManagerModel();
     // Create initial game data
     final SceneFactory sceneFactory = new SceneFactory();
     final PlayerFactory playerFactory = new PlayerFactory();
     final InMemoryGameDataAccessObject gameDataAccessObject = new InMemoryGameDataAccessObject();
-
+    private final JPanel cardPanel = new JPanel();
+    private final CardLayout cardLayout = new CardLayout();
+    ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
     private MainMenuView mainMenuView;
     private MainMenuViewModel mainMenuViewModel;
     private GameViewModel gameViewModel;
@@ -70,6 +75,17 @@ public class AppBuilder {
     public AppBuilder addGameView() {
         gameViewModel = new GameViewModel();
         gameView = new GameView(gameViewModel);
+        CollectItemPresenter collectPresenter =
+                new CollectItemPresenter(gameViewModel, viewManagerModel);
+
+        CollectItemInteractor collectInteractor =
+                new CollectItemInteractor(gameDataAccessObject, collectPresenter);
+
+        CollectItemController collectController =
+                new CollectItemController(collectInteractor);
+
+        gameView.setCollectItemController(collectController);
+
         cardPanel.add(gameView, gameView.getViewName());
         return this;
     }
@@ -118,11 +134,18 @@ public class AppBuilder {
                 new interface_adapter.game.GamePresenter(gameViewModel);
         final use_case.game.GameInputBoundary clickButtonInteractor =
                 new use_case.game.GameInteractor(gameDataAccessObject, gameOutputBoundary);
+        final use_case.dialogue.DialogueOutputBoundary dialogueOutputBoundary =
+                new interface_adapter.dialogue.DialoguePresenter(gameViewModel);
+        final use_case.dialogue.DialogueInputBoundary dialogueInputBoundary =
+                new use_case.dialogue.DialogueInteractor(gameDataAccessObject, dialogueOutputBoundary);
 
         // 4) Controller wiring
         interface_adapter.game.GameController gameController =
                 new interface_adapter.game.GameController(clickButtonInteractor);
+        interface_adapter.dialogue.DialogueController dialogueController =
+                new interface_adapter.dialogue.DialogueController(dialogueInputBoundary);
         gameView.setGameController(gameController);
+        gameView.setDialogueController(dialogueController);
         return this;
     }
 
@@ -170,6 +193,20 @@ public class AppBuilder {
 
         // ---- Inject pause controller into GameView ----
         gameView.setPauseController(pauseController);
+      
+    public AppBuilder addQuestionUseCase(QuestionDataAccessInterface riddleDAO) {
+        QuestionPresenter questionPresenter =
+                new QuestionPresenter(mainMenuViewModel, viewManagerModel, gameViewModel, gameDataAccessObject);
+
+        // Interactor: talks to API DAO + presenter
+        QuestionInputBoundary questionInteractor =
+                new QuestionInteractor(riddleDAO, questionPresenter);
+
+        // Controller: called by UI button
+        QuestionController questionController =
+                new QuestionController(questionInteractor);
+
+        gameView.setQuestionController(questionController);
 
         return this;
     }
@@ -189,6 +226,7 @@ public class AppBuilder {
 
         return application;
     }
+
     // In AppBuilder.java
     public InMemoryGameDataAccessObject getGameDataAccessObject() {
         return gameDataAccessObject;

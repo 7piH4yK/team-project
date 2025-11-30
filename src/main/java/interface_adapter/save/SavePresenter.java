@@ -1,8 +1,6 @@
 package interface_adapter.save;
 
 import interface_adapter.ViewManagerModel;
-import interface_adapter.game.GameState;
-import interface_adapter.game.GameViewModel;
 import interface_adapter.main_menu.MainMenuViewModel;
 import use_case.save.SaveOutputBoundary;
 
@@ -20,7 +18,7 @@ public class SavePresenter implements SaveOutputBoundary {
     }
 
     /**
-     Swaps the view to the main menu.
+     * Swaps the view to the main menu.
      **/
     @Override
     public void switchToSaveView() {

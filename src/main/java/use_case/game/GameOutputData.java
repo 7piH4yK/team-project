@@ -2,7 +2,6 @@ package use_case.game;
 
 import entity.ClickableObject;
 import entity.Collectibles;
-import entity.DialogueBox;
 
 import java.util.List;
 
@@ -13,16 +12,15 @@ public class GameOutputData {
 
     private String backgroundImage;
     private List<ClickableObject> clickables;
-    private DialogueBox currentDialogue;
-
+    private String sceneName;
     private List<Collectibles> inventory;
-
-    public void setBackgroundImage(String backgroundImage) {
-        this.backgroundImage = backgroundImage;
-    }
 
     public String getBackgroundImage() {
         return backgroundImage;
+    }
+
+    public void setBackgroundImage(String backgroundImage) {
+        this.backgroundImage = backgroundImage;
     }
 
     public List<ClickableObject> getClickableObjects() {
@@ -33,19 +31,19 @@ public class GameOutputData {
         this.clickables = collectibles;
     }
 
-    public DialogueBox getCurrentDialogue() {
-        return currentDialogue;
-    }
-
-    public void setCurrentDialogue(DialogueBox currentDialogue) {
-        this.currentDialogue = currentDialogue;
-    }
-
     public List<Collectibles> getInventory() {
         return inventory;
     }
 
     public void setInventory(List<Collectibles> inventory) {
         this.inventory = inventory;
+    }
+
+    public String getSceneName() {
+        return sceneName;
+    }
+
+    public void setSceneName(String sceneName) {
+        this.sceneName = sceneName;
     }
 }

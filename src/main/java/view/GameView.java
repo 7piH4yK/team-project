@@ -197,6 +197,29 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
                                     JOptionPane.INFORMATION_MESSAGE
                             );
 
+                            // ⭐⭐⭐ GIVE KEY EXIT DIRECTLY ⭐⭐⭐
+                            try {
+                                var gameDAO = AppContext.getGameDAO();
+                                if (gameDAO != null) {
+
+                                    // Directly create a new Key Exit item
+                                    Collectibles keyExit = new Collectibles(
+                                            "Key Exit",
+                                            0, 0,
+                                            "key1.png"
+                                    );
+
+                                    // Add it to the player's inventory
+                                    gameDAO.getPlayer().addToInventory(keyExit);
+
+                                    System.out.println("⭐ Key Exit added directly to inventory!");
+                                }
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                                // ⭐⭐⭐ END OF KEY REWARD ⭐⭐⭐
+
+
                             // After a correct answer: return to main game view (scene-only)
                             if (gameState != null) {
                                 gameViewModel.setState(gameState);

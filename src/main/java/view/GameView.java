@@ -197,15 +197,29 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
                                     JOptionPane.INFORMATION_MESSAGE
                             );
 
-                            // Reveal the classroom key after correct laptop quiz
                             var gameDAO = AppContext.getGameDAO();
                             if (gameDAO != null) {
-                                // Tell DAO to add the key to the Scene Table (and update currentScene if needed)
-                                gameDAO.revealClassroomKey();
+
+                                // Figure out WHICH riddle this QuestionBox corresponds to
+                                String imageName = dialogue.getImage();   // e.g. "laptop_db.png", "robber_db.png"
+
+                                if (imageName != null && imageName.contains("laptop")) {
+                                    // ✅ Laptop riddle reward: reveal classroom key on the table
+                                    gameDAO.revealClassroomKey();
+
+                                } else if (imageName != null && imageName.contains("robber")) {
+                                    // ✅ Robber riddle reward: give Exit key directly to inventory
+                                    Collectibles keyExit = new Collectibles(
+                                            "Key Exit",
+                                            0, 0,            // coordinates don't matter in inventory
+                                            "key1.png"
+                                    );
+                                    gameDAO.getPlayer().addToInventory(keyExit);
+                                    System.out.println("⭐ Robber riddle: Key Exit added to inventory");
+                                }
 
                                 // Rebuild GameState from DAO's current scene
                                 entity.Scene current = gameDAO.getCurrentScene();
-
                                 GameState newState = new GameState();
                                 newState.setSceneName(current.getName());
                                 newState.setBackgroundImage(current.getImage());
@@ -215,37 +229,13 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
                                 gameViewModel.setState(newState);
                                 gameViewModel.firePropertyChange();
                             } else if (gameState != null) {
-                                // Fallback: old behavior
-                            // ⭐⭐⭐ GIVE KEY EXIT DIRECTLY ⭐⭐⭐
-                            try {
-                                var gameDAO = AppContext.getGameDAO();
-                                if (gameDAO != null) {
-
-                                    // Directly create a new Key Exit item
-                                    Collectibles keyExit = new Collectibles(
-                                            "Key Exit",
-                                            0, 0,
-                                            "key1.png"
-                                    );
-
-                                    // Add it to the player's inventory
-                                    gameDAO.getPlayer().addToInventory(keyExit);
-
-                                    System.out.println("⭐ Key Exit added directly to inventory!");
-                                }
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                            }
-                                // ⭐⭐⭐ END OF KEY REWARD ⭐⭐⭐
-
-
-                            // After a correct answer: return to main game view (scene-only)
-                            if (gameState != null) {
+                                // Fallback (if AppContext not wired)
                                 gameViewModel.setState(gameState);
                                 gameViewModel.firePropertyChange();
                             }
 
                         } else {
+                            // ❌ Wrong answer
                             JOptionPane.showMessageDialog(
                                     GameView.this,
                                     "Wrong answer, try again!",
@@ -254,7 +244,9 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
                             );
                             // Wrong answer: keep the QuestionBox overlay, let them try again.
                         }
-                        return; // IMPORTANT: do not fall through to dialogueController for QuestionBox
+
+                        // IMPORTANT: do not fall through to dialogueController for QuestionBox
+                        return;
                     }
 
                     // ---------- NORMAL DIALOGUE OPTION BEHAVIOR ----------

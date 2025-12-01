@@ -1,9 +1,9 @@
 package use_case.save;
 
+import java.util.Map;
+
 import entity.Player;
 import entity.Scene;
-
-import java.util.Map;
 
 /**
  * Output data for the save use case.

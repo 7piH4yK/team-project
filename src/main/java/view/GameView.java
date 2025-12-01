@@ -197,11 +197,29 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
                                     JOptionPane.INFORMATION_MESSAGE
                             );
 
-                            // After a correct answer: return to main game view (scene-only)
-                            if (gameState != null) {
+                            // Reveal the classroom key after correct laptop quiz
+                            var gameDAO = AppContext.getGameDAO();
+                            if (gameDAO != null) {
+                                // Tell DAO to add the key to the Scene Table (and update currentScene if needed)
+                                gameDAO.revealClassroomKey();
+
+                                // Rebuild GameState from DAO's current scene
+                                entity.Scene current = gameDAO.getCurrentScene();
+
+                                GameState newState = new GameState();
+                                newState.setSceneName(current.getName());
+                                newState.setBackgroundImage(current.getImage());
+                                newState.setClickableObjects(current.getObjects());
+                                newState.setInventoryItems(gameDAO.getPlayer().getInventory());
+
+                                gameViewModel.setState(newState);
+                                gameViewModel.firePropertyChange();
+                            } else if (gameState != null) {
+                                // Fallback: old behavior
                                 gameViewModel.setState(gameState);
                                 gameViewModel.firePropertyChange();
                             }
+
                         } else {
                             JOptionPane.showMessageDialog(
                                     GameView.this,
@@ -213,7 +231,11 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
                         }
                         return; // IMPORTANT: do not fall through to dialogueController for QuestionBox
                     }
-                    dialogueController.clickDialogueOption(option);
+
+                    // ---------- NORMAL DIALOGUE OPTION BEHAVIOR ----------
+                    if (dialogueController != null) {
+                        dialogueController.clickDialogueOption(option);
+                    }
                 }
             });
         }
@@ -296,6 +318,4 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
     public void setPauseController(PauseController controller) {
         this.pauseController = controller;
     }
-
 }
-

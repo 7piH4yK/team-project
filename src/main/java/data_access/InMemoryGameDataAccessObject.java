@@ -39,6 +39,7 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
     private final ClickableObjectFactoryInterface clickableObjectFactory;
     private final NonPlayableCharacterFactoryInterface npcFactory;
     private final PlayerFactoryInterface playerFactory;
+    private Collectibles classroomKey;
 
     public InMemoryGameDataAccessObject(SceneFactoryInterface sceneFactory,
                                         ClickableObjectFactory clickableObjectFactory,
@@ -81,6 +82,41 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
     }
 
     /**
+     * Makes the classroom key appear on the table scene.
+     * Safe to call multiple times; it won't duplicate the key.
+     */
+    public void revealClassroomKey() {
+        final Scene sceneTable = scenes.get("Scene Table");
+        if (sceneTable == null || classroomKey == null) {
+            return;
+        }
+
+        // If key already there, do nothing
+        boolean alreadyThere = sceneTable.getObjects().stream()
+                .anyMatch(o -> "Key Classroom".equals(o.getName()));
+        if (alreadyThere) {
+            return;
+        }
+
+        // Build updated scene objects
+        final List<ClickableObject> updated = new ArrayList<>(sceneTable.getObjects());
+        updated.add(classroomKey);
+
+        final Scene updatedScene = new Scene(
+                sceneTable.getName(),
+                updated,
+                sceneTable.getImage()
+        );
+
+        scenes.put(updatedScene.getName(), updatedScene);
+
+        // If player is currently at table, update currentScene too
+        if (currentScene != null && "Scene Table".equals(currentScene.getName())) {
+            currentScene = updatedScene;
+        }
+    }
+
+    /**
      * Creates a FileAccessObject to handle the load.
      * @param filePath is a String that is the path to the file save in game_saves folder
      **/
@@ -103,8 +139,8 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
      * Resets the game back to the initial state.
      **/
     public void resetGame() {
-        final Collectibles objectKeyClassroom = clickableObjectFactory.createCollectibles("Key Classroom", 200, 200,
-                "key1.png");
+        this.classroomKey = clickableObjectFactory.createCollectibles(
+                "Key Classroom", 200, 200, "key1.png");
         final Collectibles objectKeyExit = clickableObjectFactory.createCollectibles("Key Exit", 200, 200, "key1.png");
         final ClickableObject objectDoorExit = clickableObjectFactory.create("Door Exit", 260, 310, "door.png");
         final ClickableObject objectDoorClassroom = clickableObjectFactory.create("Door Classroom", 430, 155,
@@ -125,7 +161,7 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
         final Scene sceneExit = sceneFactory.create("Scene Exit",
                 new ArrayList<>(List.of(objectDoorExit, objectGoStairsFromExit)), "scene2.png");
         final Scene sceneTable = sceneFactory.create("Scene Table",
-                new ArrayList<>(List.of(objectDoorClassroom, objectKeyClassroom, objectGoStairsFromTable)),
+                new ArrayList<>(List.of(objectDoorClassroom, objectGoStairsFromTable)),
                 "scene3.png");
         final Scene sceneClassroom = sceneFactory.create("Scene Classroom",
                 new ArrayList<>(List.of(objectGoTableFromClassroom)), "scene4.png");

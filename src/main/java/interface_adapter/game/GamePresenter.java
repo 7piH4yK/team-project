@@ -2,7 +2,9 @@ package interface_adapter.game;
 
 import use_case.game.GameOutputBoundary;
 import use_case.game.GameOutputData;
+import interface_adapter.ViewManagerModel;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 /**
@@ -11,9 +13,11 @@ import java.util.ArrayList;
 public class GamePresenter implements GameOutputBoundary {
 
     private final GameViewModel gameViewModel;
-
-    public GamePresenter(GameViewModel gameViewModel) {
+    private final ViewManagerModel viewManagerModel;
+    public GamePresenter(GameViewModel gameViewModel, ViewManagerModel viewManagerModel) {
         this.gameViewModel = gameViewModel;
+        this.viewManagerModel = viewManagerModel;
+
     }
 
     @Override
@@ -33,4 +37,38 @@ public class GamePresenter implements GameOutputBoundary {
         gameViewModel.setState(state);
         gameViewModel.firePropertyChange();
     }
+    @Override
+    public void prepareDoorUnlockedView(String message) {
+        JOptionPane.showMessageDialog(
+                null,
+                message,
+                "Door Unlocked",
+                JOptionPane.INFORMATION_MESSAGE
+        );
+    }
+
+    @Override
+    public void prepareGameWonView() {
+        JOptionPane.showMessageDialog(
+                null,
+                "🎉 Congratulations! You escaped the building! 🎉",
+                "You Win!",
+                JOptionPane.INFORMATION_MESSAGE
+        );
+
+        viewManagerModel.setState("main menu");
+        viewManagerModel.firePropertyChange();
+    }
+
+    @Override
+    public void prepareDoorLockedView(String message) {
+        JOptionPane.showMessageDialog(
+                null,
+                message,
+                "Locked Door",
+                JOptionPane.WARNING_MESSAGE
+        );
+    }
+
+
 }

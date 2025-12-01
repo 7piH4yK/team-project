@@ -139,7 +139,7 @@ public class AppBuilder {
 
         // 3) Standard presenter & interactor, but pass manager
         final use_case.game.GameOutputBoundary gameOutputBoundary =
-                new interface_adapter.game.GamePresenter(gameViewModel);
+                new interface_adapter.game.GamePresenter(gameViewModel,viewManagerModel);
         final use_case.game.GameInputBoundary clickButtonInteractor =
                 new use_case.game.GameInteractor(gameDataAccessObject, gameOutputBoundary);
         final use_case.dialogue.DialogueOutputBoundary dialogueOutputBoundary =

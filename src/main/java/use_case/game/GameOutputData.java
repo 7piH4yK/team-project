@@ -46,4 +46,5 @@ public class GameOutputData {
     public void setSceneName(String sceneName) {
         this.sceneName = sceneName;
     }
+
 }

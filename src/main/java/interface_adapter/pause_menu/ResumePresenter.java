@@ -14,6 +14,6 @@ public class ResumePresenter implements ResumeOutputBoundary {
     @Override
     public void prepareGameView() {
         viewManagerModel.setState("game");
-        viewManagerModel.firePropertyChange ();
+        viewManagerModel.firePropertyChange();
     }
 }

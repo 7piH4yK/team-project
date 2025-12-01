@@ -12,7 +12,6 @@ public class MainMenuController {
     private final SwitchToGameViewInputBoundary switchToGameViewInteractor;
     private final LoadInputBoundary loadInputBoundary;
 
-
     public MainMenuController(SwitchToGameViewInputBoundary switchToGameViewInteractor,
                               LoadInputBoundary loadInputBoundary,
                               InMemoryGameDataAccessObject gameDAO) {
@@ -27,6 +26,9 @@ public class MainMenuController {
         switchToGameViewInteractor.execute();
     }
 
+    /**
+     * Requests that the application load a previously saved game.
+     */
     public void loadGame() {
         loadInputBoundary.execute();
     }

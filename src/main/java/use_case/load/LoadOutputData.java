@@ -1,8 +1,8 @@
 package use_case.load;
 
-import entity.ClickableObject;
-
 import java.util.List;
+
+import entity.ClickableObject;
 
 public class LoadOutputData {
     private String backgroundImage;
@@ -20,7 +20,7 @@ public class LoadOutputData {
         return collectibles;
     }
 
-    public void setClickableObjects(List<ClickableObject> collectibles) {
-        this.collectibles = collectibles;
+    public void setClickableObjects(List<ClickableObject> newCollectibles) {
+        this.collectibles = newCollectibles;
     }
 }

@@ -13,17 +13,18 @@ import use_case.load.LoadOutputData;
  **/
 public class LoadPresenter implements LoadOutputBoundary {
     private final MainMenuViewModel mainMenuViewModel;
-    GameViewModel gameViewModel;
-    ViewManagerModel viewManagerModel;
+    private final GameViewModel gameViewModel;
+    private final ViewManagerModel viewManagerModel;
 
-    public LoadPresenter(MainMenuViewModel mainMenuViewModel, ViewManagerModel viewManagerModel, GameViewModel gameViewModel) {
+    public LoadPresenter(MainMenuViewModel mainMenuViewModel, ViewManagerModel viewManagerModel,
+                         GameViewModel gameViewModel) {
         this.mainMenuViewModel = mainMenuViewModel;
         this.viewManagerModel = viewManagerModel;
         this.gameViewModel = gameViewModel;
     }
 
     /**
-     * Similar to the game use case 'switchToGameView' but loads game first
+     * Similar to the game use case 'switchToGameView' but loads game first.
      **/
     @Override
     public void switchToLoadView(LoadOutputData loadOutputData) {
@@ -31,7 +32,7 @@ public class LoadPresenter implements LoadOutputBoundary {
         viewManagerModel.setState(gameViewModel.getViewName());
         viewManagerModel.firePropertyChange();
 
-        final GameState state = ((GameState) gameViewModel.getState());
+        final GameState state = (GameState) gameViewModel.getState();
         state.setBackgroundImage(loadOutputData.getBackgroundImage());
         state.setClickableObjects(loadOutputData.getClickableObjects());
         gameViewModel.setState(state);
@@ -40,9 +41,10 @@ public class LoadPresenter implements LoadOutputBoundary {
 
     /**
      * Displays errors involving load use case.
+     * @param errorMessage is the String displayed when error happens.
      **/
     public void displayError(String errorMessage) {
-        MainMenuState state = mainMenuViewModel.getState();
+        final MainMenuState state = mainMenuViewModel.getState();
         state.setErrorMessage(errorMessage);
         mainMenuViewModel.setState(state);
         mainMenuViewModel.firePropertyChange();

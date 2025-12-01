@@ -17,12 +17,7 @@
                 }
             ],
             "name": "Scene Table",
-            "collectibles": [{
-                "image": "key1.png",
-                "coordinateY": 200,
-                "coordinateX": 200,
-                "name": "Key Classroom"
-            }]
+            "collectibles": []
         },
         {
             "image": "scene1.png",
@@ -74,6 +69,11 @@
             "collectibles": []
         }
     ],
-    "player": {"inventory": []},
-    "currentScene": "Scene Stairs"
+    "player": {"inventory": [{
+        "image": "key1.png",
+        "coordinateY": 200,
+        "coordinateX": 200,
+        "name": "Key Classroom"
+    }]},
+    "currentScene": "Scene Table"
 }

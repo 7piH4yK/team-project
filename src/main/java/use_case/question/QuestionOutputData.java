@@ -1,8 +1,8 @@
 package use_case.question;
 
-import data_access.api.Question;
-
 import java.util.List;
+
+import data_access.api.Question;
 
 public class QuestionOutputData {
     private final int responseCode;

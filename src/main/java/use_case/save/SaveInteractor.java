@@ -1,10 +1,9 @@
 package use_case.save;
 
-import entity.Player;
-import entity.Scene;
-
 import java.util.Map;
 
+import entity.Player;
+import entity.Scene;
 
 /**
  * The save interactor.
@@ -21,11 +20,11 @@ public class SaveInteractor implements SaveInputBoundary {
 
     @Override
     public void execute() {
-        Scene currentScene = saveDataAccessObject.getCurrentScene();
-        Map<String, Scene> scenes = saveDataAccessObject.getScenes();
-        Player player = saveDataAccessObject.getPlayer();
+        final Scene currentScene = saveDataAccessObject.getCurrentScene();
+        final Map<String, Scene> scenes = saveDataAccessObject.getScenes();
+        final Player player = saveDataAccessObject.getPlayer();
 
-        SaveOutputData saveOutputData = new SaveOutputData();
+        final SaveOutputData saveOutputData = new SaveOutputData();
         saveOutputData.setPlayer(player);
         saveOutputData.setScenes(scenes);
         saveOutputData.setCurrentScene(currentScene);

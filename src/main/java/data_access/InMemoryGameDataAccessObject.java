@@ -1,17 +1,28 @@
 package data_access;
 
-import entity.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import entity.ClickableObject;
+import entity.ClickableObjectFactory;
+import entity.Collectibles;
+import entity.DialogueBox;
+import entity.DialogueBuilder;
+import entity.NonPlayableCharacter;
+import entity.Player;
+import entity.Scene;
+import interface_adapter.factories.ClickableObjectFactoryInterface;
+import interface_adapter.factories.NonPlayableCharacterFactoryInterface;
+import interface_adapter.factories.PlayerFactoryInterface;
+import interface_adapter.factories.SceneFactoryInterface;
 import use_case.dialogue.DialogueDataAccessInterface;
 import use_case.game.GameDataAccessInterface;
 import use_case.load.LoadDataAccessInterface;
 import use_case.save.SaveDataAccessInterface;
 import use_case.save.SaveOutputData;
 import use_case.switch_to_game.SwitchToGameViewDataAccessInterface;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * In-memory implementation of game data access.
@@ -24,10 +35,19 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
     private Player player;
     private Map<String, Scene> scenes = new HashMap<>();
     private DialogueBox currentDialogue;
+    private final SceneFactoryInterface sceneFactory;
+    private final ClickableObjectFactoryInterface clickableObjectFactory;
+    private final NonPlayableCharacterFactoryInterface npcFactory;
+    private final PlayerFactoryInterface playerFactory;
 
-
-    public InMemoryGameDataAccessObject() {
-        this.resetGame();
+    public InMemoryGameDataAccessObject(SceneFactoryInterface sceneFactory,
+                                        ClickableObjectFactory clickableObjectFactory,
+                                        NonPlayableCharacterFactoryInterface npcFactory,
+                                        PlayerFactoryInterface playerFactory) {
+        this.sceneFactory = sceneFactory;
+        this.clickableObjectFactory = clickableObjectFactory;
+        this.npcFactory = npcFactory;
+        this.playerFactory = playerFactory;
     }
 
     @Override
@@ -53,47 +73,62 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
 
     /**
      * Creates a FileAccessObject to handle the save.
+     * @param outputData contains all the data needed to save current game state.
      **/
     public void saveGame(SaveOutputData outputData) {
-        FileAccessObject fileAccessObject = new FileAccessObject();
+        final FileAccessObject fileAccessObject = new FileAccessObject();
         fileAccessObject.saveGame(outputData);
     }
 
     /**
      * Creates a FileAccessObject to handle the load.
+     * @param filePath is a String that is the path to the file save in game_saves folder
      **/
     public void loadGame(String filePath) {
-        FileAccessObject fileAccessObject = new FileAccessObject(filePath);
+        final FileAccessObject fileAccessObject = new FileAccessObject(filePath);
         this.scenes = fileAccessObject.loadScenes();
         this.player = fileAccessObject.loadPlayer();
         this.currentScene = this.scenes.get(fileAccessObject.loadCurrentScene());
 
-        Map<String, Scene> sceneMap = getScenes();
-        Scene scene1 = sceneMap.get("Scene Stairs");
-        Scene scene2 = sceneMap.get("Scene Exit");
-        Scene scene3 = sceneMap.get("Scene Table");
-        Scene scene4 = sceneMap.get("Scene Classroom");
+        final Map<String, Scene> sceneMap = getScenes();
+        final Scene scene1 = sceneMap.get("Scene Stairs");
+        final Scene scene2 = sceneMap.get("Scene Exit");
+        final Scene scene3 = sceneMap.get("Scene Table");
+        final Scene scene4 = sceneMap.get("Scene Classroom");
 
         loadGameConstants(scene1, scene2, scene3, scene4);
     }
 
+    /**
+     * Resets the game back to the initial state.
+     **/
     public void resetGame() {
-        Collectibles objectKeyClassroom = new ClickableObjectFactory().createCollectibles("Key Classroom", 200, 200, "key1.png");
-        Collectibles objectKeyExit = new ClickableObjectFactory().createCollectibles("Key Exit", 200, 200, "key1.png");
-        ClickableObject objectDoorExit = new ClickableObjectFactory().create("Door Exit", 260, 310, "door.png");
-        ClickableObject objectDoorClassroom = new ClickableObjectFactory().create("Door Classroom", 430, 155, "door_classroom.png");
-        ClickableObject objectGoExit = new ClickableObjectFactory().create("Go Exit", 250, 250, "right.png");
-        ClickableObject objectGoTable = new ClickableObject("Go Table", 0, 300, "left.png");
-        ClickableObject objectGoStairsFromExit = new ClickableObject("Go Stairs From Exit", 130, 460, "down.png");
-        ClickableObject objectGoTableFromClassroom = new ClickableObject("Go Table From Classroom", 200, 465, "down.png");
-        ClickableObject objectGoStairsFromTable = new ClickableObject("Go Stairs From Table", 500, 465, "down.png");
+        final Collectibles objectKeyClassroom = clickableObjectFactory.createCollectibles("Key Classroom", 200, 200,
+                "key1.png");
+        final Collectibles objectKeyExit = clickableObjectFactory.createCollectibles("Key Exit", 200, 200, "key1.png");
+        final ClickableObject objectDoorExit = clickableObjectFactory.create("Door Exit", 260, 310, "door.png");
+        final ClickableObject objectDoorClassroom = clickableObjectFactory.create("Door Classroom", 430, 155,
+                "door_classroom.png");
+        final ClickableObject objectGoExit = clickableObjectFactory.create("Go Exit", 250, 250, "right.png");
+        final ClickableObject objectGoTable = new ClickableObject("Go Table", 0, 300, "left.png");
+        final ClickableObject objectGoStairsFromExit = new ClickableObject("Go Stairs From Exit", 130, 460,
+                "down.png");
+        final ClickableObject objectGoTableFromClassroom = new ClickableObject("Go Table From Classroom", 200, 465,
+                "down.png");
+        final ClickableObject objectGoStairsFromTable = new ClickableObject("Go Stairs From Table", 500, 465,
+                "down.png");
 
-        this.player = new PlayerFactory().create();
+        this.player = playerFactory.create();
 
-        Scene sceneStairs = new SceneFactory().create("Scene Stairs", new ArrayList<>(List.of(objectGoExit, objectGoTable)), "scene1.png");
-        Scene sceneExit = new SceneFactory().create("Scene Exit", new ArrayList<>(List.of(objectDoorExit, objectGoStairsFromExit)), "scene2.png");
-        Scene sceneTable = new SceneFactory().create("Scene Table", new ArrayList<>(List.of(objectDoorClassroom, objectKeyClassroom, objectGoStairsFromTable)), "scene3.png");
-        Scene sceneClassroom = new SceneFactory().create("Scene Classroom", new ArrayList<>(List.of(objectGoTableFromClassroom)), "scene4.png");
+        final Scene sceneStairs = sceneFactory.create("Scene Stairs",
+                new ArrayList<>(List.of(objectGoExit, objectGoTable)), "scene1.png");
+        final Scene sceneExit = sceneFactory.create("Scene Exit",
+                new ArrayList<>(List.of(objectDoorExit, objectGoStairsFromExit)), "scene2.png");
+        final Scene sceneTable = sceneFactory.create("Scene Table",
+                new ArrayList<>(List.of(objectDoorClassroom, objectKeyClassroom, objectGoStairsFromTable)),
+                "scene3.png");
+        final Scene sceneClassroom = sceneFactory.create("Scene Classroom",
+                new ArrayList<>(List.of(objectGoTableFromClassroom)), "scene4.png");
 
         // This method loads and creates all the NPCs and their dialogues
         loadGameConstants(sceneStairs, sceneExit, sceneTable, sceneClassroom);
@@ -110,16 +145,20 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
 
     /**
      * Creates NPC and dialogue.
+     * @param sceneStairs Scene representing the stair scene.
+     * @param sceneExit Scene representing the exit scene.
+     * @param sceneTable Scene representing the table scene.
+     * @param sceneClassroom Scene representing the classroom scene.
      **/
     public void loadGameConstants(Scene sceneStairs, Scene sceneExit, Scene sceneTable, Scene sceneClassroom) {
-        DialogueBox dialogBoxOptionOutcome1 = new DialogueBuilder("robber_db.png")
+        final DialogueBox dialogBoxOptionOutcome1 = new DialogueBuilder("robber_db.png")
                 .setText("Well, maybe if you answer a riddle, that is!")
                 .addOption("Answer riddle", sceneExit)
                 .build();
 
-        DialogueBox dialogBoxOptionOutcome2 = new DialogueBuilder("janitor_db.png")
-                .setText("I would've helped you, but somebody stole my keys and ran down the hallway!" +
-                        " If you find them and bring back my keys, I will get you out!")
+        final DialogueBox dialogBoxOptionOutcome2 = new DialogueBuilder("janitor_db.png")
+                .setText("I would've helped you, but somebody stole my keys and ran down the hallway!"
+                        + " If you find them and bring back my keys, I will get you out!")
                 .addOption("I'll see what I can do.", sceneExit)
                 .build();
 
@@ -128,35 +167,34 @@ public class InMemoryGameDataAccessObject implements SwitchToGameViewDataAccessI
 //                .addOption("OK", sceneExit)
 //                .build();
 
-        DialogueBox dialogBoxOptionOutcome3 = new DialogueBuilder("laptop_db.png")
+        final DialogueBox dialogBoxOptionOutcome3 = new DialogueBuilder("laptop_db.png")
                 .setText("If you want to get past that door to the right, you must answer my question first!")
                 .addOption("Answer riddle", sceneExit)
                 .build();
 
-        DialogueBox dialogueBox = new DialogueBuilder("robber_db.png")
+        final DialogueBox dialogueBox = new DialogueBuilder("robber_db.png")
                 .setText("I stole the keys and you will never get them back!!!")
                 .addOption("Really, never?", dialogBoxOptionOutcome1)
                 .addOption("OK, fine.", sceneClassroom)
                 .build();
 
-
-        DialogueBox dialogueBox2 = new DialogueBuilder("janitor_db.png")
+        final DialogueBox dialogueBox2 = new DialogueBuilder("janitor_db.png")
                 .setText("Oh, what are you doing here? I thought the building was already closed!")
                 .addOption("Yeah, I'm stuck here.", dialogBoxOptionOutcome2)
                 .addOption("*Run away*", sceneExit)
                 .build();
 
-        DialogueBox dialogueBox3 = new DialogueBuilder("laptop_db.png")
+        final DialogueBox dialogueBox3 = new DialogueBuilder("laptop_db.png")
                 .setText("Somebody seems to have forgotten their laptop here.")
                 .addOption("Investigate.", dialogBoxOptionOutcome3)
                 .addOption("*Step Away*", sceneExit)
                 .build();
 
-        NonPlayableCharacter npc1 = new NonPlayableCharacterFactory().create("NPC1", 300, 200, "robber.png", dialogueBox);
+        final NonPlayableCharacter npc1 = npcFactory.create("NPC1", 300, 200, "robber.png", dialogueBox);
         sceneClassroom.addObject(npc1);
-        NonPlayableCharacter npc2 = new NonPlayableCharacterFactory().create("NPC2", 500, 200, "janitor1.png", dialogueBox2);
+        final NonPlayableCharacter npc2 = npcFactory.create("NPC2", 500, 200, "janitor1.png", dialogueBox2);
         sceneStairs.addObject(npc2);
-        NonPlayableCharacter npc3 = new NonPlayableCharacterFactory().create("NPC3", 80, 330, "laptop.png", dialogueBox3);
+        final NonPlayableCharacter npc3 = npcFactory.create("NPC3", 80, 330, "laptop.png", dialogueBox3);
         sceneTable.addObject(npc3);
     }
 

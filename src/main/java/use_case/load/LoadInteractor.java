@@ -1,8 +1,8 @@
 package use_case.load;
 
-import entity.Scene;
-
 import java.io.File;
+
+import entity.Scene;
 
 /**
  * The save interactor.
@@ -18,19 +18,19 @@ public class LoadInteractor implements LoadInputBoundary {
 
     @Override
     public void execute() {
-        File saveFile = new File("save.json");
+        final File saveFile = new File("src/main/java/data_access/game_saves/save.json");
 
         if (!saveFile.exists()) {
             presenter.displayError("No saved game found!");
-            return;
         }
+        else {
+            loadDataAccessObject.loadGame("src/main/java/data_access/game_saves/save.json");
 
-        loadDataAccessObject.loadGame("save.json");
-
-        Scene currentScene = loadDataAccessObject.getCurrentScene();
-        LoadOutputData loadOutputData = new LoadOutputData();
-        loadOutputData.setBackgroundImage(currentScene.getImage());
-        loadOutputData.setClickableObjects(currentScene.getObjects());
-        presenter.switchToLoadView(loadOutputData);
+            final Scene currentScene = loadDataAccessObject.getCurrentScene();
+            final LoadOutputData loadOutputData = new LoadOutputData();
+            loadOutputData.setBackgroundImage(currentScene.getImage());
+            loadOutputData.setClickableObjects(currentScene.getObjects());
+            presenter.switchToLoadView(loadOutputData);
+        }
     }
 }

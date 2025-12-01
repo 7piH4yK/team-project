@@ -22,7 +22,7 @@ public class QuestionBoxBuilder extends DialogueBuilder{
     }
 
     public QuestionBoxBuilder setQuestionText(String text) {
-        this.questionText = text;
+        this.questionText = text.replaceAll("&quot;", "\"");
         return this;
     }
 

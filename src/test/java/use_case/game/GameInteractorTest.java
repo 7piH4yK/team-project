@@ -34,7 +34,11 @@ class GameInteractorTest {
 
     @BeforeEach
     void setUp() {
-        dao = new InMemoryGameDataAccessObject();
+        SceneFactory sceneFactory = new SceneFactory();
+        ClickableObjectFactory clickFactory = new ClickableObjectFactory();
+        NonPlayableCharacterFactory npcFactory = new NonPlayableCharacterFactory();
+        PlayerFactory playerFactory = new PlayerFactory();
+        dao = new InMemoryGameDataAccessObject(sceneFactory, clickFactory, npcFactory, playerFactory);
         dao.getScenes().clear();
         dao.setPlayer(new Player());
         presenter = new TestPresenter();

@@ -24,6 +24,22 @@ public class ClickableObject {
         this.image = image;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getCoordinateX() {
+        return coordinateX;
+    }
+
+    public int getCoordinateY() {
+        return coordinateY;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
     /**
      * Creates a {@code ClickableObject} instance from a JSON representation.
      *
@@ -45,22 +61,6 @@ public class ClickableObject {
                 json.getInt("coordinateY"),
                 json.getString("image")
         );
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getCoordinateX() {
-        return coordinateX;
-    }
-
-    public int getCoordinateY() {
-        return coordinateY;
-    }
-
-    public String getImage() {
-        return image;
     }
 
     /**

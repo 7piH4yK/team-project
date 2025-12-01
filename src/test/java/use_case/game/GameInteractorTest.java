@@ -26,6 +26,21 @@ class GameInteractorTest {
             this.outputData = outputData;
             this.prepareViewCallCount++;
         }
+
+        @Override
+        public void prepareDoorUnlockedView(String message) {
+
+        }
+
+        @Override
+        public void prepareGameWonView() {
+
+        }
+
+        @Override
+        public void prepareDoorLockedView(String s) {
+
+        }
     }
 
     private InMemoryGameDataAccessObject dao;

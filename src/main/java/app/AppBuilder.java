@@ -1,6 +1,8 @@
 package app;
 
 import data_access.InMemoryGameDataAccessObject;
+import entity.ClickableObjectFactory;
+import entity.NonPlayableCharacterFactory;
 import entity.PlayerFactory;
 import entity.SceneFactory;
 import interface_adapter.AppContext;
@@ -53,7 +55,10 @@ public class AppBuilder {
     // Create initial game data
     final SceneFactory sceneFactory = new SceneFactory();
     final PlayerFactory playerFactory = new PlayerFactory();
-    final InMemoryGameDataAccessObject gameDataAccessObject = new InMemoryGameDataAccessObject();
+    final ClickableObjectFactory clickableObjectFactory = new ClickableObjectFactory();
+    final NonPlayableCharacterFactory npcFactory = new NonPlayableCharacterFactory();
+    final InMemoryGameDataAccessObject gameDataAccessObject = new InMemoryGameDataAccessObject(sceneFactory,
+            clickableObjectFactory, npcFactory, playerFactory);
     private final JPanel cardPanel = new JPanel();
     private final CardLayout cardLayout = new CardLayout();
     ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);

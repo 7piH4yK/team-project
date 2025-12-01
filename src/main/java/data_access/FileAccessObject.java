@@ -1,11 +1,5 @@
 package data_access;
 
-import entity.Player;
-import entity.Scene;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import use_case.save.SaveOutputData;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -15,36 +9,44 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import entity.Player;
+import entity.Scene;
+import use_case.save.SaveOutputData;
+
 /**
  * Class that handles JSON access.
  **/
 public class FileAccessObject {
-    final private String FILE_PATH = "src/main/java/data_access/game_saves/save.json";
-    final private JSONObject gameState;
+    private JSONObject gameState;
 
     public FileAccessObject() {
         this.gameState = null;
     }
 
     public FileAccessObject(String filePath) {
-        StringBuilder jsonText = new StringBuilder();
+        final StringBuilder jsonText = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 jsonText.append(line);
             }
-        } catch (IOException e) {
-            System.out.println("Error reading save file: " + e.getMessage());
+        }
+        catch (IOException exception) {
+            System.out.println("Error reading save file: " + exception.getMessage());
         }
         this.gameState = new JSONObject(jsonText.toString());
     }
 
     /**
      * Saves game into a save file that can be loaded later.
+     * @param outputData object that contains data for save.
      **/
     public void saveGame(SaveOutputData outputData) {
         final int prettyPrint = 4;
-        final JSONObject gameState = new JSONObject();
+        this.gameState = new JSONObject();
         final List<Scene> scenesData = new ArrayList<>(outputData.getScenes().values());
         final JSONArray scenes = new JSONArray();
 
@@ -56,21 +58,24 @@ public class FileAccessObject {
         gameState.put("currentScene", outputData.getCurrentScene().getName());
 
         // Save to file
-        try (FileWriter file = new FileWriter(FILE_PATH)) {
+        final String filePath = "src/main/java/data_access/game_saves/save.json";
+        try (FileWriter file = new FileWriter(filePath)) {
             file.write(gameState.toString(prettyPrint));
-        } catch (IOException exception) {
+        }
+        catch (IOException exception) {
             System.out.println("Error writing JSON: " + exception.getMessage());
         }
     }
 
     /**
      * Load all scenes through save file.
+     * @return a map with all the current states of scenes.
      **/
     public Map<String, Scene> loadScenes() {
         final JSONArray scenesArray = this.gameState.getJSONArray("scenes");
-        Map<String, Scene> loadedScenes = new HashMap<>();
+        final Map<String, Scene> loadedScenes = new HashMap<>();
         for (int i = 0; i < scenesArray.length(); i++) {
-            Scene s = Scene.fromJson(scenesArray.getJSONObject(i));
+            final Scene s = Scene.fromJson(scenesArray.getJSONObject(i));
             loadedScenes.put(s.getName(), s);
         }
         return loadedScenes;
@@ -78,14 +83,16 @@ public class FileAccessObject {
 
     /**
      * Load current player state through save file.
+     * @return the current Player state.
      **/
     public Player loadPlayer() {
-        JSONObject playerJson = this.gameState.getJSONObject("player");
+        final JSONObject playerJson = this.gameState.getJSONObject("player");
         return Player.fromJson(playerJson);
     }
 
     /**
      * Load current scene through save file.
+     * @return the name of the current scene.
      **/
     public String loadCurrentScene() {
         return this.gameState.getString("currentScene");

@@ -2,6 +2,7 @@ package use_case.collect_item;
 
 import data_access.InMemoryGameDataAccessObject;
 import entity.*;
+import interface_adapter.factories.PlayerFactoryInterface;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -36,7 +37,11 @@ class CollectItemInteractorTest {
 
     @BeforeEach
     void setUp() {
-        dao = new InMemoryGameDataAccessObject();
+        SceneFactory sceneFactory = new SceneFactory();
+        ClickableObjectFactory clickFactory = new ClickableObjectFactory();
+        NonPlayableCharacterFactory npcFactory = new NonPlayableCharacterFactory();
+        PlayerFactory playerFactory = new PlayerFactory();
+        dao = new InMemoryGameDataAccessObject(sceneFactory, clickFactory, npcFactory, playerFactory);
         dao.getScenes().clear();
         dao.setPlayer(new Player());
         dao.setCurrentScene(null);

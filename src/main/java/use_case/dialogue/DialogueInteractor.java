@@ -18,15 +18,12 @@ public class DialogueInteractor implements DialogueInputBoundary {
     public void executeDialogueOption(DialogueOption dialogueOption) {
 
         if (dialogueOption.leadsToScene()) {
-            // Close dialogue and navigate to scene
             dialogueDataAccessInterface.setCurrentDialogue(null);
             dialogueDataAccessInterface.setCurrentScene(dialogueOption.getTargetScene());
         } else if (dialogueOption.leadsToDialogue()) {
-            // Show next dialogue
             dialogueDataAccessInterface.setCurrentDialogue(dialogueOption.getTargetDialogue());
         }
 
-        // Update game UI
         updateView();
     }
 
@@ -37,7 +34,7 @@ public class DialogueInteractor implements DialogueInputBoundary {
         if (clicked instanceof NonPlayableCharacter) {
             dialogueDataAccessInterface.setCurrentDialogue(((NonPlayableCharacter) clicked).getDB());
         }
-        // Update game UI
+
         updateView();
     }
 

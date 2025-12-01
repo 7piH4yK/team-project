@@ -17,29 +17,26 @@ public class QuestionInteractor implements QuestionInputBoundary {
 
     @Override
     public void execute() {
-        TriviaResponse response = riddleDataAccessObject.fetchRiddles();
+        final TriviaResponse response = riddleDataAccessObject.fetchRiddles();
 
         if (response == null) {
             presenter.displayError("Failed to load riddles: no response from API.");
-            return;
         }
-
-        if (response.getResponseCode() != 0) {
+        else if (response.getResponseCode() != 0) {
             presenter.displayError("Riddle service returned error code: " + response.getResponseCode());
-            return;
+
         }
 
-        List<Question> questions = response.getResults();
+        final List<Question> questions = response.getResults();
         if (questions == null || questions.isEmpty()) {
             presenter.displayError("No riddles available.");
-            return;
         }
+        else {
+            final QuestionOutputData outputData = new QuestionOutputData(
+                    response.getResponseCode(),
+                    questions);
 
-        QuestionOutputData outputData = new QuestionOutputData(
-                response.getResponseCode(),
-                questions
-        );
-
-        presenter.presentRiddles(outputData);
+            presenter.presentRiddles(outputData);
+        }
     }
 }

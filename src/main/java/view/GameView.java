@@ -202,7 +202,7 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
         textArea.setForeground(Color.RED);
         textArea.setBackground(Color.BLACK);
         textArea.setFont(new Font(textArea.getFont().getName(), Font.BOLD, textArea.getFont().getSize()));
-        textArea.setBounds(dialogueText.getCoordinateX(), dialogueText.getCoordinateY(), 400, 300);
+        textArea.setBounds(dialogueText.getCoordinateX(), dialogueText.getCoordinateY(), 350, 300);
         add(textArea); // Add at front
 
         // Add dialogue options

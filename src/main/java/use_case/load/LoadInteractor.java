@@ -18,13 +18,14 @@ public class LoadInteractor implements LoadInputBoundary {
 
     @Override
     public void execute() {
-        final File saveFile = new File("src/main/java/data_access/game_saves/save.json");
+        final String filename = "src/main/java/data_access/game_saves/save.json";
+        final File saveFile = new File(filename);
 
         if (!saveFile.exists()) {
             presenter.displayError("No saved game found!");
         }
         else {
-            loadDataAccessObject.loadGame("src/main/java/data_access/game_saves/save.json");
+            loadDataAccessObject.loadGame(filename);
 
             final Scene currentScene = loadDataAccessObject.getCurrentScene();
             final LoadOutputData loadOutputData = new LoadOutputData();

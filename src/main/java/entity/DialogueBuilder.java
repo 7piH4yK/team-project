@@ -30,9 +30,9 @@ public class DialogueBuilder {
      */
     public DialogueBuilder addOption(String name, Scene nextScene) {
         if (name == null || name.isEmpty()) throw new IllegalArgumentException("null or empty name");
-        DialogueOption o = new DialogueOptionFactory().createWithScene(name, option_xpos, option_ypos, nextScene);
-        this.options.add(o);
+        this.options.add(new DialogueOptionFactory().createWithScene(name, option_xpos, option_ypos, nextScene));
         option_ypos += 50;
+
         return this;
     }
 
@@ -41,14 +41,12 @@ public class DialogueBuilder {
      */
     public DialogueBuilder addOption(String name, DialogueBox nextDialogue) {
         if (name == null || name.isEmpty()) throw new IllegalArgumentException("null or empty name");
-        DialogueOption o = new DialogueOptionFactory().createWithDialogue(name, option_xpos, option_ypos, nextDialogue);
-        this.options.add(o);
+        this.options.add(new DialogueOptionFactory().createWithDialogue(name, option_xpos, option_ypos, nextDialogue));
         option_ypos += 50;
         return this;
     }
 
     public DialogueBox build() {
-        DialogueText dialogueText = new DialogueTextFactory().create(text, text_xpos, text_ypos);
-        return new DialogueBox(dialogueText, options, image);
+        return new DialogueBox(new DialogueTextFactory().create(text, text_xpos, text_ypos), options, image);
     }
 }

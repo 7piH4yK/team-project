@@ -21,10 +21,11 @@ public class QuestionInteractor implements QuestionInputBoundary {
 
         if (response == null) {
             presenter.displayError("Failed to load riddles: no response from API.");
+            return;
         }
         else if (response.getResponseCode() != 0) {
             presenter.displayError("Riddle service returned error code: " + response.getResponseCode());
-
+            return;
         }
 
         final List<Question> questions = response.getResults();

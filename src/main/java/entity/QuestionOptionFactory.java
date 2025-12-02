@@ -10,7 +10,7 @@ public class QuestionOptionFactory {
                                  int coordinateY,
                                  Scene to,
                                  boolean correct) {
-        final String cleanedText = text.replaceAll("&quot;", "\"");
+        final String cleanedText = text.replaceAll("&quot;", "\"").replaceAll("&#309;", "'");
         return new QuestionOption(cleanedText, coordinateX, coordinateY, to, correct);
     }
 }

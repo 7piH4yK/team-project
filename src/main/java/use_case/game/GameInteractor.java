@@ -60,46 +60,43 @@ public class GameInteractor implements GameInputBoundary {
 
 
     private void attemptUseDoor(String doorName, String keyName, String newScene) {
+
         Player player = gameDataAccessInterface.getPlayer();
         boolean isExitDoor = "Door Exit".equals(doorName);
 
-        // If already unlocked → just enter
+        Scene target = gameDataAccessInterface.getScenes().get(newScene);
+
+        // ⭐ If the scene does not exist → do nothing (unit test expects this)
+        if (target == null) {
+            return;
+        }
+
+        // Already unlocked
         if (gameDataAccessInterface.isDoorUnlocked(doorName)) {
-            gameDataAccessInterface.setCurrentScene(
-                    gameDataAccessInterface.getScenes().get(newScene)
-            );
+            gameDataAccessInterface.setCurrentScene(target);
 
             if (isExitDoor) {
                 presenter.prepareGameWonView();
             }
-
             return;
         }
 
-        // Door is locked → but player has the key
+        // Has key
         if (player.hasItemNamed(keyName)) {
-
-            player.removeItemNamed(keyName);          // consume key
+            player.removeItemNamed(keyName);
             gameDataAccessInterface.unlockDoor(doorName);
+            gameDataAccessInterface.setCurrentScene(target);
 
-            gameDataAccessInterface.setCurrentScene(
-                    gameDataAccessInterface.getScenes().get(newScene)
-            );
-
-            // Show normal unlocked popup
             presenter.prepareDoorUnlockedView("Door unlocked with " + keyName + "!");
 
-            // After entering the exit scene
             if (isExitDoor) {
                 presenter.prepareGameWonView();
             }
-
-
             return;
         }
 
-        // Locked and no key
-        presenter.prepareDoorUnlockedView("It's locked. You need " + keyName + ".");
+        // No key
+        presenter.prepareDoorLockedView("It's locked. You need " + keyName + ".");
     }
 
 

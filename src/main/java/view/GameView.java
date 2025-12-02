@@ -122,10 +122,52 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
 
         }
 
-        // Pause button
-        JButton pauseButton = new JButton("Pause");
-        pauseButton.setBounds(650, 20, 120, 40);
+// -------------------- PAUSE BUTTON CONSTANTS --------------------
+        final int PAUSE_BTN_X = 700;
+        final int PAUSE_BTN_Y = 20;
+        final int PAUSE_BTN_SIZE = 50;
+
+        final int BAR_WIDTH = 10;
+        final int BAR_HEIGHT = 28;
+        final int BAR_SPACING = 8;
+        final int BAR_ARC = 4;
+
+        final Color BAR_COLOR = new Color(60, 60, 60);
+// -----------------------------------------------------------------
+
+        JButton pauseButton = new JButton() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+
+                Graphics2D g2 = (Graphics2D) g;
+                g2.setRenderingHint(
+                        java.awt.RenderingHints.KEY_ANTIALIASING,
+                        java.awt.RenderingHints.VALUE_ANTIALIAS_ON
+                );
+                g2.setColor(BAR_COLOR);
+
+                int centerX = getWidth() / 2;
+                int barY = (getHeight() - BAR_HEIGHT) / 2;
+
+                // Left bar
+                int leftX = centerX - BAR_SPACING - BAR_WIDTH;
+                g2.fillRoundRect(leftX, barY, BAR_WIDTH, BAR_HEIGHT, BAR_ARC, BAR_ARC);
+
+                // Right bar
+                int rightX = centerX + BAR_SPACING;
+                g2.fillRoundRect(rightX, barY, BAR_WIDTH, BAR_HEIGHT, BAR_ARC, BAR_ARC);
+            }
+        };
+
+        pauseButton.setBounds(PAUSE_BTN_X, PAUSE_BTN_Y, PAUSE_BTN_SIZE, PAUSE_BTN_SIZE);
+        pauseButton.setBorderPainted(false);
+        pauseButton.setFocusPainted(false);
+        pauseButton.setContentAreaFilled(false);
+        pauseButton.setOpaque(false);
+
         pauseButton.addActionListener(e -> pauseController.pause());
+
         add(pauseButton);
 
         // Add a small bag icon (top-right corner)
@@ -160,7 +202,7 @@ public class GameView extends JPanel implements ActionListener, PropertyChangeLi
         textArea.setForeground(Color.RED);
         textArea.setBackground(Color.BLACK);
         textArea.setFont(new Font(textArea.getFont().getName(), Font.BOLD, textArea.getFont().getSize()));
-        textArea.setBounds(dialogueText.getCoordinateX(), dialogueText.getCoordinateY(), 400, 300);
+        textArea.setBounds(dialogueText.getCoordinateX(), dialogueText.getCoordinateY(), 350, 300);
         add(textArea); // Add at front
 
         // Add dialogue options

@@ -101,20 +101,6 @@ public class GameInteractor implements GameInputBoundary {
 
 
 
-    public void executeDialogueOption(DialogueOption dialogueOption) {
-        if (dialogueOption.leadsToScene()) {
-            // Close dialogue and navigate to scene
-            gameDataAccessInterface.setCurrentDialogue(null);
-            gameDataAccessInterface.setCurrentScene(dialogueOption.getTargetScene());
-        } else if (dialogueOption.leadsToDialogue()) {
-            // Show next dialogue
-            gameDataAccessInterface.setCurrentDialogue(dialogueOption.getTargetDialogue());
-        }
-
-        // Update game UI
-        updateView();
-    }
-
     private void updateView() {
         Scene currentScene = gameDataAccessInterface.getCurrentScene();
         GameOutputData gameOutputData = new GameOutputData();
